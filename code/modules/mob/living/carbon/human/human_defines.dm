@@ -94,6 +94,11 @@
 	///How long the human is dead, in life ticks, which is 2 seconds
 	var/dead_ticks = 0
 
+	// Brute Revive Threshold with a defibrillator
+	var/brute_revive_threshold = 180
+	// Burn Revive Threshold with a defibrillator
+	var/burn_revive_threshold = 180
+
 	var/holo_card_color = "" //which color type of holocard is printed on us
 
 	var/list/limbs = list()
@@ -134,3 +139,27 @@
 /mob/living/carbon/human/proc/copy_clothing_prefs(mob/living/carbon/human/destination)
 	destination.underwear = underwear
 	destination.undershirt = undershirt
+
+///Checks brute/fire damage, heart status, having a head, death ticks and client for defibrillation
+/mob/living/carbon/human/proc/check_defib()
+
+	// Humans must have their brute and burn at 179, it doesn't matter if other damage types are present.
+	// They will always be healed to -52% health.
+	// Also, robots have their brute and burn thresholds set very high, this won't affect them.
+	if((getBruteLoss() >= brute_revive_threshold) || (getFireLoss() >= burn_revive_threshold))
+		return DEFIB_FAIL_TISSUE_DAMAGE
+
+	if(!has_working_organs() && !(species.species_flags & ROBOTIC_LIMBS)) // Ya organs dpmt wprl
+		return DEFIB_FAIL_BAD_ORGANS
+
+	var/datum/limb/head/head = src.get_limb("head")
+	if(head.limb_status & LIMB_DESTROYED)
+		return DEFIB_FAIL_DECAPITATED
+
+	if((dead_ticks > TIME_BEFORE_DNR) && !issynth(src)) // synthetics never expire
+		return DEFIB_FAIL_BRAINDEAD
+
+	if(!src.client) // no client at all
+		return DEFIB_FAIL_CLIENT_MISSING
+
+	return DEFIB_POSSIBLE

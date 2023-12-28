@@ -41,6 +41,13 @@ export const MedScanner = (props, context) => {
   return (
     <Window width={500} height={500}>
       <Window.Content>
+          {dead ? (
+          <NoticeBox danger>
+              Cardiac arrest detected, subject may be revivable.
+              Heal brute and burn to under 180, then administer shock with a defibrillator.
+              If the patient is a combat robot, defibrillate them immediately instead of repairing damage.
+          </NoticeBox>
+          ) : null}
         <Section title={'Patient: ' + patient}>
           {hugged ? (
             <NoticeBox danger>
@@ -62,7 +69,7 @@ export const MedScanner = (props, context) => {
             {dead ? (
               <LabeledList.Item label="Revivable">
                 <Box color={revivable ? 'green' : 'red'} bold={1}>
-                  {revivable ? 'TRUE' : 'False'}
+                  {revivable ? 'TRUE' : 'FALSE'}
                 </Box>
               </LabeledList.Item>
             ) : null}

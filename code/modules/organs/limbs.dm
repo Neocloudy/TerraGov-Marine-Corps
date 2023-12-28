@@ -1161,4 +1161,4 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(!.)
 		return
 	if(!(owner.species.species_flags & DETACHABLE_HEAD) && vital)
-		owner.set_undefibbable()
+		owner.set_undefibbable() // should be handled in defibrillation, do it here anyway

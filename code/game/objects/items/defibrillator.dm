@@ -1,6 +1,23 @@
+/*
+///////////////////Defibrillators///////////////////
+* Defibrillators have changed and will now require that both brute and burn are 179 or under for successful defibrillation.
+* For example, if the patient has 179 brute, 179 burn, and maximum oxyloss or toxin, they will get massive healing to reach -52 health.
+* If a patient is missing any damage levels, oxygen damage will be dealt so they are in critical condition.
+* If the patient has more than 180 of either brute or burn, the defibrillation will fail and they will heal 12 brute, burn and clone.
+*/
+
+#define TISSUE_DAMAGE_HEAL 12
+#define DOAFTER_FAIL_STRING "Take [src]'s paddles back out to continue."
+#define FAIL_REASON_TISSUE "Vital signs are weak. Repair damage and try again."
+#define FAIL_REASON_ORGANS "Patient's organs are too damaged to sustain life. Surgical intervention required."
+#define FAIL_REASON_DECAPITATED "Patient is missing their head."
+#define FAIL_REASON_BRAINDEAD "Patient is braindead. Further attempts futile."
+#define FAIL_REASON_DNR "Patient is missing intelligence patterns or has a DNR. Further attempts futile."
+#define FAIL_REASON_SOUL "No soul detected. Please try again."
+
 /obj/item/defibrillator
 	name = "emergency defibrillator"
-	desc = "A handheld emergency defibrillator, used to restore fibrillating patients. Can optionally bring people back from the dead."
+	desc = "A handheld emergency defibrillator, used to resuscitate patients."
 	icon = 'icons/obj/items/defibrillator.dmi'
 	icon_state = "defib_full"
 	item_state = "defib"
@@ -14,8 +31,8 @@
 	var/ready = FALSE
 	///wether readying is needed
 	var/ready_needed = TRUE
-	var/damage_threshold = 8 //This is the maximum non-oxy damage the defibrillator will heal to get a patient above -100, in all categories
-	var/charge_cost = 66 //How much energy is used.
+	var/damage_threshold = 12 // maximum brute, burn defibs will heal.
+	var/charge_cost = 66 // how much charge is used when defibbing, with this allows 15 uses
 	var/obj/item/cell/dcell = null
 	var/datum/effect_system/spark_spread/sparks
 	var/defib_cooldown = 0 //Cooldown for toggling the defib
@@ -31,7 +48,7 @@
 	sparks = new
 	sparks.set_up(5, 0, src)
 	sparks.attach(src)
-	set_dcell(new /obj/item/cell())
+	set_dcell(new /obj/item/cell/defibrillator())
 	update_icon()
 
 
@@ -99,14 +116,16 @@
 		if(!do_after(user, SKILL_TASK_AVERAGE - (SKILL_TASK_VERY_EASY * skill), NONE, src, BUSY_ICON_UNSKILLED)) // 3 seconds with medical skill, 5 without
 			return
 
-	defib_cooldown = world.time + 2 SECONDS
+	defib_cooldown = world.time + 0.6 SECONDS
 	ready = !ready
 	user.visible_message(span_notice("[user] turns [src] [ready? "on and opens the cover" : "off and closes the cover"]."),
 	span_notice("You turn [src] [ready? "on and open the cover" : "off and close the cover"]."))
 	playsound(get_turf(src), "sparks", 25, TRUE, 4)
 	if(ready)
+		w_class = WEIGHT_CLASS_BULKY // Let's not asspull a million fully charged defibs.
 		playsound(get_turf(src), 'sound/items/defib_safetyOn.ogg', 30, 0)
 	else
+		w_class = initial(w_class)
 		playsound(get_turf(src), 'sound/items/defib_safetyOff.ogg', 30, 0)
 	update_icon()
 
@@ -153,13 +172,15 @@
 
 ///Split proc that actually does the defibrillation. Separated to be used more easily by medical gloves
 /obj/item/defibrillator/proc/defibrillate(mob/living/carbon/human/H, mob/living/carbon/human/user)
-	if(user.do_actions) //Currently deffibing
+	if(user.do_actions) //Currently doing something
+		user.visible_message(span_warning("You're already doing something!"))
 		return
 
-	if(defib_cooldown > world.time) //Both for pulling the paddles out (2 seconds) and shocking (1 second)
+	if(defib_cooldown > world.time) // defibrillator cooldown, trying to keep this low
+		user.visible_message(span_warning("The defibrillator is on cooldown, wait a second!"))
 		return
 
-	defib_cooldown = world.time + 2 SECONDS
+	defib_cooldown = world.time + 0.6 SECONDS
 
 	var/defib_heal_amt = damage_threshold
 
@@ -168,7 +189,7 @@
 	if(skill < SKILL_MEDICAL_PRACTICED)
 		user.visible_message(span_notice("[user] fumbles around figuring out how to use [src]."),
 		span_notice("You fumble around figuring out how to use [src]."))
-		var/fumbling_time = SKILL_TASK_AVERAGE - (SKILL_TASK_VERY_EASY * skill) // 3 seconds with medical skill, 5 without
+		var/fumbling_time = SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill) // since defibs become bulky when active, let's make this more bearable
 		if(!do_after(user, fumbling_time, NONE, H, BUSY_ICON_UNSKILLED))
 			return
 	else
@@ -181,144 +202,175 @@
 		to_chat(user, span_warning("Take [src]'s paddles out first."))
 		return
 	if(dcell.charge <= charge_cost)
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Internal battery depleted. Cannot analyze nor administer shock."))
+		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Internal battery depleted, seek recharger. Cannot analyze nor administer shock."))
 		to_chat(user, maybe_message_recharge_hint())
-		return
-	if(H.stat != DEAD)
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Vital signs detected. Aborting."))
-		return
-
-	if((HAS_TRAIT(H, TRAIT_UNDEFIBBABLE ) && !issynth(H)) || H.suiciding) //synthetic species have no expiration date
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient is braindead. No remedy possible."))
-		return
-
-	if(!H.has_working_organs() && !(H.species.species_flags & ROBOTIC_LIMBS))
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient's organs are too damaged to sustain life. Deliver patient to a MD for surgical intervention."))
-		return
-
-	if((H.wear_suit && H.wear_suit.flags_atom & CONDUCT))
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Paddles registering >100,000 ohms, Possible cause: Suit or Armor interferring."))
 		return
 
 	var/mob/dead/observer/G = H.get_ghost()
 	if(G)
+		notify_ghost(G, "<font size=4><b>Your heart is being defibrillated!</b></font>", ghost_sound = 'sound/effects/gladosmarinerevive.ogg')
 		G.reenter_corpse()
-	else if(!H.client)
-		//We couldn't find a suitable ghost, this means the person is not returning
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient has a DNR."))
-		return
 
 	user.visible_message(span_notice("[user] starts setting up the paddles on [H]'s chest."),
 	span_notice("You start setting up the paddles on [H]'s chest."))
-	playsound(get_turf(src),'sound/items/defib_charge.ogg', 25, 0) //Do NOT vary this tune, it needs to be precisely 7 seconds
 
-	if(!do_after(user, 7 SECONDS, NONE, H, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
-		user.visible_message(span_warning("[user] stops setting up the paddles on [H]'s chest."),
-		span_warning("You stop setting up the paddles on [H]'s chest."))
-		return
-
-	//Do this now, order doesn't matter
-	sparks.start()
-	dcell.use(charge_cost)
-	update_icon()
-	playsound(get_turf(src), 'sound/items/defib_release.ogg', 25, 1)
-	user.visible_message(span_notice("[user] shocks [H] with the paddles."),
-	span_notice("You shock [H] with the paddles."))
-	H.visible_message(span_danger("[H]'s body convulses a bit."))
-	defib_cooldown = world.time + 10 //1 second cooldown before you can shock again
-
-	if(H.wear_suit && H.wear_suit.flags_atom & CONDUCT)
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed: Paddles registering >100,000 ohms, Possible cause: Suit or Armor interferring."))
-		return
-
-	var/datum/internal_organ/heart/heart = H.internal_organs_by_name["heart"]
-	if(!issynth(H) && !isrobot(H) && heart && prob(25))
-		heart.take_damage(5) //Allow the defibrillator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
-
-	if(HAS_TRAIT(H, TRAIT_UNDEFIBBABLE) || H.suiciding)
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient's brain has decayed too much. No remedy possible."))
-		return
-
-	if(!H.has_working_organs() && !(H.species.species_flags & ROBOTIC_LIMBS))
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed. Patient's organs are too damaged to sustain life. Deliver patient to a MD for surgical intervention."))
-		return
-
-	if(H.species.species_flags & DETACHABLE_HEAD)	//But if their head's missing, they're still not coming back
-		var/datum/limb/head/braincase = H.get_limb("head")
-		if(braincase.limb_status & LIMB_DESTROYED)
-			user.visible_message("[icon2html(src, viewers(user))] \The [src] buzzes: Positronic brain missing, cannot reboot.")
+	if(do_after(user, 3 SECONDS, NONE, H, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
+		playsound(get_turf(src),'sound/items/defib_charge.ogg', 25, 0) // Do not vary, it should be precisely 3 seconds
+		user.visible_message(span_notice("[user] starts charging the paddles on [H]'s chest."),
+		span_notice("You start charging the paddles on [H]'s chest."))
+		if(!ready)
+			to_chat(user, span_warning(DOAFTER_FAIL_STRING))
 			return
 
-	if(!H.client) //Freak case, no client at all. This is a braindead mob (like a colonist)
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: No soul detected, Attempting to revive..."))
+		if(do_after(user, 2 SECONDS, NONE, H, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL)) // 5 seconds revive time
+			if(!ready)
+				to_chat(user, span_warning(DOAFTER_FAIL_STRING))
+				return
 
-	if(H.mind && !H.client) //Let's call up the correct ghost! Also, bodies with clients only, thank you.
-		G = H.get_ghost()
-		if(istype(G))
-			user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed. Patient's soul has almost departed, please try again."))
-			return
-		//We couldn't find a suitable ghost, this means the person is not returning
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient has a DNR."))
-		return
+			if(H.stat == DEAD && H.wear_suit && H.wear_suit.flags_atom & CONDUCT) // Dead, but chest obscured.
+				user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient's chest is obscured, operation aborted. Remove suit or armor and try again."))
+				playsound(src, 'sound/items/defib_failed.ogg', 40, FALSE)
+				return
 
-	if(!H.client) //Freak case, no client at all. This is a braindead mob (like a colonist) or someone who didn't enter their body in time.
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed. No soul detected. Please try again."))
-		playsound(get_turf(src), 'sound/items/defib_failed.ogg', 35, 0)
-		return
+			else if(H.stat != DEAD) // they aren't even dead lol
+				user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient is not in a valid state. Operation aborted."))
+				playsound(src, 'sound/items/defib_failed.ogg', 40, FALSE)
+				return
 
-	//At this point, the defibrillator is ready to work
-	if(HAS_TRAIT(H, TRAIT_IMMEDIATE_DEFIB)) // this trait ignores user skill for the heal amount
-		H.setOxyLoss(0)
-		H.updatehealth()
+			else // Actual defibrillation, since we can't figure out another reason to not try
 
-		var/heal_target = H.get_death_threshold() - H.health + 1
-		var/all_loss = H.getBruteLoss() + H.getFireLoss() + H.getToxLoss()
-		if(all_loss && (heal_target > 0))
-			var/brute_ratio = H.getBruteLoss() / all_loss
-			var/burn_ratio = H.getFireLoss() / all_loss
-			var/tox_ratio = H.getToxLoss() / all_loss
-			if(tox_ratio)
-				H.adjustToxLoss(-(tox_ratio * heal_target))
-			H.heal_overall_damage(brute_ratio*heal_target, burn_ratio*heal_target, TRUE) // explicitly also heals robit parts
+				sparks.start()
+				H.visible_message(span_warning("[H]'s body convulses a bit."))
+				playsound(src, 'sound/items/defib_zap.ogg', 60, FALSE)//, -1)
+				dcell.use(charge_cost)
+				update_icon()
+				H.updatehealth()
 
-	else if(!issynth(H)) // TODO make me a trait :)
-		H.adjustBruteLoss(-defib_heal_amt)
-		H.adjustFireLoss(-defib_heal_amt)
-		H.adjustToxLoss(-defib_heal_amt)
-		H.setOxyLoss(0)
+				var/defib_result = H.check_defib()
+				var/fail_reason
 
-	H.updatehealth() //Make sure health is up to date since it's a purely derived value
-	if(H.health <= H.get_death_threshold())
-		user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed. Vital signs are too weak, repair damage and try again."))
-		playsound(get_turf(src), 'sound/items/defib_failed.ogg', 35, 0)
-		return
+				switch (defib_result)
+					if (DEFIB_FAIL_TISSUE_DAMAGE) // checks damage threshold in human_defines.dm, whatever is defined for their species
+						fail_reason = FAIL_REASON_TISSUE // also, if this is the fail reason, heals brute&burn
+					if (DEFIB_FAIL_BAD_ORGANS)
+						fail_reason = FAIL_REASON_ORGANS
+					if (DEFIB_FAIL_DECAPITATED)
+						if (H.species.species_flags & DETACHABLE_HEAD) // special message for synths/crobots missing their head
+							fail_reason = "Patient is missing their head. Reattach and try again."
+						else
+							fail_reason = FAIL_REASON_DECAPITATED
+					if (DEFIB_FAIL_BRAINDEAD)
+						fail_reason = FAIL_REASON_BRAINDEAD
+					if (DEFIB_FAIL_CLIENT_MISSING)
+						if(H.mind && !H.client) // No client, like a DNR mob
+							fail_reason = FAIL_REASON_DNR
+						else if (HAS_TRAIT(H, TRAIT_UNDEFIBBABLE))
+							fail_reason = FAIL_REASON_DNR
+						else
+							fail_reason = FAIL_REASON_SOUL // deadheads that exit their body *after* defib starts
 
-	user.visible_message(span_notice("[icon2html(src, viewers(user))] \The [src] beeps: Defibrillation successful."))
-	playsound(get_turf(src), 'sound/items/defib_success.ogg', 35, 0)
-	H.set_stat(UNCONSCIOUS)
-	H.emote("gasp")
-	H.chestburst = 0 //reset our chestburst state
-	H.regenerate_icons()
-	H.reload_fullscreens()
-	H.flash_act()
-	H.apply_effect(10, EYE_BLUR)
-	H.apply_effect(20 SECONDS, PARALYZE)
-	H.handle_regular_hud_updates()
-	H.updatehealth() //One more time, so it doesn't show the target as dead on HUDs
-	H.dead_ticks = 0 //We reset the DNR time
-	REMOVE_TRAIT(H, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
-	if(user.client)
-		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
-		personal_statistics.revives++
-	GLOB.round_statistics.total_human_revives[H.faction]++
-	SSblackbox.record_feedback("tally", "round_statistics", 1, "total_human_revives[H.faction]")
-	to_chat(H, span_notice("You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane."))
+				if(fail_reason) // Defibrillation failed
+					user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed - [fail_reason]"))
+					playsound(src, 'sound/items/defib_failed.ogg', 50, FALSE)
+					if(!issynth(H) && fail_reason == FAIL_REASON_TISSUE) // if too much damage is causing this to fail, heal them
+						H.adjustBruteLoss(-defib_heal_amt)
+						H.adjustFireLoss(-defib_heal_amt)
+						H.updatehealth() // cleanup
 
-	if(CHECK_BITFIELD(H.status_flags, XENO_HOST))
-		var/obj/item/alien_embryo/friend = locate() in H
-		START_PROCESSING(SSobj, friend)
+				else // No fail reason, let's assume it worked.
 
-	notify_ghosts("<b>[user]</b> has brought <b>[H.name]</b> back to life!", source = H, action = NOTIFY_ORBIT)
+					if(HAS_TRAIT(H, TRAIT_IMMEDIATE_DEFIB)) // if they're a robot or something, heal them to one hit from death
+						H.setOxyLoss(0)
+						H.updatehealth()
+
+						var/heal_target = H.get_death_threshold() - H.health + 1
+						var/all_loss = H.getBruteLoss() + H.getFireLoss() + H.getToxLoss()
+						if(all_loss && (heal_target > 0))
+							var/brute_ratio = H.getBruteLoss() / all_loss
+							var/burn_ratio = H.getFireLoss() / all_loss
+							var/tox_ratio = H.getToxLoss() / all_loss
+							if(tox_ratio)
+								H.adjustToxLoss(-(tox_ratio * heal_target))
+							H.heal_overall_damage(brute_ratio*heal_target, burn_ratio*heal_target, TRUE) // explicitly also heals robot parts
+
+						user.visible_message(span_notice("[icon2html(src, viewers(user))] \The [src] beeps: Robot reactivation successful."))
+						to_chat(H, span_notice("<i><font size=4>You suddenly feel a spark and your central power system reboots, dragging you back to the mortal plane...</font></i>"))
+						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
+						// TODO make this a fucking proc
+						H.updatehealth()
+						H.set_stat(UNCONSCIOUS)
+						H.Unconscious(13 SECONDS)
+						H.chestburst = 0
+						H.regenerate_icons()
+						H.reload_fullscreens()
+						H.flash_act()
+						H.apply_effect(10, EYE_BLUR)
+						H.apply_effect(20 SECONDS, PARALYZE)
+						REMOVE_TRAIT(H, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
+						if(user.client)
+							var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
+							personal_statistics.revives++
+						GLOB.round_statistics.total_human_revives[H.faction]++
+						SSblackbox.record_feedback("tally", "round_statistics", 1, "total_human_revives[H.faction]")
+
+						if(CHECK_BITFIELD(H.status_flags, XENO_HOST))
+							var/obj/item/alien_embryo/friend = locate() in H
+							START_PROCESSING(SSobj, friend)
+
+						notify_ghosts("<b>[user]</b> has brought <b>[H.name]</b> back to life!", source = H, action = NOTIFY_ORBIT)
+
+					else // Humans, doesn't do anything for synths because they're stupid
+						// healing target is -52 health
+						var/death_threshold = H.get_death_threshold()
+						var/crit_threshold = 0
+
+						var/hardcrit_target = crit_threshold + death_threshold * 0.50
+
+						var/total_brute = H.getBruteLoss()
+						var/total_burn = H.getFireLoss()
+
+						H.adjustStaminaLoss(-250) // So stamina victims don't come back to life and immediately die
+
+						if (H.health > hardcrit_target)
+							H.adjustOxyLoss(H.health - hardcrit_target + 2) // You're not getting up that easy.
+						else
+							var/overall_damage = total_brute + total_burn + H.getToxLoss() + H.getOxyLoss() + H.getCloneLoss()
+							var/mobhealth = H.health
+							H.adjustCloneLoss((mobhealth - hardcrit_target) * (H.getCloneLoss() / overall_damage)) // Cleanup so you aren't in hell
+							H.adjustOxyLoss((mobhealth - hardcrit_target) * (H.getOxyLoss() / overall_damage) + 2) // just enough to remain in crit
+							H.adjustToxLoss((mobhealth - hardcrit_target) * (H.getToxLoss() / overall_damage))
+							H.adjustFireLoss((mobhealth - hardcrit_target) * (total_burn / overall_damage))
+							H.adjustBruteLoss((mobhealth - hardcrit_target) * (total_brute / overall_damage))
+							H.Unconscious(22.5 SECONDS)
+
+						// TODO make this a fucking proc
+						H.updatehealth() // adjust procs won't actually update health, let's do some cleanup BEFORE they die instantly
+						user.visible_message(span_notice("[icon2html(src, viewers(user))] \The [src] beeps: Resuscitation successful."))
+						to_chat(H, span_notice("<i><font size=4>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane...</font></i>"))
+						H.set_stat(UNCONSCIOUS) // time for a smoke
+						H.emote("gasp")
+						H.chestburst = 0
+						H.regenerate_icons()
+						H.reload_fullscreens()
+						H.flash_act()
+						H.apply_effect(10, EYE_BLUR)
+						H.apply_effect(20 SECONDS, PARALYZE)
+						H.handle_regular_hud_updates()
+						H.dead_ticks = 0 //We reset the DNR time
+						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
+						H.updatehealth() // one last time not sure if this is needed
+						REMOVE_TRAIT(H, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
+						if(user.client)
+							var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
+							personal_statistics.revives++
+						GLOB.round_statistics.total_human_revives[H.faction]++
+						SSblackbox.record_feedback("tally", "round_statistics", 1, "total_human_revives[H.faction]")
+
+						if(CHECK_BITFIELD(H.status_flags, XENO_HOST))
+							var/obj/item/alien_embryo/friend = locate() in H
+							START_PROCESSING(SSobj, friend)
+
+						notify_ghosts("<b>[user]</b> has brought <b>[H.name]</b> back to life!", source = H, action = NOTIFY_ORBIT)
 
 /obj/item/defibrillator/civi
 	name = "emergency defibrillator"
