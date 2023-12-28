@@ -295,17 +295,8 @@
 						user.visible_message(span_notice("[icon2html(src, viewers(user))] \The [src] beeps: Robot reactivation successful."))
 						to_chat(H, span_notice("<i><font size=4>You suddenly feel a spark and your central power system reboots, dragging you back to the mortal plane...</font></i>"))
 						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
-						// TODO make this a fucking proc
-						H.updatehealth()
-						H.set_stat(UNCONSCIOUS)
-						H.Unconscious(13 SECONDS)
-						H.chestburst = 0
-						H.regenerate_icons()
-						H.reload_fullscreens()
-						H.flash_act()
-						H.apply_effect(10, EYE_BLUR)
-						H.apply_effect(20 SECONDS, PARALYZE)
-						REMOVE_TRAIT(H, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
+						H.resuscitate()
+
 						if(user.client)
 							var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
 							personal_statistics.revives++
@@ -342,23 +333,11 @@
 							H.adjustBruteLoss((mobhealth - hardcrit_target) * (total_brute / overall_damage))
 							H.Unconscious(22.5 SECONDS)
 
-						// TODO make this a fucking proc
-						H.updatehealth() // adjust procs won't actually update health, let's do some cleanup BEFORE they die instantly
-						user.visible_message(span_notice("[icon2html(src, viewers(user))] \The [src] beeps: Resuscitation successful."))
 						to_chat(H, span_notice("<i><font size=4>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane...</font></i>"))
-						H.set_stat(UNCONSCIOUS) // time for a smoke
-						H.emote("gasp")
-						H.chestburst = 0
-						H.regenerate_icons()
-						H.reload_fullscreens()
-						H.flash_act()
-						H.apply_effect(10, EYE_BLUR)
-						H.apply_effect(20 SECONDS, PARALYZE)
-						H.handle_regular_hud_updates()
-						H.dead_ticks = 0 //We reset the DNR time
+						user.visible_message(span_notice("[icon2html(src, viewers(user))] \The [src] beeps: Resuscitation successful."))
 						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
-						H.updatehealth() // one last time not sure if this is needed
-						REMOVE_TRAIT(H, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
+						H.resuscitate() // time for a smoke
+
 						if(user.client)
 							var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
 							personal_statistics.revives++

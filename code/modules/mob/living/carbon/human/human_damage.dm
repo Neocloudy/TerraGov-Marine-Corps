@@ -208,15 +208,7 @@
 		staminaloss = 0
 		return
 	return ..()
-/*
-/mob/living/carbon/proc/check_pasoxysout()
-	var/mob_oxyloss = getOxyLoss()
-	if(mob_oxyloss >= 50)
-		if(!HAS_TRAIT_FROM(src, TRAIT_KNOCKEDOUT, "oxyloss"))
-			ADD_TRAIT(src, TRAIT_KNOCKEDOUT, "oxyloss")
-	else if(mob_oxyloss < 50)
-		REMOVE_TRAIT(src, TRAIT_KNOCKEDOUT, "oxyloss")
-*/
+
 ////////////////////////////////////////////
 
 //Returns a list of damaged limbs
