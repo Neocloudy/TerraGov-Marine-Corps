@@ -1,12 +1,11 @@
 /*
 ///////////////////Defibrillators///////////////////
 * Defibrillators have changed and will now require that both brute and burn are 179 or under for successful defibrillation.
-* For example, if the patient has 179 brute, 179 burn, and maximum oxyloss or toxin, they will get massive healing to reach -52 health.
+* For example, if the patient has 179 brute, 179 burn, and maximum toxin or clone damage, they will get *massive* healing to reach -52 health.
 * If a patient is missing any damage levels, oxygen damage will be dealt so they are in critical condition.
-* If the patient has more than 180 of either brute or burn, the defibrillation will fail and they will heal 12 brute, burn and clone.
+* If the patient has more than 180 of either brute or burn, the defibrillation will fail and they will heal some brute and burn.
 */
 
-#define TISSUE_DAMAGE_HEAL 12
 #define DOAFTER_FAIL_STRING "Take [src]'s paddles back out to continue."
 #define FAIL_REASON_TISSUE "Vital signs are weak. Repair damage and try again."
 #define FAIL_REASON_ORGANS "Patient's organs are too damaged to sustain life. Surgical intervention required."
@@ -31,8 +30,8 @@
 	var/ready = FALSE
 	///wether readying is needed
 	var/ready_needed = TRUE
-	var/damage_threshold = 12 // maximum brute, burn defibs will heal.
-	var/charge_cost = 66 // how much charge is used when defibbing, with this allows 15 uses
+	var/damage_threshold = 15 // maximum brute, burn defibs will heal.
+	var/charge_cost = 66 // how much charge is used when defibbing, with this allows 20 uses
 	var/obj/item/cell/dcell = null
 	var/datum/effect_system/spark_spread/sparks
 	var/defib_cooldown = 0 //Cooldown for toggling the defib
@@ -122,7 +121,7 @@
 	span_notice("You turn [src] [ready? "on and open the cover" : "off and close the cover"]."))
 	playsound(get_turf(src), "sparks", 25, TRUE, 4)
 	if(ready)
-		w_class = WEIGHT_CLASS_BULKY // Let's not asspull a million fully charged defibs.
+		w_class = WEIGHT_CLASS_BULKY // Prevent asspulling a million fully charged defibs when one runs out
 		playsound(get_turf(src), 'sound/items/defib_safetyOn.ogg', 30, 0)
 	else
 		w_class = initial(w_class)
@@ -251,25 +250,25 @@
 
 				switch (defib_result)
 					if (DEFIB_FAIL_TISSUE_DAMAGE) // checks damage threshold in human_defines.dm, whatever is defined for their species
-						fail_reason = FAIL_REASON_TISSUE // also, if this is the fail reason, heals brute&burn
+						fail_reason = FAIL_REASON_TISSUE // also, if this is the fail reason, heals brute&burn based on skill
 					if (DEFIB_FAIL_BAD_ORGANS)
 						fail_reason = FAIL_REASON_ORGANS
 					if (DEFIB_FAIL_DECAPITATED)
-						if (H.species.species_flags & DETACHABLE_HEAD) // special message for synths/crobots missing their head
+						if (H.species.species_flags & DETACHABLE_HEAD) // special message for synths/robots missing their head
 							fail_reason = "Patient is missing their head. Reattach and try again."
 						else
 							fail_reason = FAIL_REASON_DECAPITATED
 					if (DEFIB_FAIL_BRAINDEAD)
 						fail_reason = FAIL_REASON_BRAINDEAD
 					if (DEFIB_FAIL_CLIENT_MISSING)
-						if(H.mind && !H.client) // No client, like a DNR mob
+						if(H.mind && !H.client) // no client, like a DNR mob or colonist
 							fail_reason = FAIL_REASON_DNR
 						else if (HAS_TRAIT(H, TRAIT_UNDEFIBBABLE))
 							fail_reason = FAIL_REASON_DNR
 						else
 							fail_reason = FAIL_REASON_SOUL // deadheads that exit their body *after* defib starts
 
-				if(fail_reason) // Defibrillation failed
+				if(fail_reason)
 					user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed - [fail_reason]"))
 					playsound(src, 'sound/items/defib_failed.ogg', 50, FALSE)
 					if(!issynth(H) && fail_reason == FAIL_REASON_TISSUE) // if too much damage is causing this to fail, heal them
@@ -319,7 +318,7 @@
 
 						notify_ghosts("<b>[user]</b> has brought <b>[H.name]</b> back to life!", source = H, action = NOTIFY_ORBIT)
 
-					else // Humans, doesn't do anything for synths because they're stupid
+					else // Humans, doesn't do anything for synths
 						// healing target is -52 health
 						var/death_threshold = H.get_death_threshold()
 						var/crit_threshold = 0
@@ -329,7 +328,7 @@
 						var/total_brute = H.getBruteLoss()
 						var/total_burn = H.getFireLoss()
 
-						H.adjustStaminaLoss(-250) // So stamina victims don't come back to life and immediately die
+						H.adjustStaminaLoss(-250) // stamina victims shouldn't die instantly when coming back to life
 
 						if (H.health > hardcrit_target)
 							H.adjustOxyLoss(H.health - hardcrit_target + 2) // You're not getting up that easy.
