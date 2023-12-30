@@ -1,11 +1,4 @@
-/*
-///////////////////Defibrillators///////////////////
-* Defibrillators have changed and will now require that both brute and burn are 179 or under for successful defibrillation.
-* For example, if the patient has 179 brute, 179 burn, and maximum toxin or clone damage, they will get *massive* healing to reach -52 health.
-* If a patient is missing any damage levels, oxygen damage will be dealt so they are in critical condition.
-* If the patient has more than 180 of either brute or burn, the defibrillation will fail and they will heal some brute and burn.
-*/
-
+///////////////////Reason defines///////////////////
 #define DOAFTER_FAIL_STRING "Take [src]'s paddles back out to continue."
 #define FAIL_REASON_TISSUE "Vital signs are weak. Repair damage and try again."
 #define FAIL_REASON_ORGANS "Patient's organs are too damaged to sustain life. Surgical intervention required."
@@ -14,6 +7,7 @@
 #define FAIL_REASON_DNR "Patient is missing intelligence patterns or has a DNR. Further attempts futile."
 #define FAIL_REASON_SOUL "No soul detected. Please try again."
 
+///////////////////Defibrillators///////////////////
 /obj/item/defibrillator
 	name = "emergency defibrillator"
 	desc = "A handheld emergency defibrillator, used to resuscitate patients."
@@ -27,14 +21,18 @@
 	throwforce = 6
 	w_class = WEIGHT_CLASS_NORMAL
 
+	/// if the defibrillator is ready to use (paddles out)
 	var/ready = FALSE
-	///wether readying is needed
+	/// whether this defibrillator has to be turned on to use
 	var/ready_needed = TRUE
-	var/damage_threshold = 15 // maximum brute, burn defibs will heal.
-	var/charge_cost = 66 // how much charge is used when defibbing, with this allows 20 uses
+	/// maximum brute and burn defibs will heal if defibrillation fails because of too much damage
+	var/damage_threshold = 15
+	/// how much charge is used on a shock
+	var/charge_cost = 66
+	/// toggle/shock cooldown
+	var/defib_cooldown = 0
 	var/obj/item/cell/dcell = null
 	var/datum/effect_system/spark_spread/sparks
-	var/defib_cooldown = 0 //Cooldown for toggling the defib
 
 
 /obj/item/defibrillator/suicide_act(mob/user)
@@ -112,7 +110,7 @@
 	if(skill < SKILL_MEDICAL_PRACTICED)
 		user.visible_message(span_notice("[user] fumbles around figuring out how to use [src]."),
 		span_notice("You fumble around figuring out how to use [src]."))
-		if(!do_after(user, SKILL_TASK_AVERAGE - (SKILL_TASK_VERY_EASY * skill), NONE, src, BUSY_ICON_UNSKILLED)) // 3 seconds with medical skill, 5 without
+		if(!do_after(user, SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill), NONE, src, BUSY_ICON_UNSKILLED)) // 3 seconds with medical skill, 5 without
 			return
 
 	defib_cooldown = world.time + 0.6 SECONDS
@@ -297,18 +295,6 @@
 						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
 						H.resuscitate()
 
-						if(user.client)
-							var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
-							personal_statistics.revives++
-						GLOB.round_statistics.total_human_revives[H.faction]++
-						SSblackbox.record_feedback("tally", "round_statistics", 1, "total_human_revives[H.faction]")
-
-						if(CHECK_BITFIELD(H.status_flags, XENO_HOST))
-							var/obj/item/alien_embryo/friend = locate() in H
-							START_PROCESSING(SSobj, friend)
-
-						notify_ghosts("<b>[user]</b> has brought <b>[H.name]</b> back to life!", source = H, action = NOTIFY_ORBIT)
-
 					else // Humans, doesn't do anything for synths
 						// healing target is -52 health
 						var/death_threshold = H.get_death_threshold()
@@ -326,7 +312,7 @@
 						else
 							var/overall_damage = total_brute + total_burn + H.getToxLoss() + H.getOxyLoss() + H.getCloneLoss()
 							var/mobhealth = H.health
-							H.adjustCloneLoss((mobhealth - hardcrit_target) * (H.getCloneLoss() / overall_damage)) // Cleanup so you aren't in hell
+							H.adjustCloneLoss((mobhealth - hardcrit_target) * (H.getCloneLoss() / overall_damage)) // Cleanup so patients aren't in hell.
 							H.adjustOxyLoss((mobhealth - hardcrit_target) * (H.getOxyLoss() / overall_damage) + 2) // just enough to remain in crit
 							H.adjustToxLoss((mobhealth - hardcrit_target) * (H.getToxLoss() / overall_damage))
 							H.adjustFireLoss((mobhealth - hardcrit_target) * (total_burn / overall_damage))
@@ -338,21 +324,22 @@
 						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
 						H.resuscitate() // time for a smoke
 
-						if(user.client)
-							var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
-							personal_statistics.revives++
-						GLOB.round_statistics.total_human_revives[H.faction]++
-						SSblackbox.record_feedback("tally", "round_statistics", 1, "total_human_revives[H.faction]")
+					// update stats and also process alien embryos
+					if(user.client)
+						var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
+						personal_statistics.revives++
+					GLOB.round_statistics.total_human_revives[H.faction]++
+					SSblackbox.record_feedback("tally", "round_statistics", 1, "total_human_revives[H.faction]")
 
-						if(CHECK_BITFIELD(H.status_flags, XENO_HOST))
-							var/obj/item/alien_embryo/friend = locate() in H
-							START_PROCESSING(SSobj, friend)
+					if(CHECK_BITFIELD(H.status_flags, XENO_HOST))
+						var/obj/item/alien_embryo/friend = locate() in H
+						START_PROCESSING(SSobj, friend)
 
-						notify_ghosts("<b>[user]</b> has brought <b>[H.name]</b> back to life!", source = H, action = NOTIFY_ORBIT)
+					notify_ghosts("<b>[user]</b> has brought <b>[H.name]</b> back to life!", source = H, action = NOTIFY_ORBIT)
 
 /obj/item/defibrillator/civi
-	name = "emergency defibrillator"
-	desc = "A handheld emergency defibrillator, used to restore fibrillating patients. Can optionally bring people back from the dead. Appears to be a civillian model."
+	name = "civilian defibrillator"
+	desc = "A handheld emergency defibrillator, used to resuscitate patients. Appears to be a civilian model."
 	icon_state = "civ_defib_full"
 	item_state = "defib"
 
