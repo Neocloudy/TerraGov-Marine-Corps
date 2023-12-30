@@ -110,7 +110,7 @@
 	if(skill < SKILL_MEDICAL_PRACTICED)
 		user.visible_message(span_notice("[user] fumbles around figuring out how to use [src]."),
 		span_notice("You fumble around figuring out how to use [src]."))
-		if(!do_after(user, SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill), NONE, src, BUSY_ICON_UNSKILLED)) // 3 seconds with medical skill, 5 without
+		if(!do_after(user, SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill), NONE, src, BUSY_ICON_UNSKILLED))
 			return
 
 	defib_cooldown = world.time + 0.6 SECONDS
@@ -186,7 +186,7 @@
 	if(skill < SKILL_MEDICAL_PRACTICED)
 		user.visible_message(span_notice("[user] fumbles around figuring out how to use [src]."),
 		span_notice("You fumble around figuring out how to use [src]."))
-		var/fumbling_time = SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill) // since defibs become bulky when active, let's make this more bearable
+		var/fumbling_time = SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill)
 		if(!do_after(user, fumbling_time, NONE, H, BUSY_ICON_UNSKILLED))
 			return
 	else
