@@ -25,12 +25,15 @@
 	var/ready = FALSE
 	/// whether this defibrillator has to be turned on to use
 	var/ready_needed = TRUE
-	/// maximum brute and burn defibs will heal if defibrillation fails because of too much damage
-	var/damage_threshold = 15
-	/// how much charge is used on a shock
+	/// Minimum amount of healing if the defib fails from too much damage.
+	var/damage_heal_minimum = 10
+	/// Maximum amount of healing if the defib fails from too much damage.
+	var/damage_heal_maximum = 20
+	/// How much charge is used on a shock, with a 1320 power cell, allows 20 uses
 	var/charge_cost = 66
-	/// toggle/shock cooldown
+	/// The cooldown for toggling or shocking.
 	var/defib_cooldown = 0
+	/// The defibrillator's power cell
 	var/obj/item/cell/dcell = null
 	var/datum/effect_system/spark_spread/sparks
 
@@ -75,6 +78,11 @@
 
 /obj/item/defibrillator/examine(mob/user)
 	. = ..()
+	var/maxuses = 0
+	var/currentuses = 0
+	maxuses = round(dcell.maxcharge / charge_cost)
+	currentuses = round(dcell.charge / charge_cost)
+	. += span_infoplain("It has [currentuses] out of [maxuses] uses left in its internal battery.")
 	. += maybe_message_recharge_hint()
 
 
@@ -94,7 +102,7 @@
 
 	if(!message)
 		return
-	return span_notice("[message] You can click-drag defibrillator on corpsman backpack to recharge it.")
+	return span_warning("[message] You can click-drag this unit on a corpsman backpack to recharge it.")
 
 
 /obj/item/defibrillator/attack_self(mob/living/carbon/human/user)
@@ -119,7 +127,7 @@
 	span_notice("You turn [src] [ready? "on and open the cover" : "off and close the cover"]."))
 	playsound(get_turf(src), "sparks", 25, TRUE, 4)
 	if(ready)
-		w_class = WEIGHT_CLASS_BULKY // Prevent asspulling a million fully charged defibs when one runs out
+		w_class = WEIGHT_CLASS_BULKY // Prevent pulling out more full defibs when one runs out
 		playsound(get_turf(src), 'sound/items/defib_safetyOn.ogg', 30, 0)
 	else
 		w_class = initial(w_class)
@@ -156,14 +164,6 @@
 			return ghost
 	return null
 
-/mob/living/carbon/human/proc/has_working_organs()
-	var/datum/internal_organ/heart/heart = internal_organs_by_name["heart"]
-
-	if(!heart || heart.organ_status == ORGAN_BROKEN || !has_brain())
-		return FALSE
-
-	return TRUE
-
 /obj/item/defibrillator/attack(mob/living/carbon/human/H, mob/living/carbon/human/user)
 	defibrillate(H,user)
 
@@ -179,8 +179,6 @@
 
 	defib_cooldown = world.time + 0.6 SECONDS
 
-	var/defib_heal_amt = damage_threshold
-
 	//job knowledge requirement
 	var/skill = user.skills.getRating(SKILL_MEDICAL)
 	if(skill < SKILL_MEDICAL_PRACTICED)
@@ -189,8 +187,6 @@
 		var/fumbling_time = SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill)
 		if(!do_after(user, fumbling_time, NONE, H, BUSY_ICON_UNSKILLED))
 			return
-	else
-		defib_heal_amt *= skill * 0.5 //more healing power when used by a doctor (this means non-trained don't heal)
 
 	if(!ishuman(H))
 		to_chat(user, span_warning("You can't defibrilate [H]. You don't even know where to put the paddles!"))
@@ -212,33 +208,33 @@
 	span_notice("You start setting up the paddles on [H]'s chest."))
 
 	if(do_after(user, 3 SECONDS, NONE, H, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
-		playsound(get_turf(src),'sound/items/defib_charge.ogg', 25, 0) // Do not vary, it should be precisely 3 seconds
+		playsound(get_turf(src),'sound/items/defib_charge.ogg', 25, 0) // Don't vary this, the sound needs to be precisely 3 seconds
 		user.visible_message(span_notice("[user] starts charging the paddles on [H]'s chest."),
 		span_notice("You start charging the paddles on [H]'s chest."))
 		if(!ready)
 			to_chat(user, span_warning(DOAFTER_FAIL_STRING))
 			return
 
-		if(do_after(user, 2 SECONDS, NONE, H, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL)) // 5 seconds revive time
+		if(do_after(user, 2 SECONDS, NONE, H, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL)) // 5 seconds total revive time
 			if(!ready)
 				to_chat(user, span_warning(DOAFTER_FAIL_STRING))
 				return
 
-			if(H.stat == DEAD && H.wear_suit && H.wear_suit.flags_atom & CONDUCT) // Dead, but chest obscured.
+			if(H.stat == DEAD && H.wear_suit && H.wear_suit.flags_atom & CONDUCT) // Dead, but their chest is obscured by something conductive, so basically any armor
 				user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient's chest is obscured, operation aborted. Remove suit or armor and try again."))
 				playsound(src, 'sound/items/defib_failed.ogg', 40, FALSE)
 				return
 
-			else if(H.stat != DEAD) // they aren't even dead lol
+			else if(H.stat != DEAD) // They aren't even dead
 				user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Patient is not in a valid state. Operation aborted."))
 				playsound(src, 'sound/items/defib_failed.ogg', 40, FALSE)
 				return
 
-			else // Actual defibrillation, since we can't figure out another reason to not try
+			else // Actual defibrillation
 
 				sparks.start()
 				H.visible_message(span_warning("[H]'s body convulses a bit."))
-				playsound(src, 'sound/items/defib_zap.ogg', 60, FALSE)//, -1)
+				playsound(src, 'sound/items/defib_zap.ogg', 60, FALSE)
 				dcell.use(charge_cost)
 				update_icon()
 				H.updatehealth()
@@ -269,10 +265,10 @@
 				if(fail_reason)
 					user.visible_message(span_warning("[icon2html(src, viewers(user))] \The [src] buzzes: Defibrillation failed - [fail_reason]"))
 					playsound(src, 'sound/items/defib_failed.ogg', 50, FALSE)
-					if(!issynth(H) && fail_reason == FAIL_REASON_TISSUE) // if too much damage is causing this to fail, heal them
-						H.adjustBruteLoss(-defib_heal_amt)
-						H.adjustFireLoss(-defib_heal_amt)
-						H.updatehealth() // cleanup
+					if(!issynth(H) && fail_reason == FAIL_REASON_TISSUE) // Heal them if this is failing because of too much damage.
+						H.adjustBruteLoss(-rand(damage_heal_minimum,damage_heal_maximum))
+						H.adjustFireLoss(-rand(damage_heal_minimum,damage_heal_maximum))
+						H.updatehealth() // Adjust procs won't update health
 
 				else // No fail reason, let's assume it worked.
 
@@ -296,7 +292,7 @@
 						H.resuscitate()
 
 					else // Humans, doesn't do anything for synths
-						// healing target is -52 health
+						// The health target is -52 health
 						var/death_threshold = H.get_death_threshold()
 						var/crit_threshold = 0
 
@@ -305,15 +301,15 @@
 						var/total_brute = H.getBruteLoss()
 						var/total_burn = H.getFireLoss()
 
-						H.adjustStaminaLoss(-250) // stamina victims shouldn't die instantly when coming back to life
+						H.setStaminaLoss(-250) // stamina victims shouldn't die instantly when coming back to life
 
 						if (H.health > hardcrit_target)
-							H.adjustOxyLoss(H.health - hardcrit_target + 2) // You're not getting up that easy.
+							H.adjustOxyLoss(H.health - hardcrit_target + 2) // So they remain in crit.
 						else
 							var/overall_damage = total_brute + total_burn + H.getToxLoss() + H.getOxyLoss() + H.getCloneLoss()
 							var/mobhealth = H.health
-							H.adjustCloneLoss((mobhealth - hardcrit_target) * (H.getCloneLoss() / overall_damage)) // Cleanup so patients aren't in hell.
-							H.adjustOxyLoss((mobhealth - hardcrit_target) * (H.getOxyLoss() / overall_damage) + 2) // just enough to remain in crit
+							H.adjustCloneLoss((mobhealth - hardcrit_target) * (H.getCloneLoss() / overall_damage)) // Some cleanup so patients can't be stuck in cloneloss hell
+							H.adjustOxyLoss((mobhealth - hardcrit_target) * (H.getOxyLoss() / overall_damage) + 2) // So they remain in crit.
 							H.adjustToxLoss((mobhealth - hardcrit_target) * (H.getToxLoss() / overall_damage))
 							H.adjustFireLoss((mobhealth - hardcrit_target) * (total_burn / overall_damage))
 							H.adjustBruteLoss((mobhealth - hardcrit_target) * (total_brute / overall_damage))
@@ -322,9 +318,9 @@
 						to_chat(H, span_notice("<i><font size=4>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane...</font></i>"))
 						user.visible_message(span_notice("[icon2html(src, viewers(user))] \The [src] beeps: Resuscitation successful."))
 						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
-						H.resuscitate() // time for a smoke
+						H.resuscitate() // Time for a smoke
 
-					// update stats and also process alien embryos
+					// Update stats and process alien embryos
 					if(user.client)
 						var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
 						personal_statistics.revives++

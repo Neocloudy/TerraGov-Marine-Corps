@@ -147,6 +147,21 @@
 	return TRUE
 
 /**
+ * Proc to check if a human has the required organs to sustain life.
+ *
+ * Returns false if this human is missing a heart, their current heart is broken, or they have no brain
+ *
+ * Returns true otherwise
+ */
+/mob/living/carbon/human/proc/has_working_organs()
+	var/datum/internal_organ/heart/heart = internal_organs_by_name["heart"]
+
+	if(!heart || heart.organ_status == ORGAN_BROKEN || !has_brain())
+		return FALSE
+
+	return TRUE
+
+/**
  * proc that resuscitates a human, separated because it's better this way
  *
  * intended to be called by defibrillators
