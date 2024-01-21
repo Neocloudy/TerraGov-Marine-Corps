@@ -202,7 +202,7 @@
 
 	var/mob/dead/observer/G = H.get_ghost()
 	if(G)
-		notify_ghost(G, "<font size=4><b>Your heart is being defibrillated!</b></font>", ghost_sound = 'sound/effects/gladosmarinerevive.ogg')
+		notify_ghost(G, "<font size=4.8><b>Someone is trying to revive your body!</b></font>", ghost_sound = 'sound/effects/gladosmarinerevive.ogg')
 		G.reenter_corpse()
 
 	user.visible_message(span_notice("[user] starts setting up the paddles on [H]'s chest."),
