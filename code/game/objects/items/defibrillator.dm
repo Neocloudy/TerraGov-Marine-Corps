@@ -25,14 +25,14 @@
 	var/ready = FALSE
 	/// whether this defibrillator has to be turned on to use
 	var/ready_needed = TRUE
-	/// Minimum amount of healing if the defib fails from too much damage.
-	var/damage_heal_minimum = 10
-	/// Maximum amount of healing if the defib fails from too much damage.
-	var/damage_heal_maximum = 20
+	/// The base number to use for healing amount when the defibrillator fails from too much damage
+	var/damage_threshold = 8
 	/// How much charge is used on a shock, with a 1320 power cell, allows 20 uses
 	var/charge_cost = 66
-	/// The cooldown for toggling or shocking.
+	/// The cooldown for toggling.
 	var/defib_cooldown = 0
+	/// The cooldown for shocking.
+	var/shock_cooldown = 0
 	/// The defibrillator's power cell
 	var/obj/item/cell/dcell = null
 	var/datum/effect_system/spark_spread/sparks
@@ -112,6 +112,7 @@
 	if(!istype(user))
 		return
 	if(defib_cooldown > world.time)
+		user.visible_message(span_warning("You've toggled [src] too recently!"))
 		return
 
 	//Job knowledge requirement
@@ -122,7 +123,7 @@
 		if(!do_after(user, SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill), NONE, src, BUSY_ICON_UNSKILLED))
 			return
 
-	defib_cooldown = world.time + 0.6 SECONDS
+	defib_cooldown = world.time + 1 SECONDS
 	ready = !ready
 	user.visible_message(span_notice("[user] turns [src] [ready? "on and opens the cover" : "off and closes the cover"]."),
 	span_notice("You turn [src] [ready? "on and open the cover" : "off and close the cover"]."))
@@ -174,11 +175,11 @@
 		user.visible_message(span_warning("You're already doing something!"))
 		return
 
-	if(defib_cooldown > world.time) // defibrillator cooldown, trying to keep this low
-		user.visible_message(span_warning("The defibrillator is on cooldown, wait a second!"))
+	if(shock_cooldown > world.time) // separated from defib_cooldown so you can shock instantly after defibrillating someone
+		user.visible_message(span_warning("\The [src] is recharging, wait a second!"))
 		return
 
-	defib_cooldown = world.time + 0.6 SECONDS
+	shock_cooldown = world.time + 0.4 SECONDS
 
 	//job knowledge requirement
 	var/skill = user.skills.getRating(SKILL_MEDICAL)
@@ -188,6 +189,8 @@
 		var/fumbling_time = SKILL_TASK_EASY - (SKILL_TASK_VERY_EASY * skill)
 		if(!do_after(user, fumbling_time, NONE, H, BUSY_ICON_UNSKILLED))
 			return
+	var/defib_heal_amt
+	defib_heal_amt *= skill * 0.5 // Untrained don't heal.
 
 	if(!ishuman(H))
 		to_chat(user, span_warning("You can't defibrilate [H]. You don't even know where to put the paddles!"))
@@ -202,7 +205,7 @@
 
 	var/mob/dead/observer/G = H.get_ghost()
 	if(G)
-		notify_ghost(G, "<font size=4.8><b>Someone is trying to revive your body!</b></font>", ghost_sound = 'sound/effects/gladosmarinerevive.ogg')
+		notify_ghost(G, "<font size=4.8><br><b>Someone is trying to revive your body!</b><br></font>", ghost_sound = 'sound/effects/gladosmarinerevive.ogg')
 		G.reenter_corpse()
 
 	user.visible_message(span_notice("[user] starts setting up the paddles on [H]'s chest."),
@@ -321,7 +324,11 @@
 						playsound(get_turf(src), 'sound/items/defib_success.ogg', 50, 0)
 						H.resuscitate() // Time for a smoke
 
-					// Update stats and process alien embryos
+					// checks if the patient has a camera, if it's off, turns it on
+					if(istype(H.wear_ear, /obj/item/radio/headset/mainship))
+						var/obj/item/radio/headset/mainship/cam_headset = H.wear_ear
+						if(!(cam_headset?.camera?.status))
+							cam_headset.camera.toggle_cam(null, FALSE)
 					if(user.client)
 						var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
 						personal_statistics.revives++
