@@ -57,7 +57,7 @@
 #define span_role_body(str) ("<span class='role_body'>" + str + "</span>")
 #define span_role_header(str) ("<span class='role_header'>" + str + "</span>")
 #define span_rose(str) ("<span class='rose'>" + str + "</span>")
-#define span_round_body(str) ("<span class='span_round_body'>" + str + "</span>")
+#define span_round_body(str) ("<span class='round_body'>" + str + "</span>")
 #define span_round_header(str) ("<span class='round_header'>" + str + "</span>")
 #define span_runtime_line(str) ("<span class='span_runtime_line'>" + str + "</span>")
 #define span_scanner(str) ("<span class='scanner'>" + str + "</span>")
