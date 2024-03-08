@@ -87,6 +87,11 @@
 	///more or less efficiency to metabolize helpful/harmful reagents and (TODO) regulate body temperature..
 	var/metabolism_efficiency = 1
 
+	/// The death sound of this mob.
+	var/death_sound
+	/// The emote death message of this mob.
+	var/death_message
+
 	var/tinttotal = TINT_NONE
 
 	///a list of all status effects the mob has
@@ -125,7 +130,7 @@
 	var/datum/job/job
 	var/comm_title = ""
 	/**
-	 * How much blood the mob has. 
+	 * How much blood the mob has.
 	 * !!! Use the adjust_blood_volume() and set_blood_volume() to set this variable instead of directly modifying it!!!
 	 */
 	var/blood_volume = 0

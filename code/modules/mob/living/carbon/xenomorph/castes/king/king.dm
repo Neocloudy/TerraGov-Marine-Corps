@@ -20,6 +20,7 @@
 	inherent_verbs = list(
 		/mob/living/carbon/xenomorph/proc/hijack,
 	)
+	death_sound = 'sound/voice/alien_king_died.ogg'
 
 /mob/living/carbon/xenomorph/king/Initialize(mapload)
 	. = ..()
@@ -46,5 +47,3 @@
 	if(mind)
 		mind.name = name
 
-/mob/living/carbon/xenomorph/king/death_cry()
-	playsound(loc, 'sound/voice/alien_king_died.ogg', 75, 0)

@@ -17,6 +17,7 @@
 	tier = XENO_TIER_FOUR //Queen doesn't count towards population limit.
 	upgrade = XENO_UPGRADE_NORMAL
 	bubble_icon = "alienroyal"
+	death_sound = 'sound/voice/alien_queen_died.ogg'
 
 	var/breathing_counter = 0
 	inherent_verbs = list(
@@ -96,8 +97,6 @@
 // ***************************************
 // *********** Death
 // ***************************************
-/mob/living/carbon/xenomorph/queen/death_cry()
-	playsound(loc, 'sound/voice/alien_queen_died.ogg', 75, 0)
 
 /mob/living/carbon/xenomorph/queen/xeno_death_alert()
 	return

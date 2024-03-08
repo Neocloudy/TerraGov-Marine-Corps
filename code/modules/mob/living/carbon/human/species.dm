@@ -48,7 +48,10 @@
 	var/gibbed_anim = "gibbed-h"
 	var/dusted_anim = "dust-h"
 	var/remains_type = /obj/effect/decal/cleanable/ash
+
+	/// The death sound for this species. When gaining this species, the *mob death sound* uses this
 	var/death_sound
+	/// The deathgasp string for this species.
 	var/death_message = "seizes up and falls limp, their eyes dead and lifeless..."
 
 	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
@@ -652,7 +655,6 @@
 	secondary_unarmed_type = /datum/unarmed_attack/punch/strong
 	joinable_roundstart = FALSE
 	has_fine_manipulation = TRUE //monki gun
-	death_message = "lets out a faint chimper as it collapses and stops moving..."
 	dusted_anim = "dust-m"
 	gibbed_anim = "gibbed-m"
 	is_sentient = FALSE

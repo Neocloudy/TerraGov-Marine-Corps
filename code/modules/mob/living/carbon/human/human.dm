@@ -855,6 +855,12 @@
 		max_stamina_buffer = max_stamina
 		setStaminaLoss(-max_stamina)
 
+	// Set the death sound and custom message.
+	if(species.death_sound)
+		death_sound = species.death_sound
+	if(species.death_message)
+		death_message = species.death_message
+
 	add_movespeed_modifier(MOVESPEED_ID_SPECIES, TRUE, 0, NONE, TRUE, species.slowdown)
 	species.on_species_gain(src, oldspecies) //todo move most of the stuff in this proc to here
 	return TRUE

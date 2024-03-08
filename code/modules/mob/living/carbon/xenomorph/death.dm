@@ -1,14 +1,9 @@
-
-/mob/living/carbon/xenomorph/proc/death_cry()
-	playsound(loc, prob(50) ? 'sound/voice/alien_death.ogg' : 'sound/voice/alien_death2.ogg', 25, 1)
-
-
-/mob/living/carbon/xenomorph/death(gibbing, deathmessage = "lets out a waning guttural screech, green blood bubbling from its maw.", silent)
+/*/mob/living/carbon/xenomorph/death(gibbing, silent)
 	if(stat == DEAD)
 		return ..()
 	return ..() //Just a different standard deathmessage
 
-
+*/
 /mob/living/carbon/xenomorph/on_death()
 	GLOB.alive_xeno_list -= src
 	LAZYREMOVE(GLOB.alive_xeno_list_hive[hivenumber], src)
@@ -37,8 +32,6 @@
 		if(hud_used.alien_plasma_display)
 			hud_used.alien_plasma_display.icon_state = "power_display_empty"
 	update_icons()
-
-	death_cry()
 
 	xeno_death_alert()
 
