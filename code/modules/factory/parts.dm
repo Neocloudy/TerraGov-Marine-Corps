@@ -39,25 +39,11 @@
 	next_machine = recipe[stage][STEP_NEXT_MACHINE]
 	icon_state = recipe[stage][STEP_ICON_STATE]
 
-GLOBAL_LIST_INIT(phosnade_recipe, list(
+GLOBAL_LIST_INIT(grenade, list(
 	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "uncutplate"),
 	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_HEATER, STEP_ICON_STATE = "cutplate"),
-	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FORMER, STEP_ICON_STATE = "hotplate"),
-	))
-
-/obj/item/factory_part/phosnade
-	name = "phosphorus grenade assembly"
-	desc = "A incomplete phosphorus grenade assembly"
-	result = /obj/item/explosive/grenade/phosphorus
-
-/obj/item/factory_part/phosnade/Initialize(mapload)
-	. = ..()
-	recipe = GLOB.phosnade_recipe
-
-
-GLOBAL_LIST_INIT(bignade_recipe,  list(
-	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "uncutplate"),
 	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FORMER, STEP_ICON_STATE = "roundplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_COMPRESSOR, STEP_ICON_STATE = "hotplate"),
 	))
 
 /obj/item/factory_part/bignade
@@ -67,7 +53,97 @@ GLOBAL_LIST_INIT(bignade_recipe,  list(
 
 /obj/item/factory_part/bignade/Initialize(mapload)
 	. = ..()
-	recipe = GLOB.bignade_recipe
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/incennade
+	name = "incendiary grenade assembly"
+	desc = "An incomplete incendiary grenade casing."
+	result = /obj/item/explosive/grenade/incendiary
+
+/obj/item/factory_part/incennade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/stickynade
+	name = "adhesive grenade assembly."
+	desc = "An incomplete adhesive grenade casing."
+	result = /obj/item/explosive/grenade/sticky
+
+/obj/item/factory_part/stickynade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/phosnade
+	name = "phosphorus grenade assembly"
+	desc = "An incomplete phosphorus grenade casing."
+	result = /obj/item/explosive/grenade/phosphorus
+
+/obj/item/factory_part/phosnade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/cloaknade
+	name = "cloaking grenade assembly"
+	desc = "An incomplete cloaking grenade casing."
+	result = /obj/item/explosive/grenade/smokebomb/cloak
+
+/obj/item/factory_part/cloaknade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/tfootnade
+	name = "tanglefoot grenade assembly"
+	desc ="An incomplete tanglefoot grenade casing."
+	result = /obj/item/explosive/grenade/smokebomb/drain
+
+/obj/item/factory_part/tfootnade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/trailblazer
+	name = "trailblazer grenade assembly"
+	desc = "An incomplete trailblazer grenade casing."
+	result = /obj/item/explosive/grenade/sticky/trailblazer
+
+/obj/item/factory_part/trailblazer/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/lasenade
+	name = "laser grenade assembly"
+	desc = "An incomplete laser grenade casing."
+	result = /obj/item/explosive/grenade/bullet/laser
+
+/obj/item/factory_part/lasenade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/hefanade
+	name = "HEFA fragmentation grenade assembly"
+	desc = "An incomplete HEFA fragmentation grenade casing."
+	result = /obj/item/explosive/grenade/bullet/hefa
+
+/obj/item/factory_part/hefanade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/antigas
+	name = "anti-gas smoke grenade assembly"
+	desc = "An incomplete anti-gas smoke grenade casing."
+	result = /obj/item/explosive/grenade/smokebomb/antigas
+
+/obj/item/factory_part/antigas/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
+
+/obj/item/factory_part/razornade
+	name = "razorfoam grenade assembly"
+	desc = "An unfinished Razorfoam grenade casing."
+	result = /obj/item/explosive/grenade/chem_grenade/razorburn_small
+
+/obj/item/factory_part/razornade/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.grenade
 
 GLOBAL_LIST_INIT(pizza_recipe,  list(
 	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "dough"),
@@ -318,6 +394,15 @@ GLOBAL_LIST_INIT(IFF_ammo, list(
 	. = ..()
 	recipe = GLOB.IFF_ammo
 
+/obj/item/factory_part/sniper_flak_magazine
+	name = "\improper FLAK sniper bullet box"
+	desc = "A box with unfinished flak sniper rounds inside."
+	result = /obj/item/ammo_magazine/rifle/chamberedrifle/flak
+
+/obj/item/factory_part/sniper_flak_magazine/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.IFF_ammo
+
 GLOBAL_LIST_INIT(mateba_speedloader, list(
 	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "uncutplate"),
 	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FLATTER, STEP_ICON_STATE = "bulletbox"),
@@ -378,20 +463,6 @@ GLOBAL_LIST_INIT(minigun_powerpack, list(
 /obj/item/factory_part/minigun_powerpack/Initialize(mapload)
 	. = ..()
 	recipe = GLOB.minigun_powerpack
-
-GLOBAL_LIST_INIT(razornade, list(
-	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "uncutplate"),
-	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FORMER, STEP_ICON_STATE = "roundplate"),
-	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_HEATER, STEP_ICON_STATE = "cutplate"),
-	))
-/obj/item/factory_part/razornade
-	name = "razorfoam grenade"
-	desc = "An unfinished Razorfoam grenade casing."
-	result = /obj/item/explosive/grenade/chem_grenade/razorburn_small
-
-/obj/item/factory_part/razornade/Initialize(mapload)
-	. = ..()
-	recipe = GLOB.razornade
 
 GLOBAL_LIST_INIT(howitzer_shell, list(
 	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "uncutplate"),
@@ -664,3 +735,169 @@ GLOBAL_LIST_INIT(equipment_recipe, list(
 /obj/item/factory_part/deployable_camera/Initialize(mapload)
 	. = ..()
 	recipe = GLOB.equipment_recipe
+
+GLOBAL_LIST_INIT(agls_recipe, list(
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "uncutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_HEATER, STEP_ICON_STATE = "cutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CONSTRUCTOR, STEP_ICON_STATE = "hotplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FLATTER, STEP_ICON_STATE = "rockettube"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_GALVANIZER, STEP_ICON_STATE = "hotplate"),
+	))
+
+/obj/item/factory_part/agls_he
+	name = "\improper AGLS HE magazine assembly"
+	desc = "An incomplete AGLS HE magazine assembly."
+	result = /obj/item/ammo_magazine/standard_agls
+
+/obj/item/factory_part/obj/item/factory_part/agls_he/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.agls_recipe
+
+/obj/item/factory_part/agls_frag
+	name = "\improper AGLS Frag magazine assembly"
+	desc = "An incomplete AGLS Frag magazine assembly."
+	result = /obj/item/ammo_magazine/standard_agls/fragmentation
+
+/obj/item/factory_part/agls_frag/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.agls_recipe
+
+/obj/item/factory_part/agls_incendiary
+	name = "\improper AGLS HE magazine assembly"
+	desc = "An incomplete AGLS HE magazine assembly."
+	result = /obj/item/ammo_magazine/standard_agls/incendiary
+
+/obj/item/factory_part/agls_incendiary/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.agls_recipe
+
+/obj/item/factory_part/agls_flare
+	name = "\improper AGLS HE magazine assembly"
+	desc = "An incomplete AGLS HE magazine assembly."
+	result = /obj/item/ammo_magazine/standard_agls/flare
+
+/obj/item/factory_part/agls_flare/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.agls_recipe
+
+/obj/item/factory_part/agls_cloak
+	name = "\improper AGLS HE magazine assembly"
+	desc = "An incomplete AGLS HE magazine assembly."
+	result = /obj/item/ammo_magazine/standard_agls/cloak
+
+/obj/item/factory_part/agls_cloak/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.agls_recipe
+
+/obj/item/factory_part/agls_tanglefoot
+	name = "\improper AGLS HE magazine assembly"
+	desc = "An incomplete AGLS HE magazine assembly."
+	result = /obj/item/ammo_magazine/standard_agls/tanglefoot
+
+/obj/item/factory_part/agls_tanglefoot/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.agls_recipe
+
+GLOBAL_LIST_INIT(atgun_recipe, list(
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_CUTTER, STEP_ICON_STATE = "uncutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_HEATER, STEP_ICON_STATE = "cutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FLATTER, STEP_ICON_STATE = "hotplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_COMPRESSOR, STEP_ICON_STATE = "rockettube"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_GALVANIZER, STEP_ICON_STATE = "rockettube"),
+	))
+
+/obj/item/factory_part/atgun_aphe
+	name = "\improper AT-36 APHE shell assembly"
+	desc = "An incomplete AT-36 APHE shell assembly."
+	result = /obj/item/ammo_magazine/standard_atgun
+
+/obj/item/factory_part/atgun_aphe/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.atgun_recipe
+
+/obj/item/factory_part/atgun_apcr
+	name = "\improper AT-36 APCR shell assembly"
+	desc = "An incomplete AT-36 APCR shell assembly."
+	result = /obj/item/ammo_magazine/standard_atgun/apcr
+
+/obj/item/factory_part/atgun_apcr/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.atgun_recipe
+
+/obj/item/factory_part/atgun_he
+	name = "\improper AT-36 HE shell assembly"
+	desc = "An incomplete AT-36 HE shell assembly."
+	result = /obj/item/ammo_magazine/standard_atgun/he
+
+/obj/item/factory_part/atgun_he/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.atgun_recipe
+
+/obj/item/factory_part/atgun_beehive
+	name = "\improper AT-36 Beehive shell assembly"
+	desc = "An incomplete AT-36 Beehive shell assembly."
+	result = /obj/item/ammo_magazine/standard_atgun/beehive
+
+/obj/item/factory_part/atgun_beehive/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.atgun_recipe
+
+/obj/item/factory_part/atgun_incend
+	name = "\improper AT-36 Napalm shell assembly"
+	desc = "An incomplete AT-36 Napalm shell assembly."
+	result = /obj/item/ammo_magazine/standard_atgun/incend
+
+/obj/item/factory_part/atgun_incend/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.atgun_recipe
+
+GLOBAL_LIST_INIT(heavy_isg_recipe, list(
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_HEATER, STEP_ICON_STATE = "uncutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_COMPRESSOR, STEP_ICON_STATE = "cutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_DRILLER, STEP_ICON_STATE = "hotplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_GALVANIZER, STEP_ICON_STATE = "rockettube"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FORMER, STEP_ICON_STATE = "rockettube"),
+	))
+
+/obj/item/factory_part/heavy_isg_he
+	name = "\improper FK-88 HE shell assembly"
+	desc = "An incomplete FK-88 HE shell assembly."
+	result = /obj/item/ammo_magazine/heavy_isg/he
+
+/obj/item/factory_part/heavy_isg_he/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.heavy_isg_recipe
+
+/obj/item/factory_part/heavy_isg_sabot
+	name = "\improper FK-88 HE shell assembly"
+	desc = "An incomplete FK-88 APFDS shell assembly."
+	result = /obj/item/ammo_magazine/heavy_isg/sabot
+
+/obj/item/factory_part/heavy_isg_sabot/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.heavy_isg_recipe
+
+GLOBAL_LIST_INIT(ac_recipe, list(
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_HEATER, STEP_ICON_STATE = "uncutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_COMPRESSOR, STEP_ICON_STATE = "cutplate"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_GALVANIZER, STEP_ICON_STATE = "rockettube"),
+	list(STEP_NEXT_MACHINE = FACTORY_MACHINE_FORMER, STEP_ICON_STATE = "rockettube"),
+	))
+
+/obj/item/factory_part/ac_hv
+	name = "\improper ATR-22 high velocity magazine assembly"
+	desc = "An incomplete ATR-22 high velocity magazine assembly."
+	result = /obj/item/ammo_magazine/auto_cannon
+
+/obj/item/factory_part/ac_hv/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.ac_recipe
+
+/obj/item/factory_part/ac_flak
+	name = "\improper ATR-22 flak magazine assembly"
+	desc = "An incomplete ATR-22 flak magazine assembly."
+	result = /obj/item/ammo_magazine/auto_cannon/flak
+
+/obj/item/factory_part/ac_flak/Initialize(mapload)
+	. = ..()
+	recipe = GLOB.ac_recipe

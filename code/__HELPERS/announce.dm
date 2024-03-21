@@ -55,16 +55,16 @@
 	return finalized_alert
 
 /**
- * Make a priority announcement to a target
+ * Make a priority announcement to a target.
  *
  * Arguments
- * * message - **required,** the content of the announcement
+ * * message - required the content of the announcement
  * * title - optional, the title of the announcement
  * * subtitle - optional, the subtitle/subheader of the announcement
  * * type - optional, the type of the announcement (see defines in `__HELPERS/announce.dm`)
  * * sound - optional, the sound played accompanying the announcement
  * * random_channel - optional, is this sound going to be on a random channel? (so it can't be interrupted)
- * * color_override - **recommended,** string, use the passed color instead of the default blue (see defines in `__HELPERS/announce.dm`)
+ * * color_override - recommended, use this string instead of the default blue (see defines in `__HELPERS/announce.dm` or `chat_[light/dark].scss`)
  * * receivers - a list of all players to send the message to. defaults to all players, not including those in lobby
  */
 /proc/priority_announce(message, title = "Announcement", subtitle = "", type = ANNOUNCEMENT_REGULAR, sound = 'sound/misc/notice2.ogg', random_channel = FALSE, color_override, list/receivers = (GLOB.alive_human_list + GLOB.ai_list + GLOB.observer_list))
@@ -135,11 +135,11 @@
  * * alert - optional, alert or notice?
  * * receivers - a list of all players to send the message to
  */
-/proc/minor_announce(message, title = "Attention:", alert = TRUE, list/receivers = GLOB.alive_human_list)
+/proc/minor_announce(message, title = "Attention:", alert, list/receivers = GLOB.alive_human_list, should_play_sound = TRUE)
 	if(!message)
 		return
 
-	var/sound/S = alert ? sound('sound/misc/notice2.ogg') : sound('sound/misc/notice3.ogg')
+	var/sound/S = alert ? sound('sound/misc/notice1.ogg') : sound('sound/misc/notice2.ogg')
 	S.channel = CHANNEL_ANNOUNCEMENTS
 	for(var/mob/M AS in receivers)
 		if(!isnewplayer(M) && !isdeaf(M))
@@ -148,7 +148,8 @@
 				message = message,
 				minor = TRUE
 			))
-			SEND_SOUND(M, S)
+			if(should_play_sound)
+				SEND_SOUND(M, S)
 
 #undef span_alert_header
 #undef span_faction_alert_title

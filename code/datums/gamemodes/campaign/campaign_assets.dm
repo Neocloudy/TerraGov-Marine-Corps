@@ -30,6 +30,8 @@
 	var/detailed_desc = "This is a placeholder asset. You shouldn't see this, it does nothing at all."
 	///The faction associated with these stats
 	var/datum/faction_stats/faction
+	///Specific portrait used when activating this asset. Defaults to faction default if not specified
+	var/asset_portrait = null
 	///asset related flags
 	var/asset_flags = ASSET_ACTIVATED_EFFECT
 	///Number of times this can be used
@@ -68,8 +70,8 @@
 		immediate_effect()
 
 ///Handles the activated asset process
-/datum/campaign_asset/proc/attempt_activatation(mob/user)
-	if(activation_checks(user))
+/datum/campaign_asset/proc/attempt_activatation(mob/user, check_override = FALSE)
+	if(!check_override && activation_checks(user))
 		return FALSE
 
 	activated_effect()

@@ -14,7 +14,7 @@ export const MarineDropship = (props) => {
 
   return (
     <>
-      {data.is_human ? (
+      {!data.is_xeno ? (
         <Window width={500} height={600}>
           <Window.Content scrollable>
             {!data.hijack_state ? (
@@ -165,7 +165,10 @@ const CorruptedOperation = (props) => {
           </Button>
         </Box>
         <Box mt={1}>
-          <Button onClick={() => act('abduct')}>
+          <Button
+            onClick={() => act('abduct')}
+            disabled={data.shuttle_hijacked}
+          >
             Capture the {data.ship_name}
           </Button>
         </Box>

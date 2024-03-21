@@ -63,7 +63,6 @@ There are several things that need to be remembered:
 
 
 /mob/living/carbon/human
-	var/list/overlays_standing[TOTAL_LAYERS]
 	var/list/underlays_standing[TOTAL_UNDERLAYS]
 	var/previous_damage_appearance // store what the body last looked like, so we only have to update it if something changed
 
@@ -285,8 +284,8 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 		stand_icon.Blend(eyes, ICON_OVERLAY)
 
 		//Mouth	(lipstick!)
-		if(lip_style && (species?.species_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
-			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "camo_[lip_style]_s"), ICON_OVERLAY)
+		if(makeup_style && (species?.species_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
+			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "camo_[makeup_style]_s"), ICON_OVERLAY)
 
 
 	if(species.species_flags & HAS_UNDERWEAR)
@@ -668,8 +667,8 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 	eyes_l.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
 	face_lying.Blend(eyes_l, ICON_OVERLAY)
 
-	if(lip_style)
-		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
+	if(makeup_style)
+		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "lips_[makeup_style]_l"), ICON_OVERLAY)
 
 	var/image/face_lying_image = new /image(icon = face_lying)
 	return face_lying_image

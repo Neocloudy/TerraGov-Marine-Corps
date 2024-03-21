@@ -348,18 +348,17 @@
 			clear_fullscreen("remote_view", 0)
 
 /mob/living/silicon/ai/update_sight()
-	. = ..()
 	if(HAS_TRAIT(src, TRAIT_SEE_IN_DARK))
 		see_in_dark = max(see_in_dark, 8)
 		lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
 		eyeobj.see_in_dark = max(eyeobj.see_in_dark, 8)
 		eyeobj.lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
-		return
+		return ..()
+	see_in_dark = initial(see_in_dark)
+	lighting_alpha = initial(lighting_alpha)
 	eyeobj.see_in_dark = initial(eyeobj.see_in_dark)
 	eyeobj.lighting_alpha = initial(eyeobj.lighting_alpha)
-	see_in_dark = initial(see_in_dark)
-	lighting_alpha = initial(lighting_alpha) // yes you really have to change both the eye and the ai vars
-
+	return ..()
 
 /mob/living/silicon/ai/get_status_tab_items()
 	. = ..()
@@ -396,6 +395,9 @@
 			. += "AI bioscan status: Instruments recalibrating, next scan in [(last_ai_bioscan  + COOLDOWN_AI_BIOSCAN - world.time)/10] seconds." //about 10 minutes
 		else
 			. += "AI bioscan status: Instruments are ready to scan the planet."
+	var/status_value = SSevacuation?.get_status_panel_eta()
+	if(status_value)
+		. += "Evacuation in: [status_value]"
 
 /mob/living/silicon/ai/fully_replace_character_name(oldname, newname)
 	. = ..()
