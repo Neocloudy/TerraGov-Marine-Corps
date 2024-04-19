@@ -797,79 +797,6 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 	visible_message(span_boldnotice("[selected_marine] has been transfered from squad '[old_squad]' to squad '[new_squad]'. Logging to enlistment file."))
 	to_chat(selected_marine, "[icon2html(src, selected_marine)] <font size='3' color='blue'><B>\[Overwatch\]:</b> You've been transfered to [new_squad]!</font>")
 
-	/*
-	if(!source)
-		return
-	if(!current_squad)
-		to_chat(source, "[icon2html(src, source)] [span_warning("No squad selected!")]")
-		return
-	var/datum/squad/S = current_squad
-	if(!camera)
-		var/mob/living/carbon/human/transfer_marine = tgui_input_list(source, "Choose marine to transfer", "Transfer Marine", current_squad.marines_list)
-	if(!transfer_marine || S != current_squad) //don't change overwatched squad, idiot.
-		return
-
-	if(!istype(transfer_marine) || !transfer_marine.mind || transfer_marine.stat == DEAD) //gibbed, decapitated/ssd, dead
-		to_chat(source, "[icon2html(src, source)] [span_warning("[transfer_marine] is KIA.")]")
-		return
-
-	if(!istype(transfer_marine.wear_id, /obj/item/card/id))
-		to_chat(usr, "[icon2html(src, usr)] [span_warning("Transfer aborted. [transfer_marine] isn't wearing an ID.")]")
-		return
-
-	var/list/available_squads = list()
-	for(var/datum/squad/squad AS in SSjob.active_squads[faction])
-		available_squads += squad
-
-	var/datum/squad/new_squad = tgui_input_list(usr, "Choose the marine's new squad", "Squad Selection", available_squads)
-	if(!new_squad || S != current_squad)
-		return
-
-	if(!istype(transfer_marine) || !transfer_marine.mind || transfer_marine.stat == DEAD)
-		to_chat(usr, "[icon2html(src, usr)] [span_warning("[transfer_marine] is KIA.")]")
-		return
-
-	if(!istype(transfer_marine.wear_id, /obj/item/card/id))
-		to_chat(usr, "[icon2html(src, usr)] [span_warning("Transfer aborted. [transfer_marine] isn't wearing an ID.")]")
-		return
-
-	var/datum/squad/old_squad = transfer_marine.assigned_squad
-	if(new_squad == old_squad)
-		to_chat(usr, "[icon2html(src, source)] [span_warning("[transfer_marine] is already in [new_squad]!")]")
-		return
-
-	if((ismarineleaderjob(transfer_marine.job) || issommarineleaderjob(transfer_marine.job)) && new_squad.current_positions[transfer_marine.job.type] >= SQUAD_MAX_POSITIONS(transfer_marine.job.total_positions))
-		to_chat(usr, "[icon2html(src, source)] [span_warning("Transfer aborted. [new_squad] can't have another [transfer_marine.job.title].")]")
-		return
-
-	if(!new_squad)
-		return
-
-	if(old_squad)
-		if(old_squad.squad_leader == transfer_marine)
-			old_squad.demote_leader()
-		old_squad.remove_from_squad(transfer_marine)
-	new_squad.insert_into_squad(transfer_marine)
-
-	for(var/datum/data/record/t in GLOB.datacore.general) //we update the crew manifest
-		if(t.fields["name"] == transfer_marine.real_name)
-			t.fields["squad"] = new_squad.name
-			break
-
-	var/obj/item/card/id/ID = transfer_marine.wear_id
-	ID.assigned_fireteam = 0 //reset fireteam assignment
-
-	//Changes headset frequency to match new squad
-	var/obj/item/radio/headset/mainship/marine/headset = transfer_marine.wear_ear
-	if(istype(headset, /obj/item/radio/headset/mainship/marine))
-		headset.set_frequency(new_squad.radio_freq)
-
-	transfer_marine.hud_set_job()
-	if(issilicon(source))
-		to_chat(source, span_boldnotice("[transfer_marine] has been transfered from squad '[old_squad]' to squad '[new_squad]'. Logging to enlistment file."))
-	visible_message(span_boldnotice("[transfer_marine] has been transfered from squad '[old_squad]' to squad '[new_squad]'. Logging to enlistment file."))
-	to_chat(transfer_marine, "[icon2html(src, transfer_marine)] <font size='3' color='blue'><B>\[Overwatch\]:</b> You've been transfered to [new_squad]!</font>")*/
-
 /**
  * Message a squad member
  *
@@ -951,6 +878,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 						if(!target.faction == faction || get_dist(target, turf_target) > 9)
 							continue
 						transfer_squad(source, target, chosen_squad)
+
 ///Radial squad select menu.
 /obj/machinery/computer/camera_advanced/overwatch/proc/squad_select(datum/source, atom/A)
 	var/list/squad_options = list()
@@ -967,7 +895,6 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 	if(marked_lase)
 		SSminimaps.remove_marker(marked_lase)
 		marked_lase = null
-
 
 ///This is an orbital light. Basically, huge thing which the CIC can use to light up areas for a bit of time.
 /obj/machinery/computer/camera_advanced/overwatch/proc/attempt_spotlight(datum/source, atom/A, params)
