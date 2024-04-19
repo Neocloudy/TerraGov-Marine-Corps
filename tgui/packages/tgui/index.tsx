@@ -17,7 +17,10 @@ import './styles/themes/retro.scss';
 import './styles/themes/syndicate.scss';
 import './styles/themes/som.scss';
 import './styles/themes/xeno.scss';
-import './styles/themes/crt/crt-green.scss';
+import './styles/themes/overwatch-alpha.scss';
+import './styles/themes/overwatch-bravo.scss';
+import './styles/themes/overwatch-charlie.scss';
+import './styles/themes/overwatch-delta.scss';
 
 import { perf } from 'common/perf';
 import { setupHotReloading } from 'tgui-dev-server/link/client.cjs';
