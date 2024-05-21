@@ -126,6 +126,7 @@
 			data["radiallasersgunpref"] = !!(toggles_gameplay & RADIAL_LASERGUNS)
 			data["autointeractdeployablespref"] = !!(toggles_gameplay & AUTO_INTERACT_DEPLOYABLES)
 			data["directional_attacks"] = !!(toggles_gameplay & DIRECTIONAL_ATTACKS)
+			data["show_health_scan"] = !!(toggles_gameplay & SHOW_HEALTH_SCAN)
 			data["scaling_method"] = scaling_method
 			data["pixel_size"] = pixel_size
 			data["parallax"] = parallax
@@ -827,6 +828,9 @@
 
 		if("directional_attacks")
 			toggles_gameplay ^= DIRECTIONAL_ATTACKS
+
+		if("show_health_scan")
+			toggles_gameplay ^= SHOW_HEALTH_SCAN
 
 		if("pixel_size")
 			switch(pixel_size)

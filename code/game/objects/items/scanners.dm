@@ -115,6 +115,9 @@ REAGENT SCANNER
 	patient = M
 	current_user = user
 	if(show_patient)
+		if(!(patient.client?.prefs?.toggles_gameplay & SHOW_HEALTH_SCAN))
+			balloon_alert(user, "Can't show healthscan")
+			return
 		balloon_alert_to_viewers("Showed healthscan", vision_distance = 4)
 		ui_interact(M)
 	else
