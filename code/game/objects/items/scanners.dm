@@ -90,14 +90,6 @@ REAGENT SCANNER
 
 /obj/item/healthanalyzer/attack(mob/living/carbon/M, mob/living/user)
 	. = ..()
-	analyze_vitals(M, user)
-
-/obj/item/healthanalyzer/attack_alternate(mob/living/carbon/M, mob/living/user)
-	. = ..()
-	analyze_vitals(M, user, TRUE)
-
-///Health scans a target. M is the thing being scanned, user is the person doing the scanning, show_patient will show the UI to the scanee when TRUE.
-/obj/item/healthanalyzer/proc/analyze_vitals(mob/living/carbon/M, mob/living/user, show_patient)
 	if(user.skills.getRating(SKILL_MEDICAL) < skill_threshold)
 		to_chat(user, span_warning("You start fumbling around with [src]..."))
 		if(!do_after(user, max(SKILL_TASK_AVERAGE - (1 SECONDS * user.skills.getRating(SKILL_MEDICAL)), 0), NONE, M, BUSY_ICON_UNSKILLED))
@@ -114,11 +106,7 @@ REAGENT SCANNER
 		return
 	patient = M
 	current_user = user
-	if(show_patient)
-		balloon_alert_to_viewers("Showed healthscan", vision_distance = 4)
-		ui_interact(M)
-	else
-		ui_interact(user)
+	ui_interact(user)
 	update_static_data(user)
 	if(user.skills.getRating(SKILL_MEDICAL) < upper_skill_threshold)
 		return
