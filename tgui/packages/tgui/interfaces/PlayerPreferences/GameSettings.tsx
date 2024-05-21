@@ -5,7 +5,6 @@ import {
   LabeledList,
   Section,
   Stack,
-  Tooltip,
 } from '../../components';
 import {
   LoopingSelectionPreference,
@@ -151,15 +150,13 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
               />
-              <Tooltip content="Allow other people to show you your health scan">
-                <ToggleFieldPreference
-                  label="Allow showing healthscan"
-                  value="show_health_scan"
-                  action="show_health_Scan"
-                  leftLabel={'Enabled'}
-                  rightLabel={'Disabled'}
-                />
-              </Tooltip>
+              <ToggleFieldPreference
+                label="Allow showing healthscan"
+                value="show_health_scan"
+                action="show_health_scan"
+                leftLabel={'Enabled'}
+                rightLabel={'Disabled'}
+              />
             </LabeledList>
           </Section>
         </Stack.Item>
