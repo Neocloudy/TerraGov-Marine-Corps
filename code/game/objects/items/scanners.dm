@@ -87,6 +87,8 @@ REAGENT SCANNER
 	var/mob/living/carbon/human/current_user
 	///Distance the current_user can be away from the patient and still get health data.
 	var/track_distance = 3
+	///The cooldown for trying to show someone their health scan
+	var/show_health_scan_cooldown = 0
 
 /obj/item/healthanalyzer/attack(mob/living/carbon/M, mob/living/user)
 	. = ..()
@@ -96,29 +98,41 @@ REAGENT SCANNER
 	. = ..()
 	analyze_vitals(M, user, TRUE)
 
-///Health scans a target. M is the thing being scanned, user is the person doing the scanning, show_patient will show the UI to the scanee when TRUE.
-/obj/item/healthanalyzer/proc/analyze_vitals(mob/living/carbon/M, mob/living/user, show_patient)
+///Health scans a target. target is the thing being scanned, user is the person doing the scanning, show_patient will show the UI to the scanee when TRUE.
+/obj/item/healthanalyzer/proc/analyze_vitals(mob/living/carbon/target, mob/living/user, show_patient)
 	if(user.skills.getRating(SKILL_MEDICAL) < skill_threshold)
 		to_chat(user, span_warning("You start fumbling around with [src]..."))
-		if(!do_after(user, max(SKILL_TASK_AVERAGE - (1 SECONDS * user.skills.getRating(SKILL_MEDICAL)), 0), NONE, M, BUSY_ICON_UNSKILLED))
+		if(!do_after(user, max(SKILL_TASK_AVERAGE - (1 SECONDS * user.skills.getRating(SKILL_MEDICAL)), 0), NONE, target, BUSY_ICON_UNSKILLED))
 			return
-	playsound(src.loc, 'sound/items/healthanalyzer.ogg', 50)
-	if(!iscarbon(M))
+	if(!iscarbon(target))
 		balloon_alert(user, "Cannot scan")
 		return
-	if(isxeno(M))
+	if(isxeno(target))
 		balloon_alert(user, "Unknown entity")
 		return
-	if(M.species.species_flags & NO_SCAN)
+	if(target.species.species_flags & NO_SCAN)
 		balloon_alert(user, "Not Organic")
 		return
-	patient = M
+	patient = target
 	current_user = user
 	if(show_patient)
+		if(show_health_scan_cooldown > world.time)
+			balloon_alert(user, "On cooldown")
+			return // don't let people spam patients with chat messages
+		if(target.faction != current_user.faction)
+			balloon_alert(user, "Can't show healthscan")
+			return // don't let people healthscan their enemies in hvh gamemodes
+		balloon_alert_to_viewers("Showing healthscan...", vision_distance = 4)
+		show_health_scan_cooldown = world.time + 4 SECONDS
+		to_chat(target, span_userdanger("[user] is trying to show you a scan of your health."))
+		if(!do_after(current_user, 2 SECONDS, NONE, target, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
+			balloon_alert(user, "Interrupted")
+			return
 		balloon_alert_to_viewers("Showed healthscan", vision_distance = 4)
-		ui_interact(M)
+		ui_interact(target)
 	else
 		ui_interact(user)
+	playsound(src.loc, 'sound/items/healthanalyzer.ogg', 50)
 	update_static_data(user)
 	if(user.skills.getRating(SKILL_MEDICAL) < upper_skill_threshold)
 		return
