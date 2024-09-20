@@ -33,7 +33,7 @@
 
 /obj/item/clothing/gloves/defibrillator/examine(mob/user)
 	. = ..()
-	. += internal_defib.charge_information()
+	. += internal_defib.charge_information(user)
 
 /obj/item/clothing/gloves/defibrillator/update_overlays()
 	. = ..()

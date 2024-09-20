@@ -33,15 +33,11 @@
 
 /obj/item/defibrillator/Initialize(mapload)
 	. = ..()
-	sparks = new
-	sparks.set_up(5, 0, src)
-	sparks.attach(src)
 	set_dcell(new /obj/item/cell())
 	update_icon()
 
 
 /obj/item/defibrillator/Destroy()
-	QDEL_NULL(sparks)
 	if(dcell)
 		UnregisterSignal(dcell, COMSIG_QDELETING)
 		QDEL_NULL(dcell)
@@ -71,7 +67,7 @@
 
 /obj/item/defibrillator/examine(mob/user)
 	. = ..()
-	. += charge_information()
+	. += charge_information(user)
 
 
 ///Returns the amount of charges left and how to recharge the defibrillator.
@@ -80,6 +76,8 @@
 		return
 
 	var/message
+	if(user.skills.getRating(SKILL_MEDICAL) >= SKILL_MEDICAL_EXPERT)
+		message += span_info("You are proficient enough in the Medical field to take less time when using this unit.\n")
 	message += span_info("It has [round(dcell.charge / charge_cost)] out of [round(dcell.maxcharge / charge_cost)] uses left in its internal battery.\n")
 	if(dcell.charge < charge_cost)
 		message += span_alert("The battery is empty.\n")
@@ -209,28 +207,33 @@
 			title = "Revival Imminent!",
 			message = "Someone is trying to resuscitate your body! Stay in it if you want to be resurrected!",
 			color_override = "purple"
-		), ghost_sound = 'sound/effects/gladosmarinerevive.ogg')
+		), ghost_sound = 'sound/effects/revival_alert.ogg')
 		ghost.reenter_corpse()
 
+	var/actionspeed_modifier = (DEFIB_BASE_SETUP_SPEED * (medical_skill >= SKILL_MEDICAL_EXPERT ? 0.25 : 1)) // Medical 4 or higher drops the overall time from 7 to 4
 	user.visible_message(span_notice("[user] starts setting up the paddles on [patient]'s chest."),
 	span_notice("You start setting up the paddles on [patient]'s chest."))
-	playsound(get_turf(src),'sound/items/defib_charge.ogg', 45, 0) // Don't vary this, it should be exactly 7 seconds
+	if(!do_after(user, actionspeed_modifier, NONE, patient, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
+		balloon_alert(user, "interrupted!")
+		return
 
-	if(!do_after(user, 7 SECONDS, NONE, patient, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
-		to_chat(user, span_warning("You stop setting up the paddles on [patient]'s chest."))
+	playsound(get_turf(src), 'sound/items/defib_charge.ogg', 45, 0)
+	if(!do_after(user, 3 SECONDS, NONE, patient, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
+		balloon_alert(user, "interrupted!")
 		return
 
 	if(!defib_ready(patient, user)) // we're doing this again just in case something has changed
 		return
 
 	// do the defibrillation effects now and check revive parameters in a moment
-	sparks.start()
 	dcell.use(charge_cost)
 	update_icon()
+	playsound(get_turf(src), 'sound/items/defib_victim_convulse.ogg', 45, 1)
 	playsound(get_turf(src), 'sound/items/defib_release.ogg', 45, 1)
 	user.visible_message(span_notice("[user] shocks [patient] with the paddles."),
 	span_notice("You shock [patient] with the paddles."))
 	patient.visible_message(span_warning("[patient]'s body convulses a bit."))
+	patient.do_jitter_animation(300)
 
 	COOLDOWN_START(src, defib_cooldown, 1 SECONDS) // 1 second before you can try again if you finish the do_after
 

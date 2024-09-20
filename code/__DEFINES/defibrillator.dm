@@ -2,11 +2,15 @@
 #define DEFIBRILLATOR_BASE_HEALING_VALUE 8
 /**
  * A macro for healing with a defibrillator.
- * 
+ *
  * * `skill_input` - What to multiply `healing_value` by. If this is less than `SKILL_MEDICAL_PRACTICED`, will be 8.
  * * `healing_value` - The number to multiply. Should be `DEFIBRILLATOR_BASE_HEALING_VALUE` unless you want to change the base healing value
  */
 #define DEFIBRILLATOR_HEALING_TIMES_SKILL(skill_input, healing_value) (skill_input < SKILL_MEDICAL_PRACTICED ? 8 : healing_value * skill_input * 0.5)
+
+///The base time for the initial progress bar when defibrillating somebody.
+///Essentially: this + 3 seconds (from the second progress bar).
+#define DEFIB_BASE_SETUP_SPEED (4 SECONDS)
 
 // Defibrillation outcomes, used in human_defines.dm
 ///Ready to defibrillate
