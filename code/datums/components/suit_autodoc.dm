@@ -22,7 +22,8 @@
 
 */
 /datum/component/suit_autodoc
-	var/obj/item/healthanalyzer/integrated/analyzer
+	/// The actual health analyzer functionality
+	var/datum/health_scan/analyzer
 
 	var/chem_cooldown = 2.5 MINUTES
 
@@ -71,7 +72,7 @@
 	if(!istype(parent, /obj/item))
 		return COMPONENT_INCOMPATIBLE
 
-	analyzer = new
+	analyzer = new(src, FALSE, null)
 	if(!isnull(chem_cooldown))
 		src.chem_cooldown = chem_cooldown
 
@@ -179,6 +180,7 @@
 		return
 	enabled = FALSE
 	toggle_action.set_toggle(FALSE)
+	analyzer.clear_memory()
 	UnregisterSignal(wearer, COMSIG_HUMAN_DAMAGE_TAKEN)
 	STOP_PROCESSING(SSobj, src)
 	if(!silent)
@@ -320,12 +322,10 @@
 	else
 		enable()
 
-/**
-	Proc to handle the internal analyzer scanning the user
-*/
+/// Gets the internal analyzer to scan the wearer
 /datum/component/suit_autodoc/proc/scan_user(datum/source)
 	SIGNAL_HANDLER
-	INVOKE_ASYNC(analyzer, TYPE_PROC_REF(/obj/item, attack), wearer, wearer, TRUE)
+	INVOKE_ASYNC(analyzer, TYPE_PROC_REF(/datum/health_scan, attempt_interact), FALSE, wearer, wearer)
 
 /**
 	Proc to show the suit configuration page
@@ -391,7 +391,7 @@
 		action_toggle()
 
 	else if(href_list["analyzer"]) //Integrated scanner
-		analyzer.attack(wearer, wearer, TRUE)
+		analyzer.attempt_interact(TRUE, wearer, wearer)
 
 	else if(href_list["automed_damage"])
 		damage_threshold += text2num(href_list["automed_damage"])

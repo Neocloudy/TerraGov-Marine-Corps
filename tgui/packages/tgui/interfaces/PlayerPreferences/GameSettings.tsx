@@ -119,6 +119,20 @@ export const GameSettings = (props) => {
                   action="accessible_tgui_themes"
                 />
               </Tooltip>
+              <Tooltip content="Allows you to opt out of being shown your health scan by others.">
+                <ToggleFieldPreference
+                  label="Health Scan: Allow showing scans"
+                  value="health_scan_allow_scan_showing"
+                  action="health_scan_allow_scan_showing"
+                />
+              </Tooltip>
+              <Tooltip content="Allows you to opt out of seeing advice in health scans. (not applied to scans shown to you)">
+                <ToggleFieldPreference
+                  label="Health Scan: Advice"
+                  value="health_scan_show_advice"
+                  action="health_scan_show_advice"
+                />
+              </Tooltip>
               <ToggleFieldPreference
                 label="Fullscreen mode"
                 value="fullscreen_mode"

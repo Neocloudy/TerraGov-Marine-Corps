@@ -34,7 +34,7 @@
 		/datum/action/suit_autodoc/scan = PROC_REF(scan_user)
 	)
 	///Instant analyzer for the chemsuit
-	var/obj/item/healthanalyzer/integrated/analyzer
+	var/datum/health_scan/analyzer
 	///Determines whether the suit is on
 	var/boost_on = FALSE
 	///Stores the current effect strength
@@ -91,7 +91,7 @@
 	if(!isitem(parent))
 		return COMPONENT_INCOMPATIBLE
 	update_boost(boost_tier1)
-	analyzer = new
+	analyzer = new(src, FALSE, null)
 	meds_beaker = new
 	setup_reagent_info()
 	var/list/new_actions = list()
@@ -315,7 +315,7 @@
 ///Used to scan the person
 /datum/component/chem_booster/proc/scan_user(datum/source)
 	SIGNAL_HANDLER
-	INVOKE_ASYNC(analyzer, TYPE_PROC_REF(/obj/item/healthanalyzer, attack), wearer, wearer, TRUE)
+	INVOKE_ASYNC(analyzer, TYPE_PROC_REF(/datum/health_scan, attempt_interact), TRUE, wearer, wearer)
 
 /datum/component/chem_booster/proc/vali_connect(datum/source)
 	SIGNAL_HANDLER

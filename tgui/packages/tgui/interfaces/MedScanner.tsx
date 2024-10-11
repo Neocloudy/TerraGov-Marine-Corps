@@ -43,6 +43,9 @@ type MedScannerData = {
   implants: number;
   hugged: number;
   advice: any;
+  scan_timing: number;
+  outdated_scan: boolean;
+  show_advice: boolean;
   accessible_theme: boolean;
 };
 
@@ -57,6 +60,7 @@ export const MedScanner = () => {
     internal_bleeding,
     advice,
     accessible_theme,
+    show_advice,
   } = data;
   return (
     <Window
@@ -78,7 +82,7 @@ export const MedScanner = () => {
         {limbs_damaged ? <PatientLimbs /> : null}
         {damaged_organs.length ? <PatientOrgans /> : null}
         {blood_amount < 560 || internal_bleeding ? <PatientBlood /> : null}
-        {advice ? <PatientAdvice /> : null}
+        {advice && show_advice ? <PatientAdvice /> : null}
       </Window.Content>
     </Window>
   );
@@ -109,6 +113,9 @@ const PatientBasics = () => {
 
     ssd,
 
+    scan_timing,
+    outdated_scan,
+
     accessible_theme,
   } = data;
   return (
@@ -116,15 +123,18 @@ const PatientBasics = () => {
       title={(species === 'robot' ? 'Robot: ' : 'Patient: ') + patient}
       buttons={
         <Button
-          icon="info"
-          tooltip="Most elements of this window have a tooltip for additional information. Hover your mouse over something for clarification!"
-          color="transparent"
+          icon={outdated_scan ? 'backward' : 'clock'}
+          tooltip={
+            'The operation time when this scan took place.' +
+            (outdated_scan ? ' This scan is outdated.' : ' Up to date.')
+          }
+          color={outdated_scan ? 'default' : 'transparent'}
           mt={
             /* with the "hackerman" theme, the buttons have this ugly outline that messes with the section titlebar, let's fix that */
             accessible_theme ? (species === 'robot' ? '-5px' : '0px') : '0px'
           }
         >
-          Tooltips - hover for info
+          {scan_timing}
         </Button>
       }
     >

@@ -153,6 +153,11 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	/// Example application: health analyzers using this to choose between default themes or the NtOS themes.
 	var/accessible_tgui_themes = FALSE
 
+	/// Governs whether others can show you your health scan.
+	var/health_scan_allow_scan_showing = TRUE
+	/// Governs whether you can see advice in the health scan UI.
+	var/health_scan_show_advice = TRUE
+
 	/// Chat on map
 	var/chat_on_map = TRUE
 	var/see_chat_non_mob = FALSE

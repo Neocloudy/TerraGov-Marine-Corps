@@ -108,6 +108,8 @@
 			data["volume_tts"] = volume_tts
 			data["radio_tts_flags"] = radio_tts_flags
 			data["accessible_tgui_themes"] = accessible_tgui_themes
+			data["health_scan_allow_scan_showing"] = health_scan_allow_scan_showing
+			data["health_scan_show_advice"] = health_scan_show_advice
 			data["tgui_fancy"] = tgui_fancy
 			data["tgui_lock"] = tgui_lock
 			data["tgui_input"] = tgui_input
@@ -664,6 +666,12 @@
 
 		if("accessible_tgui_themes")
 			accessible_tgui_themes = !accessible_tgui_themes
+
+		if("health_scan_allow_scan_showing")
+			health_scan_allow_scan_showing = !health_scan_allow_scan_showing
+
+		if("health_scan_show_advice")
+			health_scan_show_advice = !health_scan_show_advice
 
 		if("tgui_fancy")
 			tgui_fancy = !tgui_fancy
