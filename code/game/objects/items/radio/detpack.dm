@@ -29,6 +29,7 @@
 /obj/item/detpack/Initialize(mapload)
 	. = ..()
 	set_frequency(frequency)
+	code = rand(1, 100)
 
 
 /obj/item/detpack/examine(mob/user)
@@ -114,7 +115,7 @@
 			return
 
 		if(prob((SKILL_ENGINEER_METAL - user.skills.getRating(SKILL_ENGINEER)) * 20))
-			to_chat(user, span_highdanger("After several seconds of your clumsy meddling the [src] buzzes angrily as if offended. You have a <b>very</b> bad feeling about this."))
+			to_chat(user, span_userdanger("After several seconds of your clumsy meddling the [src] buzzes angrily as if offended. You have a <b>very</b> bad feeling about this."))
 			timer = 0 //Oops. Now you fucked up. Immediate detonation.
 
 	user.visible_message(span_notice("[user] begins disarming [src] with [I]."),
@@ -259,6 +260,11 @@
 		return FALSE
 	if(target.resistance_flags & INDESTRUCTIBLE)
 		return FALSE
+	if(istype(target, /obj/vehicle/unmanned))
+		var/obj/vehicle/unmanned/unmanned_target = target
+		if(!unmanned_target.allow_explosives)
+			to_chat(user, "[span_warning("[src] doesnt fit on [unmanned_target]")]!")
+			return FALSE
 	if(istype(target, /obj/structure/window))
 		var/obj/structure/window/W = target
 		if(!W.damageable)

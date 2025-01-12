@@ -2,6 +2,7 @@
 	name = "Synthetic"
 	default_language_holder = /datum/language_holder/synthetic
 	unarmed_type = /datum/unarmed_attack/punch
+	limb_type = SPECIES_LIMB_HUMAN
 
 	total_health = 125 //more health than regular humans
 
@@ -36,7 +37,7 @@
 /datum/species/synthetic/handle_unique_behavior(mob/living/carbon/human/H)
 	if(H.health <= SYNTHETIC_CRIT_THRESHOLD && H.stat != DEAD) // Instead of having a critical condition, they overheat and slowly die.
 		H.apply_effect(4 SECONDS, STUTTER) // Added flavor
-		H.adjustFireLoss(rand(5, 16)) // Melting!!!
+		H.take_overall_damage(rand(5, 16), BURN, updating_health = TRUE, max_limbs = 1) // Melting!!!
 		if(prob(12))
 			H.visible_message(span_boldwarning("[H] shudders violently and shoots out sparks!"), span_warning("Critical damage sustained. Internal temperature regulation systems offline. Shutdown imminent. <b>Estimated integrity: [round(H.health)]%.</b>"))
 			do_sparks(4, TRUE, H)
@@ -107,7 +108,7 @@
 /datum/species/early_synthetic/handle_unique_behavior(mob/living/carbon/human/H)
 	if(H.health <= SYNTHETIC_CRIT_THRESHOLD && H.stat != DEAD) // Instead of having a critical condition, they overheat and slowly die.
 		H.apply_effect(4 SECONDS, STUTTER) // Added flavor
-		H.adjustFireLoss(rand(7, 19)) // Melting even more!!!
+		H.take_overall_damage(rand(7, 19), BURN, updating_health = TRUE, max_limbs = 1) // Melting even more!!!
 		if(prob(12))
 			H.visible_message(span_boldwarning("[H] shudders violently and shoots out sparks!"), span_warning("Critical damage sustained. Internal temperature regulation systems offline. Shutdown imminent. <b>Estimated integrity: [round(H.health)]%.</b>"))
 			do_sparks(4, TRUE, H)

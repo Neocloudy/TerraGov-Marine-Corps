@@ -182,6 +182,8 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 #define isstorageobj(A) (istype(A, /obj/item/storage))
 
+#define isholster(A) (istype(A, /obj/item/storage/holster))
+
 #define isitemstack(A) (istype(A, /obj/item/stack))
 
 #define isuniform(A) (istype(A, /obj/item/clothing/under))
@@ -244,7 +246,7 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 #define isAPC(A) (istype(A, /obj/machinery/power/apc))
 
-#define is_cleanable(A) (istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/rune)) //if something is cleanable
+#define is_cleanable(A) (istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/decal/cleanable/rune)) //if something is cleanable
 
 #define isvehicle(A) (istype(A, /obj/vehicle))
 

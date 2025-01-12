@@ -723,12 +723,10 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 	return src == proj.original_target
 
 /obj/vehicle/unmanned/projectile_hit(obj/projectile/proj, cardinal_move, uncrossing)
-	if(proj.shot_from == src)
-		return FALSE
 	if(iff_signal & proj.iff_signal)
 		proj.damage -= proj.damage*proj.damage_marine_falloff
 		return FALSE
-	return TRUE
+	return ..()
 
 /obj/vehicle/ridden/motorbike/projectile_hit(obj/projectile/P)
 	if(!buckled_mobs)
@@ -831,7 +829,7 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 	return ..()
 
 /mob/living/carbon/human/projectile_hit(obj/projectile/proj, cardinal_move, uncrossing)
-	if(wear_id?.iff_signal & proj.iff_signal)
+	if((wear_id?.iff_signal & proj.iff_signal) || (proj?.firer?.faction == faction && proj.original_target != src && Adjacent(proj.firer)))
 		proj.damage -= proj.damage*proj.damage_marine_falloff
 		return FALSE
 	return ..()
@@ -848,10 +846,12 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 		return FALSE
 	return ..()
 
-
+///visual and audio feedback for hits
 /obj/projectile/proc/play_damage_effect(mob/M)
-	if(ammo.sound_hit) playsound(M, ammo.sound_hit, 50, 1)
-	if(M.stat != DEAD) animation_flash_color(M)
+	if(ammo.sound_hit)
+		playsound(M, ammo.sound_hit, 50, 1)
+	if(M.stat != DEAD)
+		animation_flash_color(M)
 
 //----------------------------------------------------------
 				//				    \\
@@ -1291,7 +1291,7 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 		if(feedback_flags & BULLET_FEEDBACK_FIRE)
 			victim_feedback += "You burst into <b>flames!!</b> Stop drop and roll!"
 
-		to_chat(src, span_highdanger("[victim_feedback.Join(" ")]"))
+		to_chat(src, span_userdanger("[victim_feedback.Join(" ")]"))
 
 	if(feedback_flags & BULLET_FEEDBACK_SCREAM && stat == CONSCIOUS && !(species.species_flags & NO_PAIN))
 		emote("scream")
@@ -1330,7 +1330,7 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 	if(feedback_flags & BULLET_FEEDBACK_SCREAM && stat == CONSCIOUS)
 		emote(prob(70) ? "hiss" : "roar")
 
-	to_chat(src, span_highdanger("[victim_feedback.Join(" ")]"))
+	to_chat(src, span_userdanger("[victim_feedback.Join(" ")]"))
 
 // Sundering procs
 /mob/living/proc/adjust_sunder(adjustment)

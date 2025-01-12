@@ -130,7 +130,7 @@
 		title = round_finished,
 		text = announcement_body,
 		play_sound = FALSE,
-		style = "game"
+		style = OOC_ALERT_GAME
 	)
 
 	var/sound/som_track
@@ -195,6 +195,9 @@
 	current_mission = new_mission
 	addtimer(CALLBACK(src, PROC_REF(autobalance_cycle)), CAMPAIGN_AUTOBALANCE_DELAY, TIMER_CLIENT_TIME) //we autobalance teams after a short delay to account for slow respawners
 	//TIMER_CLIENT_TIME as loading a new z-level messes with the timing otherwise
+	for(var/faction in factions)
+		for(var/player in GLOB.alive_human_list_faction[faction])
+			stat_list[faction].interact(player) //gives the mission brief
 	current_mission.load_mission()
 	TIMER_COOLDOWN_START(src, COOLDOWN_BIOSCAN, bioscan_interval)
 

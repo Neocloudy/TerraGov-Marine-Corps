@@ -827,14 +827,20 @@ WEAPONS
 /datum/supply_packs/weapons/rocketsledge
 	name = "Rocket Sledge"
 	contains = list(/obj/item/weapon/twohanded/rocketsledge)
-	cost = 600
+	cost = 850
+
+/datum/supply_packs/weapons/chainsaw
+	name = "Chainsaw"
+	contains = list(/obj/item/weapon/twohanded/chainsaw)
+	cost = 500
 
 /datum/supply_packs/weapons/smart_pistol
-	name = "TX13 smartpistol"
+	name = "TX13 smart machinepistol"
 	contains = list(/obj/item/weapon/gun/pistol/smart_pistol)
-	cost = 150
+	cost = 250
+
 /datum/supply_packs/weapons/smart_pistol_ammo
-	name = "TX13 smartpistol ammo"
+	name = "TX13 smart machinepistol ammo"
 	contains = list(/obj/item/ammo_magazine/pistol/standard_pistol/smart_pistol)
 	cost = 10
 
@@ -866,6 +872,16 @@ WEAPONS
 /datum/supply_packs/weapons/cupola_rounds
 	name = "Cupola tank magazine"
 	contains = list(/obj/item/ammo_magazine/tank/secondary_cupola)
+	cost = 10
+
+/datum/supply_packs/weapons/tow_rocket
+	name = "TOW Missile"
+	contains = list(/obj/item/ammo_magazine/tank/tow_missile)
+	cost = 5 // marginally cheaper due to being a single loader
+
+/datum/supply_packs/weapons/microrocket_pod
+	name = "Microrocket pod"
+	contains = list(/obj/item/ammo_magazine/tank/microrocket_rack)
 	cost = 10
 
 /*******************************************************************************
@@ -1276,6 +1292,11 @@ CLOTHING
 	name = "Double pack of night vision batteries"
 	contains = list(/obj/item/cell/night_vision_battery, /obj/item/cell/night_vision_battery)
 	cost = 100
+
+/datum/supply_packs/clothing/saddle
+	name = "Runner Saddle"
+	contains = list(/obj/item/storage/backpack/marine/duffelbag/xenosaddle)
+	cost = 120
 
 /*******************************************************************************
 MEDICAL
@@ -1787,12 +1808,6 @@ Imports
 	contains = list(/obj/item/ammo_magazine/smg/ppsh/extended)
 	cost = 3
 
-/datum/supply_packs/imports/sawnoff
-	name = "Sawn Off Shotgun"
-	contains = list(/obj/item/weapon/gun/shotgun/double/sawn)
-	cost = 150
-	available_against_xeno_only = TRUE
-
 /datum/supply_packs/imports/leveraction
 	name = "Lever Action Rifle"
 	contains = list(/obj/item/weapon/gun/shotgun/pump/lever)
@@ -2030,6 +2045,11 @@ VEHICLES
 	contains = list(/obj/item/uav_turret/droid)
 	cost = 200
 	containertype = /obj/structure/closet/crate/weapon
+
+/datum/supply_packs/vehicles/tiny_uv
+	name = "Tiny unmanned vehicle - Skink"
+	contains = list(/obj/item/deployable_vehicle/tiny)
+	cost = 50
 
 /datum/supply_packs/vehicles/light_uv
 	name = "Light unmanned vehicle - Iguana"
@@ -2295,17 +2315,18 @@ FACTORY
 /datum/supply_packs/factory/scout_rifle_magazine_refill
 	name = "BR-8 scout rifle magazine assembly refill"
 	contains = list(/obj/item/factory_refill/scout_rifle_magazine_refill)
-	cost = 200
+	cost = 300
 
 /datum/supply_packs/factory/scout_rifle_incen_magazine_refill
 	name = "BR-8 scout rifle incendiary magazine assembly refill"
 	contains = list(/obj/item/factory_refill/scout_rifle_incen_magazine_refill)
-	cost = 200
+	cost = 600
 
 /datum/supply_packs/factory/scout_rifle_impact_magazine_refill
 	name = "BR-8 scout rifle impact magazine assembly refill"
 	contains = list(/obj/item/factory_refill/scout_rifle_impact_magazine_refill)
-	cost = 200
+	cost = 600
+
 /datum/supply_packs/factory/claymorerefill
 	name = "Claymore parts refill"
 	contains = list(/obj/item/factory_refill/claymore_refill)
