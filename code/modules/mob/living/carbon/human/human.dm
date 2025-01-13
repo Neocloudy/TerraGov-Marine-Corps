@@ -622,6 +622,9 @@
 		if(istype(I))
 			I.examine(usr)
 
+	if(href_list["flavor_text"])
+		to_chat(usr, examine_block("[flavor_text]"))
+
 	return ..()
 
 /mob/living/carbon/human/grabbed_self_attack()

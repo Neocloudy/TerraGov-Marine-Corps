@@ -507,7 +507,7 @@
 
 	if(flavor_text)
 		msg += separator_hr("Flavor Text")
-		msg += "</span>[flavor_text]<span class='info'>"
+		msg += span_notice("[copytext_char(flavor_text, 1, 100)]... <a href='?src=[REF(src)];flavor_text=1'>\[Click to see full flavor text\]</a>")
 
 	if(hasHUD(user,"security"))
 		msg += separator_hr("Security HUD")
