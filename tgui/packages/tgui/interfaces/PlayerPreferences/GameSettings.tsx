@@ -5,7 +5,6 @@ import {
   LabeledList,
   Section,
   Stack,
-  Tooltip,
 } from '../../components';
 import {
   LoopingSelectionPreference,
@@ -115,13 +114,12 @@ export const GameSettings = (props) => {
                   />
                 ))}
               </LabeledList.Item>
-              <Tooltip content="Use more accessible TGUI themes/layouts wherever possible.">
-                <ToggleFieldPreference
-                  label="Accessible TGUI themes"
-                  value="accessible_tgui_themes"
-                  action="accessible_tgui_themes"
-                />
-              </Tooltip>
+              <ToggleFieldPreference
+                label="Accessible TGUI themes"
+                value="accessible_tgui_themes"
+                action="accessible_tgui_themes"
+                tooltip="Use more accessible TGUI themes/layouts wherever possible."
+              />
               <ToggleFieldPreference
                 label="Fullscreen mode"
                 value="fullscreen_mode"
@@ -417,6 +415,16 @@ export const GameSettings = (props) => {
                   action="toggle_adminhelp_sound"
                   leftLabel={'Enabled'}
                   rightLabel={'Disabled'}
+                />
+                <ToggleFieldPreference
+                  label="Hear LOOC from anywhere"
+                  value="hear_looc_offscreen_as_staff"
+                  action="hear_looc_offscreen_as_staff"
+                  leftLabel={'Enabled'}
+                  rightLabel={'Disabled'}
+                  tooltip={
+                    "As staff, hear LOOC from anywhere. If you're a Mentor, this only applies while ghosted."
+                  }
                 />
               </LabeledList>
             </Section>

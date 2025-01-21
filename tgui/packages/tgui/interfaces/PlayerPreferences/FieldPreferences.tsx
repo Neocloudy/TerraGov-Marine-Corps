@@ -44,6 +44,7 @@ export const ToggleFieldPreference = (props) => {
     rightValue = 0,
     rightLabel = 'False',
     action,
+    tooltip,
   } = props;
   const itemLabel = label || value;
 
@@ -51,7 +52,7 @@ export const ToggleFieldPreference = (props) => {
   let labelRight = rightLabel || rightValue;
 
   return (
-    <LabeledList.Item label={itemLabel}>
+    <LabeledList.Item label={itemLabel} tooltip={tooltip}>
       <Button.Checkbox
         inline
         content={labelLeft}

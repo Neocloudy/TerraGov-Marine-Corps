@@ -438,8 +438,10 @@
 	for(var/client/recv_staff AS in GLOB.admins)
 		if(!check_other_rights(recv_staff, R_ADMIN, FALSE) && !is_mentor(recv_staff))
 			continue
+		if(!recv_staff.prefs?.hear_looc_offscreen_as_staff)
+			continue
 		if(is_mentor(recv_staff) && !isobserver(recv_staff.mob))
-			continue // Mentors can hear this from anywhere but only as a ghost
+			continue // If we are a mentor, only hear LOOC from anywhere as a ghost
 		if(recv_staff.mob == mob)
 			continue
 
