@@ -422,9 +422,7 @@ export const GameSettings = (props) => {
                   action="hear_looc_offscreen_as_staff"
                   leftLabel={'Enabled'}
                   rightLabel={'Disabled'}
-                  tooltip={
-                    "As staff, hear LOOC from anywhere. If you're a Mentor, this only applies while ghosted."
-                  }
+                  tooltip="As staff, hear LOOC from anywhere. If you're a Mentor, this only applies while ghosted."
                 />
               </LabeledList>
             </Section>
