@@ -426,14 +426,14 @@
 
 	if(admin && isobserver(mob)) // LOOC speaker is an admin ghost, make that obvious
 		message = span_looc("[span_prefix("LOOC:")] [usr.client.holder.fakekey ? "Administrator" : usr.client.key]: [span_message("[msg]")]")
-		for(var/mob/in_range_player in range(mob))
-			to_chat(in_range_player, message)
+		for(var/mob/in_range_mob in range(mob))
+			to_chat(in_range_mob, message)
 	else
 		message = span_looc("[span_prefix("LOOC:")] [mob.name]: [span_message("[msg]")]")
-		for(var/mob/in_range in range(mob))
-			to_chat(in_range, message)
-			if(in_range.client?.prefs?.chat_on_map)
-				in_range.create_chat_message(mob, raw_message = "(LOOC: [msg])", runechat_flags = EMOTE_MESSAGE)
+		for(var/mob/in_range_mob in range(mob))
+			to_chat(in_range_mob, message)
+			if(in_range_mob.client?.prefs?.chat_on_map)
+				in_range_mob.create_chat_message(mob, raw_message = "(LOOC: [msg])", runechat_flags = EMOTE_MESSAGE)
 
 	for(var/client/recv_staff AS in GLOB.admins)
 		if(!check_other_rights(recv_staff, R_ADMIN, FALSE) && !is_mentor(recv_staff))
