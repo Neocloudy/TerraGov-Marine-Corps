@@ -424,12 +424,10 @@
 
 	var/message
 
-	if(admin && isobserver(mob))
+	if(admin && isobserver(mob)) // LOOC speaker is an admin ghost, make that obvious
 		message = span_looc("[span_prefix("LOOC:")] [usr.client.holder.fakekey ? "Administrator" : usr.client.key]: [span_message("[msg]")]")
-		for(var/mob/in_range_admin in range(mob))
-			to_chat(in_range_admin, message)
-			if(in_range_admin.client?.prefs?.chat_on_map)
-				in_range_admin.create_chat_message(mob, raw_message = "(LOOC: [msg])", runechat_flags = EMOTE_MESSAGE)
+		for(var/mob/in_range_player in range(mob))
+			to_chat(in_range_player, message)
 	else
 		message = span_looc("[span_prefix("LOOC:")] [mob.name]: [span_message("[msg]")]")
 		for(var/mob/in_range in range(mob))
