@@ -517,7 +517,7 @@
 	if(check_other_rights(src, R_DBRANKS, FALSE))
 		color = "headminasay"
 
-	msg = "<span class='[color]'>[span_prefix("ADMIN:")] [ADMIN_TPMONTY(mob)]: <span class='message linkify'>[msg]</span></span>"
+	msg = "<span class='[color]'>[span_prefix("ADMIN CHAT:")] [ADMIN_TPMONTY(mob)]: <span class='message linkify'>[msg]</span></span>"
 	for(var/client/C in GLOB.admins)
 		if(check_other_rights(C, R_ASAY, FALSE))
 			to_chat(C,
@@ -555,15 +555,15 @@
 		if(check_other_rights(C, R_ADMIN, FALSE))
 			to_chat(C,
 				type = MESSAGE_TYPE_MENTORCHAT,
-				html = "<span class='[color]'>[span_prefix("[holder.rank.name]:")] [ADMIN_TPMONTY(mob)]: <span class='message linkify'>[msg]</span></span>")
+				html = "<span class='[color]'>[span_prefix("MENTOR CHAT: [holder.rank.name]:")] [ADMIN_TPMONTY(mob)]: <span class='message linkify'>[msg]</span></span>")
 		else if(is_mentor(C) && mob.stat == DEAD)
 			to_chat(C,
 				type = MESSAGE_TYPE_MENTORCHAT,
-				html = "<span class='[color]'>[span_prefix("[holder.rank.name]:")] [key_name_admin(src, TRUE, TRUE, FALSE)] [ADMIN_JMP(mob)] [ADMIN_FLW(mob)]: <span class='message linkify'>[msg]</span></span>")
+				html = "<span class='[color]'>[span_prefix("MENTOR CHAT: [holder.rank.name]:")] [key_name_admin(src, TRUE, TRUE, FALSE)] [ADMIN_JMP(mob)] [ADMIN_FLW(mob)]: <span class='message linkify'>[msg]</span></span>")
 		else if(is_mentor(C))
 			to_chat(C,
 				type = MESSAGE_TYPE_MENTORCHAT,
-				html = "<span class='[color]'>[span_prefix("[holder.rank.name]:")] [key_name_admin(src, TRUE, FALSE, FALSE)] [ADMIN_JMP(mob)] [ADMIN_FLW(mob)]: <span class='message linkify'>[msg]</span></span>")
+				html = "<span class='[color]'>[span_prefix("MENTOR CHAT: [holder.rank.name]:")] [key_name_admin(src, TRUE, FALSE, FALSE)] [ADMIN_JMP(mob)] [ADMIN_FLW(mob)]: <span class='message linkify'>[msg]</span></span>")
 
 	var/list/pinged_admin_clients = check_admin_pings(msg)
 	if(length(pinged_admin_clients) && pinged_admin_clients[ADMINSAY_PING_UNDERLINE_NAME_INDEX])
