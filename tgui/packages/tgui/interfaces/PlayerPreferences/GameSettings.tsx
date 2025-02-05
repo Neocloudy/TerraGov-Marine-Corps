@@ -72,6 +72,7 @@ export const GameSettings = (props) => {
                 action="windowflashing"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Allows native taskbar flashing for important events."
               />
               <ToggleFieldPreference
                 label="Unique action behaviour"
@@ -79,6 +80,7 @@ export const GameSettings = (props) => {
                 action="unique_action_use_active_hand"
                 leftLabel={'Use on active hand'}
                 rightLabel={'Use on both hands'}
+                tooltip="Governs if unique action will only use on your active hand or also try to do a unique action with your offhand."
               />
               <ToggleFieldPreference
                 label="Mute xeno health alert messages"
@@ -86,17 +88,23 @@ export const GameSettings = (props) => {
                 action="mute_xeno_health_alert_messages"
                 leftLabel={'Muted'}
                 rightLabel={'Enabled'}
+                tooltip="Governs if you receive alerts for low health xenos when playing as a xeno."
               />
               <SelectFieldPreference
                 label="Play Text-to-Speech"
                 value="sound_tts"
                 action="sound_tts"
+                tooltip="Enables receiving TTS sounds."
               />
               <TextFieldPreference
                 label="Text to speech volume"
                 value="volume_tts"
+                tooltip="The volume of TTS sounds."
               />
-              <LabeledList.Item label={'Text to Speech radio configuration'}>
+              <LabeledList.Item
+                label={'Text to Speech radio configuration'}
+                tooltip="Who you can hear radio/hivemind TTS from."
+              >
                 {TTSRadioSetting.map((setting) => (
                   <Button.Checkbox
                     inline
@@ -120,7 +128,7 @@ export const GameSettings = (props) => {
                 action="accessible_tgui_themes"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
-                tooltip="Try to use more accessible or default TGUI themes/layouts wherever possible."
+                tooltip="Tries to use more accessible or default TGUI themes/layouts wherever possible/applied."
               />
               <ToggleFieldPreference
                 label="Fullscreen mode"
@@ -128,6 +136,7 @@ export const GameSettings = (props) => {
                 action="fullscreen_mode"
                 leftLabel={'Fullscreen'}
                 rightLabel={'Windowed'}
+                tooltip="Governs if the game is in fullscreen, hiding your native taskbar/window top bar and letting it take up your entire display."
               />
               <ToggleFieldPreference
                 label="TGUI Window Mode"
@@ -135,6 +144,7 @@ export const GameSettings = (props) => {
                 action="tgui_fancy"
                 leftLabel={'Fancy (default)'}
                 rightLabel={'Compatible (slower)'}
+                tooltip="Governs if TGUI web views will use a baked-in top bar or use the native top bar. Compatible is only required for extremely old operating systems/computers."
               />
               <ToggleFieldPreference
                 label="TGUI Window Placement"
@@ -142,6 +152,7 @@ export const GameSettings = (props) => {
                 action="tgui_lock"
                 leftLabel={'Free (default)'}
                 rightLabel={'Primary monitor'}
+                tooltip="Governs if TGUI web views can move between monitors or only stay in your primary monitor."
               />
               <ToggleFieldPreference
                 label="TGUI Input boxes"
@@ -149,6 +160,7 @@ export const GameSettings = (props) => {
                 action="tgui_input"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if input boxes will open in a TGUI web view or BYOND native alert."
               />
               <ToggleFieldPreference
                 label="TGUI Input Buttons"
@@ -158,6 +170,7 @@ export const GameSettings = (props) => {
                 leftValue={0}
                 rightLabel={'Large'}
                 rightValue={1}
+                tooltip="The size of buttons in TGUI input boxes."
               />
               <ToggleFieldPreference
                 label="TGUI Input Buttons placement"
@@ -165,6 +178,7 @@ export const GameSettings = (props) => {
                 action="tgui_input_buttons_swap"
                 leftLabel={'Submit/Cancel'}
                 rightLabel={'Cancel/Submit'}
+                tooltip="The order that input buttons will use in TGUI input boxes."
               />
               <ToggleFieldPreference
                 label="Tooltips"
@@ -172,6 +186,7 @@ export const GameSettings = (props) => {
                 action="tooltips"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if HTML web view tooltips can appear, for example when mousing over status alerts. No effect on TGUI."
               />
               <TextFieldPreference label={'FPS'} value={'clientfps'} />
               <ToggleFieldPreference
@@ -180,6 +195,7 @@ export const GameSettings = (props) => {
                 action="auto_fit_viewport"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if the game will automatically run Fit Viewport when your view range changes."
               />
               <ToggleFieldPreference
                 label="Auto interact with Deployables"
@@ -187,6 +203,7 @@ export const GameSettings = (props) => {
                 action="autointeractdeployablespref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if you will automatically use and man deployables after you finish setting them up."
               />
               <ToggleFieldPreference
                 label="Use directional attacks"
@@ -194,6 +211,7 @@ export const GameSettings = (props) => {
                 action="directional_attacks"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if directional melee attacks for people not on your faction are enabled. Click in a direction to attack people adjacent to you."
               />
             </LabeledList>
           </Section>
@@ -209,10 +227,12 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightValue={0}
                 rightLabel={'Disabled'}
+                tooltip="Governs if above-head messages are enabled."
               />
               <TextFieldPreference
                 label="Runechat character limit"
                 value="max_chat_length"
+                tooltip="Maximum length for a runechat message before it is truncated."
               />
               <ToggleFieldPreference
                 label="Show non-mob runechat"
@@ -222,6 +242,7 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightValue={0}
                 rightLabel={'Disabled'}
+                tooltip="Governs if runechat can appear for non-mobs (vending machines, tactical binoculars, etc)."
               />
               <ToggleFieldPreference
                 label="Show emotes in runechat"
@@ -231,6 +252,7 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightValue={0}
                 rightLabel={'Disabled'}
+                tooltip="Governs if runechat can appear for emotes."
               />
               <ToggleFieldPreference
                 label="Show typing indicator"
@@ -240,6 +262,7 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightValue={0}
                 rightLabel={'Disabled'}
+                tooltip="Governs if your sprite will gain a typing indicator when you use TGUI say."
               />
               <ToggleFieldPreference
                 label="Show self combat messages"
@@ -267,6 +290,7 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightValue={0}
                 rightLabel={'Disabled'}
+                tooltip="Enables your xeno name being prefixed with a rank based on your playtime."
               />
             </LabeledList>
           </Section>
@@ -280,6 +304,7 @@ export const GameSettings = (props) => {
                 label={'UI Style'}
                 value={'ui_style'}
                 action={'ui'}
+                tooltip="The viewport UI style. Applies when you respawn."
               />
               <TextFieldPreference
                 label={'UI Color'}
@@ -296,6 +321,7 @@ export const GameSettings = (props) => {
                 label={'UI Opacity'}
                 value={'ui_style_alpha'}
                 action={'uialpha'}
+                tooltip="The opacity of the viewport UI."
               />
               <ToggleFieldPreference
                 label="Widescreen mode"
@@ -303,6 +329,7 @@ export const GameSettings = (props) => {
                 action="widescreenpref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if the viewport uses widescreen. Allows for slightly increased horizontal FOV and looks less jarring on modern aspect ratios."
               />
               <ToggleFieldPreference
                 label="Radial medical wheel"
@@ -310,6 +337,7 @@ export const GameSettings = (props) => {
                 action="radialmedicalpref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if medical actions will use a radial wheel for choosing limbs or use your targeted limb."
               />
               <ToggleFieldPreference
                 label="Radial stacks wheel"
@@ -317,6 +345,7 @@ export const GameSettings = (props) => {
                 action="radialstackspref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if material stacks will default to opening a radial wheel or window for viewing recipes."
               />
               <ToggleFieldPreference
                 label="Radial laser gun wheel"
@@ -324,21 +353,25 @@ export const GameSettings = (props) => {
                 action="radiallasersgunpref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if laser guns and other weapons with multiple modes will use a radial wheel for changing modes or simply switch to the next mode over on unique action."
               />
               <LoopingSelectionPreference
                 label="Scaling Method"
                 value={scaling_method}
                 action="scaling_method"
+                tooltip="How the viewport will scale for different sizes. Distort looks 100% clear but may impact the look of sprites depending on how large the game viewport is."
               />
               <LoopingSelectionPreference
                 label="Pixel Size Scaling"
                 value={pixel_size}
                 action="pixel_size"
+                tooltip="What size pixels should be displayed as."
               />
               <LoopingSelectionPreference
                 label="Parallax"
                 value={ParallaxNumToString(parallax)}
                 action="parallax"
+                tooltip="The quality level of space parallax."
               />
             </LabeledList>
           </Section>
@@ -352,6 +385,7 @@ export const GameSettings = (props) => {
                 action="toggle_admin_music"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if you can hear sounds played by admins."
               />
               <ToggleFieldPreference
                 label="Toggle ambience sound"
@@ -359,6 +393,7 @@ export const GameSettings = (props) => {
                 action="toggle_ambience_sound"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if you can hear SS13 or groundmap ambience."
               />
               <ToggleFieldPreference
                 label="Toggle lobby music"
@@ -366,6 +401,7 @@ export const GameSettings = (props) => {
                 action="toggle_lobby_music"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if you can hear lobby music."
               />
               <ToggleFieldPreference
                 label="Toggle instruments sound"
@@ -373,6 +409,7 @@ export const GameSettings = (props) => {
                 action="toggle_instruments_sound"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if you can hear instruments at all."
               />
               <ToggleFieldPreference
                 label="Toggle weather sound"
@@ -380,6 +417,7 @@ export const GameSettings = (props) => {
                 action="toggle_weather_sound"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if you can hear ground map weather."
               />
               <ToggleFieldPreference
                 label="Toggle round end sounds"
@@ -387,6 +425,7 @@ export const GameSettings = (props) => {
                 action="toggle_round_end_sounds"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+                tooltip="Governs if you can hear jingles when the server restarts or shuts down."
               />
             </LabeledList>
           </Section>
@@ -403,6 +442,7 @@ export const GameSettings = (props) => {
                   action="fast_mc_refresh"
                   leftLabel={'Enabled'}
                   rightLabel={'Disabled'}
+                  tooltip="Governs if the MC tab refreshes super fast. Not recommended except for debugging purposes."
                 />
                 <ToggleFieldPreference
                   label="Split admin tabs"
@@ -413,11 +453,12 @@ export const GameSettings = (props) => {
                   tooltip="When enabled, staff commands will be split into multiple tabs (Admin/Fun/etc). Otherwise, non-debug commands will remain in one statpanel tab."
                 />
                 <ToggleFieldPreference
-                  label="Toggle adminhelp sound"
+                  label="Toggle ticket sounds"
                   value="toggle_adminhelp_sound"
                   action="toggle_adminhelp_sound"
                   leftLabel={'Enabled'}
                   rightLabel={'Disabled'}
+                  tooltip="Governs if you can hear ahelp/mhelp sounds."
                 />
                 <ToggleFieldPreference
                   label="Hear LOOC from anywhere"
