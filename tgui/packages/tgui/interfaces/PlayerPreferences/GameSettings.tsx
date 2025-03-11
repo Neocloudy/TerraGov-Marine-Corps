@@ -1,17 +1,39 @@
-import { useBackend } from '../../backend';
 import {
   Button,
   ColorBox,
   LabeledList,
   Section,
   Stack,
-} from '../../components';
+} from 'tgui-core/components';
+
+import { useBackend } from '../../backend';
 import {
   LoopingSelectionPreference,
   SelectFieldPreference,
   TextFieldPreference,
   ToggleFieldPreference,
 } from './FieldPreferences';
+
+const MultiZPerfToString = (integer) => {
+  let returnval = '';
+  switch (integer) {
+    case -1:
+      returnval = 'Standard';
+      break;
+    case 0:
+      returnval = 'Low';
+      break;
+    case 1:
+      returnval = 'Medium';
+      break;
+    case 2:
+      returnval = 'High';
+      break;
+    default:
+      returnval = 'Error!';
+  }
+  return returnval;
+};
 
 const ParallaxNumToString = (integer) => {
   let returnval = '';
@@ -39,8 +61,14 @@ const ParallaxNumToString = (integer) => {
 
 export const GameSettings = (props) => {
   const { act, data } = useBackend<GameSettingData>();
-  const { ui_style_color, scaling_method, pixel_size, parallax, is_admin } =
-    data;
+  const {
+    ui_style_color,
+    scaling_method,
+    pixel_size,
+    parallax,
+    multiz_performance,
+    is_admin,
+  } = data;
 
   // Remember to update this alongside defines
   // todo: unfuck. Bruh why is this being handled in the tsx?
@@ -136,7 +164,37 @@ export const GameSettings = (props) => {
                 action="fullscreen_mode"
                 leftLabel={'Fullscreen'}
                 rightLabel={'Windowed'}
-                tooltip="Governs if the game is in fullscreen, hiding your native taskbar/window top bar and letting it take up your entire display."
+                tooltip="Toggles Windowed Borderless mode"
+              />
+              <ToggleFieldPreference
+                label="Status Bar"
+                value="show_status_bar"
+                action="show_status_bar"
+                leftLabel={'Show'}
+                rightLabel={'Hide'}
+                tooltip="Whether to show or hide the status bar in the bottom left of the screen"
+              />
+              <ToggleFieldPreference
+                label="Ambient Occlusion"
+                value="ambient_occlusion"
+                action="ambient_occlusion"
+                leftLabel={'On'}
+                rightLabel={'Off'}
+                tooltip="Whether to render ambient occlusion, which adds a shadow-like effect to floors. Increases performance when off."
+              />
+              <ToggleFieldPreference
+                label="Multi-Z (3D) parallax"
+                value="multiz_parallax"
+                action="multiz_parallax"
+                leftLabel={'On'}
+                rightLabel={'Off'}
+                tooltip="Toggles parallax applying through multiple Zs. Increases performance when off."
+              />
+              <LoopingSelectionPreference
+                label="Multi-Z Detail"
+                value={MultiZPerfToString(multiz_performance)}
+                action="multiz_performance"
+                tooltip="How detailed multi-z is. Lower this to improve performance."
               />
               <ToggleFieldPreference
                 label="TGUI Window Mode"
@@ -212,6 +270,13 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
                 tooltip="Governs if directional melee attacks for people not on your faction are enabled. Click in a direction to attack people adjacent to you."
+              />
+              <ToggleFieldPreference
+                label="Toggle Click-dragging"
+                value="toggle_clickdrag"
+                action="toggle_clickdrag"
+                leftLabel={'Enabled'}
+                rightLabel={'Disabled'}
               />
             </LabeledList>
           </Section>
@@ -461,12 +526,12 @@ export const GameSettings = (props) => {
                   tooltip="Governs if you can hear ahelp/mhelp sounds."
                 />
                 <ToggleFieldPreference
-                  label="Hear LOOC from anywhere"
-                  value="hear_looc_anywhere_as_staff"
-                  action="hear_looc_anywhere_as_staff"
+                  label="Hear OOC from anywhere"
+                  value="hear_ooc_anywhere_as_staff"
+                  action="hear_ooc_anywhere_as_staff"
                   leftLabel={'Enabled'}
                   rightLabel={'Disabled'}
-                  tooltip="Enables hearing LOOC from anywhere in any situation. For Mentors, this setting is only relevant when observing."
+                  tooltip="Enables hearing OOC channels from anywhere in any situation."
                 />
               </LabeledList>
             </Section>
