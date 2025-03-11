@@ -156,7 +156,7 @@ export const GameSettings = (props) => {
                 action="accessible_tgui_themes"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
-                tooltip="Tries to use more accessible or default TGUI themes/layouts wherever possible/applied."
+                tooltip="Tries to use alternative or default TGUI themes/layouts wherever implemented."
               />
               <ToggleFieldPreference
                 label="Fullscreen mode"
@@ -164,7 +164,7 @@ export const GameSettings = (props) => {
                 action="fullscreen_mode"
                 leftLabel={'Fullscreen'}
                 rightLabel={'Windowed'}
-                tooltip="Toggles Windowed Borderless mode"
+                tooltip="Toggles Windowed Borderless mode."
               />
               <ToggleFieldPreference
                 label="Status Bar"
@@ -172,7 +172,7 @@ export const GameSettings = (props) => {
                 action="show_status_bar"
                 leftLabel={'Show'}
                 rightLabel={'Hide'}
-                tooltip="Whether to show or hide the status bar in the bottom left of the screen"
+                tooltip="Whether to show or hide the status bar in the bottom left of the screen."
               />
               <ToggleFieldPreference
                 label="Ambient Occlusion"
@@ -202,7 +202,7 @@ export const GameSettings = (props) => {
                 action="tgui_fancy"
                 leftLabel={'Fancy (default)'}
                 rightLabel={'Compatible (slower)'}
-                tooltip="Governs if TGUI web views will use a baked-in top bar or use the native top bar. Compatible is only required for extremely old operating systems/computers."
+                tooltip="Governs if TGUI windows will use a baked-in top bar or use the native top bar. Compatible is only required for extremely old operating systems/computers."
               />
               <ToggleFieldPreference
                 label="TGUI Window Placement"
@@ -210,7 +210,7 @@ export const GameSettings = (props) => {
                 action="tgui_lock"
                 leftLabel={'Free (default)'}
                 rightLabel={'Primary monitor'}
-                tooltip="Governs if TGUI web views can move between monitors or only stay in your primary monitor."
+                tooltip="Governs if TGUI windows can move between monitors or only stay in your primary monitor."
               />
               <ToggleFieldPreference
                 label="TGUI Input boxes"
@@ -292,7 +292,7 @@ export const GameSettings = (props) => {
                 leftLabel={'Enabled'}
                 rightValue={0}
                 rightLabel={'Disabled'}
-                tooltip="Governs if above-head messages are enabled."
+                tooltip="Governs if runechat is enabled. Runechat is a system for messages appearing above people's heads when they speak."
               />
               <TextFieldPreference
                 label="Runechat character limit"
@@ -369,7 +369,7 @@ export const GameSettings = (props) => {
                 label={'UI Style'}
                 value={'ui_style'}
                 action={'ui'}
-                tooltip="The viewport UI style. Applies when you respawn."
+                tooltip="The viewport UI style when playing as a human."
               />
               <TextFieldPreference
                 label={'UI Color'}
@@ -386,7 +386,7 @@ export const GameSettings = (props) => {
                 label={'UI Opacity'}
                 value={'ui_style_alpha'}
                 action={'uialpha'}
-                tooltip="The opacity of the viewport UI."
+                tooltip="The opacity of the viewport UI. Applies to the UI elements themselves, so inventory UI slots will look transparent but the items in them will be fully opaque."
               />
               <ToggleFieldPreference
                 label="Widescreen mode"
@@ -394,7 +394,7 @@ export const GameSettings = (props) => {
                 action="widescreenpref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
-                tooltip="Governs if the viewport uses widescreen. Allows for slightly increased horizontal FOV and looks less jarring on modern aspect ratios."
+                tooltip="Governs if the viewport uses widescreen. Allows for marginally increased horizontal FOV and looks less jarring on modern aspect ratios."
               />
               <ToggleFieldPreference
                 label="Radial medical wheel"
@@ -418,13 +418,13 @@ export const GameSettings = (props) => {
                 action="radiallasersgunpref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
-                tooltip="Governs if laser guns and other weapons with multiple modes will use a radial wheel for changing modes or simply switch to the next mode over on unique action."
+                tooltip="Governs if laser guns and other weapons with multiple modes will use a radial wheel for changing modes or switch to the next mode over on unique action."
               />
               <LoopingSelectionPreference
                 label="Scaling Method"
                 value={scaling_method}
                 action="scaling_method"
-                tooltip="How the viewport will scale for different sizes. Distort looks 100% clear but may impact the look of sprites depending on how large the game viewport is."
+                tooltip="How the viewport will scale for different sizes. Distort looks 100% clear but will marginally impact the look of sprites depending on the game viewport size."
               />
               <LoopingSelectionPreference
                 label="Pixel Size Scaling"
@@ -490,7 +490,7 @@ export const GameSettings = (props) => {
                 action="toggle_round_end_sounds"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
-                tooltip="Governs if you can hear jingles when the server restarts or shuts down."
+                tooltip="Governs if you can hear sounds when the round ends."
               />
             </LabeledList>
           </Section>
@@ -507,7 +507,7 @@ export const GameSettings = (props) => {
                   action="fast_mc_refresh"
                   leftLabel={'Enabled'}
                   rightLabel={'Disabled'}
-                  tooltip="Governs if the MC tab refreshes super fast. Not recommended except for debugging purposes."
+                  tooltip="Governs if the MC tab refreshes fast. Recommended only for development purposes."
                 />
                 <ToggleFieldPreference
                   label="Split admin tabs"
