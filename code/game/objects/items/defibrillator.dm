@@ -94,9 +94,6 @@
 		return
 	if(!istype(user))
 		return
-	if(!COOLDOWN_CHECK(src, defib_cooldown))
-		balloon_alert(user, "toggled too recently")
-		return
 
 	//Job knowledge requirement
 	var/skill = user.skills.getRating(SKILL_MEDICAL)
@@ -106,7 +103,6 @@
 		if(!do_after(user, SKILL_TASK_AVERAGE - (SKILL_TASK_VERY_EASY * skill), NONE, src, BUSY_ICON_UNSKILLED))
 			return
 
-	COOLDOWN_START(src, defib_cooldown, 2 SECONDS)
 	ready = !ready
 	user.visible_message(span_notice("[user] turns [src] [ready? "on and opens the cover" : "off and closes the cover"]."),
 	span_notice("You turn [src] [ready? "on and open the cover" : "off and close the cover"]."))
@@ -161,8 +157,6 @@
 	if(!COOLDOWN_CHECK(src, defib_cooldown))
 		balloon_alert(user, "recharging")
 		return
-
-	COOLDOWN_START(src, defib_cooldown, 2 SECONDS) // 2 seconds before you can try again, initially
 
 	//job knowledge requirement
 	var/medical_skill = user.skills.getRating(SKILL_MEDICAL)
@@ -226,6 +220,8 @@
 		return
 
 	// do the defibrillation effects now and check revive parameters in a moment
+	. = TRUE
+	sparks.start()
 	dcell.use(charge_cost)
 	update_icon()
 	playsound(get_turf(src), 'sound/items/defib_victim_convulse.ogg', 45, 1)
@@ -235,7 +231,7 @@
 	patient.visible_message(span_warning("[patient]'s body convulses a bit."))
 	patient.do_jitter_animation(300)
 
-	COOLDOWN_START(src, defib_cooldown, 1 SECONDS) // 1 second before you can try again if you finish the do_after
+	COOLDOWN_START(src, defib_cooldown, DEFIBRILLATOR_COOLDOWN)
 
 	var/datum/internal_organ/heart/heart = patient.get_organ_slot(ORGAN_SLOT_HEART)
 	if(!issynth(patient) && !isrobot(patient) && heart && prob(25))
@@ -302,8 +298,8 @@
 	patient.resuscitate() // time for a smoke
 	patient.emote("gasp")
 	patient.flash_act()
-	patient.apply_effect(10, EYE_BLUR)
-	patient.apply_effect(20 SECONDS, PARALYZE)
+	patient.apply_effect(10, EFFECT_EYE_BLUR)
+	patient.apply_effect(20 SECONDS, EFFECT_UNCONSCIOUS)
 
 	ghost = patient.get_ghost(TRUE) // just in case they re-entered their body
 	if(ghost) // register a signal to bring them into their body on reconnect

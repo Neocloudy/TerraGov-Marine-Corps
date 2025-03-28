@@ -16,8 +16,8 @@
 	buckle_lying = 90
 	allow_pass_flags = PASS_LOW_STRUCTURE|PASSABLE
 	resistance_flags = XENO_DAMAGEABLE
+	obj_flags = parent_type::obj_flags|BLOCK_Z_OUT_DOWN|BLOCK_Z_IN_UP
 	max_integrity = 40
-	resistance_flags = XENO_DAMAGEABLE
 	hit_sound = 'sound/effects/metalhit.ogg'
 	coverage = 10
 	var/dropmetal = TRUE
@@ -376,6 +376,9 @@ GLOBAL_LIST_EMPTY(activated_medevac_stretchers)
 	if(LAZYLEN(buckled_mobs) || buckled_bodybag)
 		. += image("icon_state"="stretcher_box","layer"=LYING_MOB_LAYER + 0.1)
 
+/obj/structure/bed/medevac_stretcher/ai_should_stay_buckled(mob/living/carbon/npc)
+	return TRUE
+
 /obj/structure/bed/medevac_stretcher/attack_hand_alternate(mob/living/user)
 	activate_medevac_teleport(user)
 
@@ -614,8 +617,6 @@ GLOBAL_LIST_EMPTY(activated_medevac_stretchers)
 	var/list/obj/structure/bed/medevac_stretcher/linked_beds_deployed = list()
 	req_one_access = list(ACCESS_MARINE_MEDPREP, ACCESS_MARINE_LEADER, ACCESS_MARINE_MEDBAY)
 	var/obj/item/radio/headset/mainship/doc/radio
-	///The faction this beacon belongs to
-	var/faction
 
 /obj/item/medevac_beacon/Initialize(mapload)
 	. = ..()

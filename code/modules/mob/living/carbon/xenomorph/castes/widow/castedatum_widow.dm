@@ -3,6 +3,7 @@
 	display_name = "Widow"
 	upgrade_name = ""
 	caste_desc = "You don't think you've seen a tarantula this giant before."
+	base_strain_type = /mob/living/carbon/xenomorph/widow
 	caste_type_path = /mob/living/carbon/xenomorph/widow
 
 	tier = XENO_TIER_THREE
@@ -29,7 +30,7 @@
 
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_IS_BUILDER
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_JELLY
 	caste_traits = null
 
 	// *** Defense *** //

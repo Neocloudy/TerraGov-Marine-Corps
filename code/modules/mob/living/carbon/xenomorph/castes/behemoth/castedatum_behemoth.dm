@@ -3,6 +3,7 @@
 	display_name = "Behemoth"
 	upgrade_name = ""
 	caste_desc = "Behemoths are known to like rocks. Perhaps we should give them one!"
+	base_strain_type = /mob/living/carbon/xenomorph/behemoth
 	caste_type_path = /mob/living/carbon/xenomorph/behemoth
 	tier = XENO_TIER_THREE
 	upgrade = XENO_UPGRADE_BASETYPE
@@ -32,7 +33,7 @@
 
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_IS_STRONG|CASTE_STAGGER_RESISTANT
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_JELLY
 	caste_traits = null
 
 	// *** Defense *** //

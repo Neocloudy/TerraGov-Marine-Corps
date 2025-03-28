@@ -5,7 +5,7 @@
 /obj/effect/temp_visual/behemoth/stomp
 	icon_state = "behemoth_stomp"
 	duration = 0.5 SECONDS
-	layer = ABOVE_LYING_MOB_LAYER
+	layer = MOB_BELOW_PIGGYBACK_LAYER
 
 /obj/effect/temp_visual/behemoth/stomp/Initialize(mapload)
 	. = ..()
@@ -49,7 +49,7 @@
 /obj/effect/temp_visual/behemoth/crack
 	icon_state = "behemoth_crack"
 	duration = 5.5 SECONDS
-	layer = CONVEYOR_LAYER
+	layer = BELOW_OBJ_LAYER
 
 /obj/effect/temp_visual/behemoth/crack/Initialize(mapload)
 	. = ..()
@@ -65,6 +65,7 @@
 
 /obj/effect/temp_visual/behemoth/warning/Initialize(mapload, warning_duration)
 	. = ..()
+	notify_ai_hazard()
 	if(warning_duration)
 		duration = warning_duration
 	animate(src, time = duration - 0.5 SECONDS)
@@ -154,7 +155,7 @@
 /obj/effect/temp_visual/behemoth/landslide/dust
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "landslide_dust"
-	layer = ABOVE_LYING_MOB_LAYER
+	layer = MOB_BELOW_PIGGYBACK_LAYER
 	duration = 1.1 SECONDS
 
 /obj/effect/temp_visual/behemoth/landslide/dust/Initialize(mapload, direction, which_step)
@@ -336,21 +337,10 @@
 /datum/action/ability/activable/xeno/landslide/proc/get_affected_turfs(turf/origin_turf, direction, range)
 	if(!origin_turf || !direction || !range)
 		return
-	var/list/turf/turfs_list = list(origin_turf)
-	var/list/turf/turfs_to_check = list()
-	for(var/turf/turf_to_check AS in get_line(origin_turf, get_ranged_target_turf(origin_turf, direction, range)))
-		if(turf_to_check in turfs_list)
-			continue
-		turfs_to_check += turf_to_check
-	for(var/turf/turf_to_check AS in turfs_to_check)
-		for(var/turf/adjacent_turf AS in get_adjacent_open_turfs(turf_to_check))
-			if((adjacent_turf in turfs_to_check) || (adjacent_turf in turfs_list))
-				continue
-			turfs_to_check += adjacent_turf
-	for(var/turf/turf_to_check AS in turfs_to_check)
-		if(LinkBlocked(origin_turf, turf_to_check) || !line_of_sight(origin_turf, turf_to_check, range))
-			continue
-		turfs_list += turf_to_check
+	var/turf/end_turf = check_path(origin_turf, get_ranged_target_turf(origin_turf, direction, range), pass_flags_checked = NONE)
+	var/list/turf/turfs_list = get_traversal_line(origin_turf, end_turf)
+	for(var/turf/turf_to_check AS in turfs_list)
+		turfs_list |= get_adjacent_open_turfs(turf_to_check)
 	return turfs_list
 
 /**
@@ -749,7 +739,7 @@
 			pixel_x += 19
 			pixel_y -= 12
 
-/obj/effect/temp_visual/shockwave/enhanced/Initialize(mapload, radius, direction)
+/obj/effect/temp_visual/shockwave/enhanced/Initialize(mapload, radius, direction, speed_rate=1, easing_type = LINEAR_EASING, y_offset=0, x_offset=0)
 	. = ..()
 	switch(direction)
 		if(NORTH)
@@ -807,7 +797,7 @@
 /datum/action/ability/xeno_action/seismic_fracture/proc/do_ability(turf/target_turf, wind_up, enhanced)
 	if(!target_turf)
 		return
-	var/list/turf/turfs_to_attack = filled_turfs(target_turf, SEISMIC_FRACTURE_ATTACK_RADIUS, include_edge = FALSE, bypass_window = TRUE, projectile = TRUE)
+	var/list/turf/turfs_to_attack = filled_turfs(target_turf, SEISMIC_FRACTURE_ATTACK_RADIUS, include_edge = FALSE, pass_flags_checked = PASS_GLASS|PASS_PROJECTILE)
 	if(!length(turfs_to_attack))
 		owner.balloon_alert(owner, "Unable to use here")
 		return
@@ -822,14 +812,14 @@
 		return
 	new /obj/effect/temp_visual/shockwave/enhanced(get_turf(owner), SEISMIC_FRACTURE_ATTACK_RADIUS, owner.dir)
 	playsound(owner, 'sound/effects/alien/behemoth/landslide_roar.ogg', 40, TRUE)
-	var/list/turf/extra_turfs_to_warn = filled_turfs(target_turf, SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED, bypass_window = TRUE, projectile = TRUE)
+	var/list/turf/extra_turfs_to_warn = filled_turfs(target_turf, SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED, pass_flags_checked = PASS_GLASS|PASS_PROJECTILE)
 	for(var/turf/extra_turf_to_warn AS in extra_turfs_to_warn)
 		if(isclosedturf(extra_turf_to_warn))
 			extra_turfs_to_warn -= extra_turf_to_warn
 	if(length(extra_turfs_to_warn) && length(turfs_to_attack))
 		extra_turfs_to_warn -= turfs_to_attack
 	do_warning(owner, extra_turfs_to_warn, wind_up + SEISMIC_FRACTURE_ENHANCED_DELAY)
-	var/list/turf/extra_turfs = filled_turfs(target_turf, SEISMIC_FRACTURE_ATTACK_RADIUS + 1, bypass_window = TRUE, projectile = TRUE)
+	var/list/turf/extra_turfs = filled_turfs(target_turf, SEISMIC_FRACTURE_ATTACK_RADIUS + 1, pass_flags_checked = PASS_GLASS|PASS_PROJECTILE)
 	if(length(extra_turfs) && length(turfs_to_attack))
 		extra_turfs -= turfs_to_attack
 	addtimer(CALLBACK(src, PROC_REF(do_attack_extra), target_turf, extra_turfs, turfs_to_attack, enhanced, SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED, SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED - SEISMIC_FRACTURE_ATTACK_RADIUS), wind_up + SEISMIC_FRACTURE_ENHANCED_DELAY)
@@ -853,7 +843,7 @@
 		for(var/turf/turf_to_check AS in turfs_to_check)
 			if((turf_to_check in extra_turfs) || (turf_to_check in excepted_turfs) || (turf_to_check in turfs_to_attack))
 				continue
-			if(!line_of_sight(origin_turf, turf_to_check) || LinkBlocked(origin_turf, turf_to_check, TRUE, TRUE))
+			if(!line_of_sight(origin_turf, turf_to_check) || LinkBlocked(origin_turf, turf_to_check, PASS_GLASS|PASS_PROJECTILE))
 				continue
 			extra_turfs += turf_to_check
 	behemoth_area_attack(owner, turfs_to_attack, enhanced)
@@ -892,7 +882,7 @@
 	rotation = 0
 	spin = generator(GEN_NUM, 5, 20)
 
-/obj/effect/temp_visual/shockwave/primal_wrath/Initialize(mapload, radius, direction)
+/obj/effect/temp_visual/shockwave/primal_wrath/Initialize(mapload, radius, direction, speed_rate=1, easing_type = LINEAR_EASING, y_offset=0, x_offset=0)
 	. = ..()
 	switch(direction)
 		if(NORTH)
@@ -996,15 +986,11 @@
 	for(var/mob/living/affected_living in cheap_get_humans_near(owner, PRIMAL_WRATH_RANGE) + owner)
 		if(!affected_living.hud_used)
 			continue
-		var/atom/movable/screen/plane_master/floor/floor_plane = affected_living.hud_used.plane_masters["[FLOOR_PLANE]"]
-		var/atom/movable/screen/plane_master/game_world/world_plane = affected_living.hud_used.plane_masters["[GAME_PLANE]"]
-		if(floor_plane.get_filter("primal_wrath") || world_plane.get_filter("primal_wrath"))
-			continue
+		var/atom/movable/plane_master_controller/game_plane_master_controller = affected_living.hud_used.plane_master_controllers[PLANE_MASTERS_GAME]
 		var/filter_size = 0.01
-		world_plane.add_filter("primal_wrath", 2, radial_blur_filter(filter_size))
-		animate(world_plane.get_filter("primal_wrath"), size = filter_size * 2, time = 0.5 SECONDS, loop = -1)
-		floor_plane.add_filter("primal_wrath", 2, radial_blur_filter(filter_size))
-		animate(floor_plane.get_filter("primal_wrath"), size = filter_size * 2, time = 0.5 SECONDS, loop = -1)
+		game_plane_master_controller.add_filter("primal_wrath", 2, radial_blur_filter(filter_size))
+		for(var/dm_filter/filt AS in game_plane_master_controller.get_filters("primal_wrath"))
+			animate(filt, size = filter_size * 2, time = 0.5 SECONDS, loop = -1)
 		ability_check(affected_living, owner)
 	addtimer(CALLBACK(src, PROC_REF(do_ability)), 0.1 SECONDS)
 
@@ -1023,16 +1009,14 @@
 /datum/action/ability/xeno_action/primal_wrath/proc/ability_check(mob/living/affected_living, mob/living/carbon/xenomorph/xeno_source)
 	if(!affected_living || !xeno_source)
 		return
-	var/atom/movable/screen/plane_master/floor/floor_plane = affected_living.hud_used.plane_masters["[FLOOR_PLANE]"]
-	var/atom/movable/screen/plane_master/game_world/world_plane = affected_living.hud_used.plane_masters["[GAME_PLANE]"]
-	if(!floor_plane.get_filter("primal_wrath") || !world_plane.get_filter("primal_wrath"))
+	var/atom/movable/plane_master_controller/game_plane_master_controller = affected_living.hud_used.plane_master_controllers[PLANE_MASTERS_GAME]
+	if(!game_plane_master_controller.get_filter("primal_wrath"))
 		return
 	if(!currently_roaring || get_dist(affected_living, xeno_source) > PRIMAL_WRATH_RANGE)
 		var/resolve_time = 0.2 SECONDS
-		animate(floor_plane.get_filter("primal_wrath"), size = 0, time = resolve_time, flags = ANIMATION_PARALLEL)
-		animate(world_plane.get_filter("primal_wrath"), size = 0, time = resolve_time, flags = ANIMATION_PARALLEL)
-		addtimer(CALLBACK(floor_plane, TYPE_PROC_REF(/datum, remove_filter), "primal_wrath"), resolve_time)
-		addtimer(CALLBACK(world_plane, TYPE_PROC_REF(/datum, remove_filter), "primal_wrath"), resolve_time)
+		for(var/dm_filter/filt AS in game_plane_master_controller.get_filters("primal_wrath"))
+			animate(filt, size = 0, time = resolve_time, flags = ANIMATION_PARALLEL)
+		addtimer(CALLBACK(game_plane_master_controller, TYPE_PROC_REF(/datum, remove_filter), "primal_wrath"), resolve_time)
 		return
 	addtimer(CALLBACK(src, PROC_REF(ability_check), affected_living, xeno_source), 0.1 SECONDS)
 
@@ -1183,7 +1167,7 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "earth_pillar_0"
 	base_icon_state = "earth_pillar_0"
-	layer = ABOVE_LYING_MOB_LAYER
+	layer = MOB_BELOW_PIGGYBACK_LAYER
 	climbable = TRUE
 	climb_delay = 1.5 SECONDS
 	interaction_flags = INTERACT_CHECK_INCAPACITATED
@@ -1382,7 +1366,7 @@
 /datum/ammo/xeno/earth_pillar/proc/on_hit_anything(turf/hit_turf, obj/projectile/proj)
 	playsound(hit_turf, 'sound/effects/alien/behemoth/earth_pillar_destroyed.ogg', 40, TRUE)
 	new /obj/effect/temp_visual/behemoth/earth_pillar/destroyed(hit_turf)
-	var/list/turf/affected_turfs = filled_turfs(hit_turf, EARTH_PILLAR_SPREAD_RADIUS, include_edge = FALSE, bypass_window = TRUE, projectile = TRUE)
+	var/list/turf/affected_turfs = filled_turfs(hit_turf, EARTH_PILLAR_SPREAD_RADIUS, include_edge = FALSE, pass_flags_checked = PASS_GLASS|PASS_PROJECTILE)
 	behemoth_area_attack(proj.firer, affected_turfs, damage_multiplier = EARTH_PILLAR_SPREAD_DAMAGE_MULTIPLIER)
 
 /datum/ammo/xeno/earth_pillar/landslide/do_at_max_range(turf/target_turf, obj/projectile/proj)
@@ -1439,7 +1423,7 @@
 					if(affected_pillar.warning_flashes < initial(affected_pillar.warning_flashes))
 						continue
 					affected_pillar.call_area_attack()
-					var/list/turf/spread_turfs = filled_turfs(affected_pillar.loc, EARTH_PILLAR_SPREAD_RADIUS, include_edge = FALSE, bypass_window = TRUE, projectile = TRUE)
+					var/list/turf/spread_turfs = filled_turfs(affected_pillar.loc, EARTH_PILLAR_SPREAD_RADIUS, include_edge = FALSE, pass_flags_checked = PASS_GLASS|PASS_PROJECTILE)
 					var/wind_up_duration = initial(affected_pillar.warning_flashes) * 10
 					do_warning(xeno_owner, spread_turfs, wind_up_duration)
 					addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(behemoth_area_attack), xeno_owner, spread_turfs, enhanced), wind_up_duration)

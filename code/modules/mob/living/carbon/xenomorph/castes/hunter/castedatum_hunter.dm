@@ -3,7 +3,7 @@
 	display_name = "Hunter"
 	upgrade_name = ""
 	caste_desc = "A fast, powerful front line combatant."
-
+	base_strain_type = /mob/living/carbon/xenomorph/hunter
 	caste_type_path = /mob/living/carbon/xenomorph/hunter
 
 	tier = XENO_TIER_TWO
@@ -36,7 +36,7 @@
 
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_JELLY
 	caste_traits = list(TRAIT_CAN_VENTCRAWL)
 
 	// *** Defense *** //

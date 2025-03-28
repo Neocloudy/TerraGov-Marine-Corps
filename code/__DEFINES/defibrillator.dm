@@ -1,5 +1,8 @@
 ///The base healing number for a defibrillator.
 #define DEFIBRILLATOR_BASE_HEALING_VALUE 8
+
+///How often you can defib someone
+#define DEFIBRILLATOR_COOLDOWN 1 SECONDS
 /**
  * A macro for healing with a defibrillator.
  *

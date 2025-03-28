@@ -11,7 +11,7 @@
 	walltype = "resin-wall"
 	base_icon_state = "resin-wall"
 	max_integrity = 200
-	layer = RESIN_STRUCTURE_LAYER
+	layer = BELOW_OBJ_LAYER
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = list(SMOOTH_GROUP_XENO_STRUCTURES)
 	canSmoothWith = list(SMOOTH_GROUP_XENO_STRUCTURES)
@@ -23,7 +23,7 @@
 	var/is_normal_resin_wall = TRUE
 
 /turf/closed/wall/resin/add_debris_element()
-	AddElement(/datum/element/debris, null, -15, 8, 0.7)
+	AddElement(/datum/element/debris, null, -40, 8, 0.7)
 
 /turf/closed/wall/resin/Initialize(mapload)
 	. = ..()
