@@ -14,10 +14,15 @@
 	var/ready = FALSE
 	///Whether this defibrillator has to be turned on to use
 	var/ready_needed = TRUE
-	///The base healing number when someone is shocked. Uses `DEFIBRILLATOR_HEALING_TIMES_SKILL` to change based on user skill.
+	///Fumble when using this is removed at this skill.
+	///Healing, setup speed and charge cost will also shift based on this.
+	var/minimum_skill = SKILL_MEDICAL_PRACTICED
+	///The base healing number when someone is shocked (can be changed by medical skill)
 	var/defibrillator_healing = DEFIBRILLATOR_BASE_HEALING_VALUE
-	///How much charge is used on a shock
-	var/charge_cost = 66
+	///How fast the first progress bar is (can be changed by medical skill)
+	var/setup_speed = DEFIB_BASE_SETUP_SPEED
+	///How much charge is used on a shock (can be changed by medical skill)
+	var/charge_cost = DEFIB_BASE_CHARGE_COST
 	///The defibrillator's power cell
 	var/obj/item/cell/dcell = null
 	///Var for quickly creating sparks on shock
@@ -68,26 +73,36 @@
 /obj/item/defibrillator/examine(mob/user)
 	. = ..()
 	. += charge_information(user)
+	. += skill_information(user)
 
-
-///Returns the amount of charges left and how to recharge the defibrillator.
+/// Returns the amount of charges left and how to recharge the defibrillator.
 /obj/item/defibrillator/proc/charge_information(mob/living/carbon/human/user)
 	if(!dcell)
 		return
-
-	var/message
-	if(user.skills.getRating(SKILL_MEDICAL) >= SKILL_MEDICAL_EXPERT)
-		message += span_info("You are proficient enough in the Medical field to take less time when using this unit.\n")
-	message += span_info("It has [round(dcell.charge / charge_cost)] out of [round(dcell.maxcharge / charge_cost)] uses left in its internal battery.\n")
+	. = list()
+	if(!charge_cost)
+		return list(span_info("No power cost when used."))
+	. += EXAMINE_SECTION_BREAK
+	. += span_info("It has [round(dcell.charge / charge_cost)] out of [span_tooltip("See skill information below for the actual charge cost - this may vary based on skill.", "[round(dcell.maxcharge / charge_cost)]")] uses left in its internal battery.")
 	if(dcell.charge < charge_cost)
-		message += span_alert("The battery is empty.\n")
+		. += span_alert("The battery is empty.")
 	else if(round(dcell.charge * 100 / dcell.maxcharge) <= 33)
-		message += span_alert("The battery is low.\n")
+		. += span_alert("The battery is low.")
 
-	if(!message)
-		return
-	return "[message]You can click-drag this unit on a corpsman backpack or satchel to recharge it."
+	. += span_info("You can click-drag this unit on a corpsman backpack or satchel to recharge it.")
 
+/// Returns skill bonuses for the user.
+/obj/item/defibrillator/proc/skill_information(mob/living/carbon/human/user)
+	. = list()
+	. += EXAMINE_SECTION_BREAK
+	. += span_info("[span_tooltip("When at or above this skill level in Medical, you won't fumble when using this. The effects below (except damage healing) are also at their default/average when you have this skill level, and will change if you are higher or lower than this skill level.",
+					"Requires Medical Lvl. [minimum_skill]")]")
+	var/medical_skill = (isobserver(user) ? minimum_skill : user.skills.getRating(SKILL_MEDICAL))
+	. += span_info("<b>Effects for Medical Lvl. [medical_skill]:</b>")
+	. += "• [DEFIBRILLATOR_HEALING_TIMES_SKILL(medical_skill, defibrillator_healing)] [span_tooltip("Brute, burn and toxin damage. Oxygen damage will be instantly healed, and Cloneloss may not be healed by defibrillators.", "non-cloneloss")] damage healed each use."
+	. += "• [round(DEFIB_SETUP_SPEED_TIMES_SKILL(medical_skill, setup_speed, minimum_skill) / setup_speed * 100)]% [span_tooltip("[round(DEFIB_SETUP_SPEED_TIMES_SKILL(medical_skill, setup_speed, minimum_skill)*0.1, 0.1)] seconds to place the paddles on somebody.", "setup time")]."
+	if(charge_cost)
+		. += "• [round(DEFIB_CHARGE_COST_SKILL_MULT(medical_skill, minimum_skill) * 100)]% [span_tooltip("You can use this [round(dcell.maxcharge / (charge_cost * DEFIB_CHARGE_COST_SKILL_MULT(medical_skill, minimum_skill)))] times before needing a recharge.", "charge cost on each use")]."
 
 /obj/item/defibrillator/attack_self(mob/living/carbon/human/user)
 	if(!ready_needed)
@@ -160,10 +175,10 @@
 
 	//job knowledge requirement
 	var/medical_skill = user.skills.getRating(SKILL_MEDICAL)
-	if(medical_skill < SKILL_MEDICAL_PRACTICED)
+	if(medical_skill < minimum_skill)
 		user.visible_message(span_notice("[user] fumbles around figuring out how to use [src]."),
 		span_notice("You fumble around figuring out how to use [src]."))
-		var/fumbling_time = SKILL_TASK_AVERAGE - (SKILL_TASK_VERY_EASY * medical_skill) // 3 seconds with medical skill, 5 without
+		var/fumbling_time = SKILL_TASK_VERY_EASY - (SKILL_TASK_TRIVIAL * medical_skill)
 		if(!do_after(user, fumbling_time, NONE, patient, BUSY_ICON_UNSKILLED))
 			return
 
@@ -204,14 +219,14 @@
 		), ghost_sound = 'sound/effects/revival_alert.ogg')
 		ghost.reenter_corpse()
 
-	var/actionspeed_modifier = (DEFIB_BASE_SETUP_SPEED * (medical_skill >= SKILL_MEDICAL_EXPERT ? 0.25 : 1)) // Medical 4 or higher drops the overall time from 7 to 4
 	user.visible_message(span_notice("[user] starts setting up the paddles on [patient]'s chest."),
 	span_notice("You start setting up the paddles on [patient]'s chest."))
-	if(!do_after(user, actionspeed_modifier, NONE, patient, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
+	if(!do_after(user, DEFIB_SETUP_SPEED_TIMES_SKILL(medical_skill, setup_speed, minimum_skill), NONE, patient, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
 		balloon_alert(user, "interrupted!")
 		return
 
 	playsound(get_turf(src), 'sound/items/defib_charge.ogg', 45, 0)
+	balloon_alert(user, "charging up...")
 	if(!do_after(user, 3 SECONDS, NONE, patient, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
 		balloon_alert(user, "interrupted!")
 		return
@@ -221,8 +236,8 @@
 
 	// do the defibrillation effects now and check revive parameters in a moment
 	. = TRUE
-	sparks.start()
-	dcell.use(charge_cost)
+	do_sparks(4, TRUE, src)
+	dcell.use(charge_cost * DEFIB_CHARGE_COST_SKILL_MULT(medical_skill, minimum_skill))
 	update_icon()
 	playsound(get_turf(src), 'sound/items/defib_victim_convulse.ogg', 45, 1)
 	playsound(get_turf(src), 'sound/items/defib_release.ogg', 45, 1)
