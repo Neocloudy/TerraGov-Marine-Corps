@@ -443,7 +443,7 @@
 		if(e.limb_status & LIMB_BLEEDING)
 			bled = "Bleeding:<br>"
 		if(e.limb_status & LIMB_BROKEN)
-			AN = "[e.broken_description]:<br>"
+			AN = "Broken:<br>"
 		if(e.limb_status & LIMB_NECROTIZED)
 			necrosis = "Necrotizing:<br>"
 		if(e.limb_status & LIMB_ROBOT)

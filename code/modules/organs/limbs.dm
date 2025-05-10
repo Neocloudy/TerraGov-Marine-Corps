@@ -2,78 +2,76 @@
 				EXTERNAL ORGANS
 ****************************************************/
 /datum/limb
-	///Actual name of the limb
+	/// Actual name of the limb. You may not use this for limb zones.
+	/// I will find you if you try. Use [body_zone] for that.
 	var/name = "limb"
+	/// Player friendly name of the limb.
+	var/display_name
+	/// Icon state of this limb
 	var/icon_name = null
 	/// Zone of this limb, for def_zone
 	var/body_zone = null
-	///Whether the icon created for this limb is LEFT, RIGHT or 0. Currently utilised for legs and feet
+	/// Whether the icon created for this limb is LEFT, RIGHT or 0. Currently utilised for legs and feet
 	var/icon_position = 0
+	/// Damage tier, used for icons
 	var/damage_state = "00"
-	///brute damage this limb has taken as a part
+	/// brute damage this limb has taken as a part
 	var/brute_dam = 0
-	///burn damage this limb has taken as a part
+	/// burn damage this limb has taken as a part
 	var/burn_dam = 0
-	///Max damage the limb can take. Extremities sever when they have at least LIMB_MAX_DAMAGE_SEVER_RATIO as a fraction of this in brute damage.
+	/// Max damage the limb can take. Extremities sever when they have at least LIMB_MAX_DAMAGE_SEVER_RATIO as a fraction of this in brute damage.
 	var/max_damage = 0
-	///Amount of damage this limb regenerates per tick while treated before multi-limb regen penalty
+	/// Amount of damage this limb regenerates per tick while treated before multi-limb regen penalty
 	var/base_regen = 2
-	var/max_size = 0
+	/// Most recent total damage number
 	var/last_dam = -1
-	var/supported = FALSE
-	///How many instances of damage the limb can take before its splints fall off
+	/// How many instances of damage the limb can take before its splints fall off
 	var/splint_health = 0
-
+	/// Active soft armor—a percent damage reduction
 	var/datum/armor/soft_armor
+	/// Active hard armor—a flat AP reduction
 	var/datum/armor/hard_armor
-
-	var/display_name
-	var/list/wounds = list()
-	var/number_wounds = 0 // cache the number of wounds, which is NOT length(wounds)!
-
+	/// Number of wounds on this limb
+	var/list/datum/wound/wounds = list()
+	/// Damage required for a fracture
 	var/min_broken_damage = 30
-
+	/// Limb that owns this limb, like an arm if this is a hand, or a chest if this is an arm
 	var/datum/limb/parent
+	/// Limbs we are owning, like a hand if this is an arm, or arms and legs if this is a chest
 	var/list/datum/limb/children
-
-	///List of Internal organs of this body part
+	/// List of internal organs of this body part
 	var/list/datum/internal_organ/internal_organs
-
-	/// Message that displays when you feel pain from this limb
-	var/damage_msg = span_warning("You feel an intense pain")
-	var/broken_description
-
+	/// Stage of our surgery—incisions and shit
 	var/surgery_open_stage = 0
+	/// Stage of bone repair—gel applied, etc
 	var/bone_repair_stage = 0
+	/// Stage of limb replacement—stump fixed, etc
 	var/limb_replacement_stage = 0
+	/// Stage of necro removal
 	var/necro_surgery_stage = 0
-	var/cavity = 0
-
-	///Whether someone is currently doing surgery on this limb
+	/// Whether someone is currently doing surgery on this limb
 	var/in_surgery_op = FALSE
-
-	var/encased       // Needs to be opened with a saw to access the organs.
-
+	/// Do we have a rib cage or skull or something that needs to be opened to reach this in srugery
+	/// If so, this is the name of that, like `"ribcage"`
+	var/encased
+	/// If this limb has a hidden implant within
 	var/obj/item/hidden = null
-	///[/obj/item/implant] Implants contained within this specific limb
+	/// [/obj/item/implant] Implants contained within this specific limb
 	var/list/implants = list()
-
-	///how often wounds should be updated, a higher number means less often
-	var/wound_update_accuracy = 1
+	/// Status flags like robotic/fractured/etc
 	var/limb_status = NONE //limb status flags
+	/// Wound treatment flags
 	var/limb_wound_status = NONE //for wound treatment flags
-
-	///Human owner mob of this limb
+	/// Human owner mob of this limb
 	var/mob/living/carbon/human/owner = null
-	///Whether this limb is vital, if true you die on losing it (todo make a flag)
+	/// Whether this limb is vital, if true you die on losing it (todo make a flag)
 	var/vital = FALSE
-	///INTERNAL germs inside the organ, this is BAD if it's greater than INFECTION_LEVEL_ONE
+	/// INTERNAL germs inside the organ, this is BAD if it's greater than [INFECTION_LEVEL_ONE]
 	var/germ_level = 0
-	///Keeps track of the last time the limb bothered its owner about infection to prevent spam.
+	/// Keeps track of the last time the limb bothered its owner about infection to prevent spam.
 	COOLDOWN_DECLARE(next_infection_message)
-	///What % of the body does this limb cover. Make sure that the sum is always 100.
+	/// What % of the body does this limb cover. Make sure that the sum is always 100.
 	var/cover_index = 0
-
 
 /datum/limb/New(datum/limb/P, mob/mob_owner)
 	if(P)
@@ -300,7 +298,6 @@
 	burn_dam = 0
 	germ_level = 0
 	QDEL_LIST(wounds)
-	number_wounds = 0
 	limb_wound_status = NONE
 
 	// heal internal organs
@@ -373,10 +370,7 @@
 
 //TODO limbs should probably be on slow process
 /datum/limb/process(limb_regen_penalty)
-
-	// Process wounds, doing healing etc. Only do this every few ticks to save processing power
-	if(owner.life_tick % wound_update_accuracy == 0)
-		update_wounds(limb_regen_penalty)
+	update_wounds(limb_regen_penalty)
 
 	//Bone fractures
 	if(CONFIG_GET(flag/bones_can_break) && brute_dam > min_broken_damage && !(limb_status & LIMB_ROBOT))
@@ -848,7 +842,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	add_limb_flags(LIMB_BROKEN)
 	remove_limb_flags(LIMB_REPAIRED)
-	broken_description = pick("broken","fracture","hairline fracture")
 
 	// Fractures have a chance of getting you out of restraints
 	if (prob(25))
@@ -963,8 +956,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	bone_repair_stage = 0
 	limb_replacement_stage = 0
 	necro_surgery_stage = 0
-	cavity = 0
-
 
 /datum/limb/proc/add_limb_soft_armor(datum/armor/added_armor)
 	soft_armor = soft_armor.attachArmor(added_armor)
