@@ -865,7 +865,7 @@
 	surprise.transform *= 0.6
 	surprise.add_mob_blood(consumer)
 	var/mob/living/carbon/human/H = consumer
-	var/datum/limb/E = H.get_limb("chest")
+	var/datum/limb/E = H.get_limb(BODY_ZONE_CHEST)
 	E.fracture()
 	for (var/datum/internal_organ/I in E.internal_organs)
 		I.take_damage(rand(I.min_bruised_damage, I.min_broken_damage+1))

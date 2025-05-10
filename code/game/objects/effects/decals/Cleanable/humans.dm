@@ -63,8 +63,8 @@
 	if(CHECK_MULTIPLE_BITFIELDS(perp.pass_flags, HOVERING))
 		return
 
-	var/datum/limb/foot/l_foot = perp.get_limb("l_foot")
-	var/datum/limb/foot/r_foot = perp.get_limb("r_foot")
+	var/datum/limb/foot/l_foot = perp.get_limb(BODY_ZONE_PRECISE_L_FOOT)
+	var/datum/limb/foot/r_foot = perp.get_limb(BODY_ZONE_PRECISE_R_FOOT)
 	var/hasfeet = 1
 	if((!l_foot || l_foot.limb_status & LIMB_DESTROYED) && (!r_foot || r_foot.limb_status & LIMB_DESTROYED))
 		hasfeet = 0

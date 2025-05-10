@@ -50,8 +50,8 @@
 		affecting = get_limb(ran_zone(X.zone_selected, XENO_DEFAULT_ACCURACY - X.xeno_caste.accuracy_malus))
 	if(!affecting || (random_location && !set_location) || (ignore_destroyed && !affecting.is_usable())) //No organ or it's destroyed, just get a random one
 		affecting = get_limb(ran_zone(null, 0))
-	if(!affecting || (no_head && affecting == get_limb("head")) || (ignore_destroyed && !affecting.is_usable()))
-		affecting = get_limb("chest")
+	if(!affecting || (no_head && affecting == get_limb(BODY_ZONE_HEAD)) || (ignore_destroyed && !affecting.is_usable()))
+		affecting = get_limb(BODY_ZONE_CHEST)
 	return affecting
 
 /mob/living/proc/attack_alien_harm(mob/living/carbon/xenomorph/X, dam_bonus, set_location = FALSE, random_location = FALSE, no_head = FALSE, no_crit = FALSE, force_intent = null)

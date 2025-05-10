@@ -5,7 +5,8 @@
 	///Actual name of the limb
 	var/name = "limb"
 	var/icon_name = null
-	var/body_part = null
+	/// Zone of this limb, for def_zone
+	var/body_zone = null
 	///Whether the icon created for this limb is LEFT, RIGHT or 0. Currently utilised for legs and feet
 	var/icon_position = 0
 	var/damage_state = "00"
@@ -130,10 +131,6 @@
 	if (polyhexanide >= MIN_ANTIBIOTICS)
 		germ_level -= polyhexanide_curve[infection_level]
 
-
-
-
-
 /****************************************************
 			DAMAGE PROCS
 ****************************************************/
@@ -256,12 +253,12 @@
 
 	//If limb took enough damage, try to cut or tear it off
 
-	if(body_part == CHEST || body_part == GROIN)
+	if(body_zone == BODY_ZONE_CHEST || body_zone == BODY_ZONE_PRECISE_GROIN)
 		if(updating_health)
 			owner.updatehealth()
 		return update_icon()
 	var/obj/item/clothing/worn_helmet = owner.head
-	if(body_part == HEAD && worn_helmet && (worn_helmet.armor_features_flags & ARMOR_NO_DECAP)) //Early return if the body part is a head but target is wearing decap-protecting headgear.
+	if(body_zone == BODY_ZONE_HEAD && worn_helmet && (worn_helmet.armor_features_flags & ARMOR_NO_DECAP)) //Early return if the body part is a head but target is wearing decap-protecting headgear.
 		if(updating_health)
 			owner.updatehealth()
 		return update_icon()
@@ -664,7 +661,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(limb_status & LIMB_DESTROYED)
 		return FALSE
 
-	if(body_part == CHEST)
+	if(body_zone == BODY_ZONE_CHEST)
 		return FALSE
 
 	if(amputation)
@@ -702,8 +699,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	reset_limb_surgeries()
 
 	var/obj/organ	//Dropped limb object
-	switch(body_part)
-		if(HEAD)
+	switch(body_zone)
+		if(BODY_ZONE_HEAD)
 			if(issynth(owner)) //special head for synth to allow brainmob to talk without an MMI
 				organ = new /obj/item/limb/head/synth(owner.loc, owner)
 			else if(isrobot(owner))
@@ -715,41 +712,41 @@ Note that amputating the affected organ does in fact remove the infection from t
 			owner.dropItemToGround(owner?.wear_ear, force = TRUE)
 			owner.dropItemToGround(owner?.wear_mask, force = TRUE)
 			owner.update_hair()
-		if(ARM_RIGHT)
+		if(BODY_ZONE_R_ARM)
 			if(limb_status & LIMB_ROBOT)
 				organ = new /obj/item/robot_parts/r_arm(owner.loc)
 			else
 				organ = new /obj/item/limb/r_arm(owner.loc, owner)
-		if(ARM_LEFT)
+		if(BODY_ZONE_L_ARM)
 			if(limb_status & LIMB_ROBOT)
 				organ = new /obj/item/robot_parts/l_arm(owner.loc)
 			else
 				organ = new /obj/item/limb/l_arm(owner.loc, owner)
-		if(LEG_RIGHT)
+		if(BODY_ZONE_R_LEG)
 			if(limb_status & LIMB_ROBOT)
 				organ = new /obj/item/robot_parts/r_leg(owner.loc)
 			else
 				organ = new /obj/item/limb/r_leg(owner.loc, owner)
-		if(LEG_LEFT)
+		if(BODY_ZONE_L_LEG)
 			if(limb_status & LIMB_ROBOT)
 				organ = new /obj/item/robot_parts/l_leg(owner.loc)
 			else
 				organ = new /obj/item/limb/l_leg(owner.loc, owner)
-		if(HAND_RIGHT)
+		if(BODY_ZONE_PRECISE_R_HAND)
 			if(!(limb_status & LIMB_ROBOT))
 				organ= new /obj/item/limb/r_hand(owner.loc, owner)
 			owner.dropItemToGround(owner.gloves, force = TRUE)
 			owner.dropItemToGround(owner.r_hand, force = TRUE)
-		if(HAND_LEFT)
+		if(BODY_ZONE_PRECISE_L_HAND)
 			if(!(limb_status & LIMB_ROBOT))
 				organ= new /obj/item/limb/l_hand(owner.loc, owner)
 			owner.dropItemToGround(owner.gloves, force = TRUE)
 			owner.dropItemToGround(owner.l_hand, force = TRUE)
-		if(FOOT_RIGHT)
+		if(BODY_ZONE_PRECISE_R_FOOT)
 			if(!(limb_status & LIMB_ROBOT))
 				organ= new /obj/item/limb/r_foot/(owner.loc, owner)
 			owner.dropItemToGround(owner.shoes, force = TRUE)
-		if(FOOT_LEFT)
+		if(BODY_ZONE_PRECISE_L_FOOT)
 			if(!(limb_status & LIMB_ROBOT))
 				organ = new /obj/item/limb/l_foot(owner.loc, owner)
 			owner.dropItemToGround(owner.shoes, force = TRUE)
@@ -787,7 +784,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 ****************************************************/
 
 /datum/limb/proc/release_restraints()
-	if (owner.handcuffed && (body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT)))
+	if (owner.handcuffed && (body_zone in list(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND)))
 		owner.visible_message(\
 			"\The [owner.handcuffed.name] falls off of [owner.name].",\
 			"\The [owner.handcuffed.name] falls off you.")
@@ -1005,7 +1002,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	display_name = "chest"
 	max_damage = 200
 	min_broken_damage = 60
-	body_part = CHEST
+	body_zone = BODY_ZONE_CHEST
 	vital = TRUE
 	cover_index = 27
 	encased = "ribcage"
@@ -1016,7 +1013,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	display_name = "groin"
 	max_damage = 200
 	min_broken_damage = 60
-	body_part = GROIN
+	body_zone = BODY_ZONE_PRECISE_GROIN
 	vital = TRUE
 	cover_index = 9
 
@@ -1026,7 +1023,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_arm"
 	max_damage = 150
 	min_broken_damage = 50
-	body_part = ARM_LEFT
+	body_zone = BODY_ZONE_L_ARM
 	cover_index = 7
 
 /datum/limb/l_arm/process()
@@ -1039,7 +1036,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_leg"
 	max_damage = 125
 	min_broken_damage = 50
-	body_part = LEG_LEFT
+	body_zone = BODY_ZONE_L_LEG
 	cover_index = 14
 	icon_position = LEFT
 
@@ -1049,7 +1046,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_arm"
 	max_damage = 150
 	min_broken_damage = 50
-	body_part = ARM_RIGHT
+	body_zone = BODY_ZONE_R_ARM
 	cover_index = 7
 
 /datum/limb/r_arm/process()
@@ -1062,7 +1059,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_leg"
 	max_damage = 125
 	min_broken_damage = 50
-	body_part = LEG_RIGHT
+	body_zone = BODY_ZONE_R_LEG
 	cover_index = 14
 	icon_position = RIGHT
 
@@ -1072,7 +1069,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_foot"
 	max_damage = 100
 	min_broken_damage = 37
-	body_part = FOOT_LEFT
+	body_zone = BODY_ZONE_PRECISE_L_FOOT
 	cover_index = 4
 	icon_position = LEFT
 
@@ -1082,7 +1079,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_foot"
 	max_damage = 100
 	min_broken_damage = 37
-	body_part = FOOT_RIGHT
+	body_zone = BODY_ZONE_PRECISE_R_FOOT
 	cover_index = 4
 	icon_position = RIGHT
 
@@ -1092,7 +1089,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_hand"
 	max_damage = 100
 	min_broken_damage = 37
-	body_part = HAND_RIGHT
+	body_zone = BODY_ZONE_PRECISE_R_HAND
 	cover_index = 2
 
 /datum/limb/hand/r_hand/process()
@@ -1105,7 +1102,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_hand"
 	max_damage = 100
 	min_broken_damage = 37
-	body_part = HAND_LEFT
+	body_zone = BODY_ZONE_PRECISE_L_HAND
 	cover_index = 2
 
 /datum/limb/hand/l_hand/process()
@@ -1118,7 +1115,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	display_name = "head"
 	max_damage = 125
 	min_broken_damage = 40
-	body_part = HEAD
+	body_zone = BODY_ZONE_HEAD
 	vital = TRUE
 	cover_index = 10
 	encased = "skull"

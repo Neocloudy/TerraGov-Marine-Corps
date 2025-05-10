@@ -115,7 +115,7 @@
 			nearby_human.throw_at(far_away_lands, 20, spin = TRUE)
 			to_chat(nearby_human, span_warning("[src] bursts, releasing a strong gust of pressurised gas!"))
 			nearby_human.adjust_stagger(3 SECONDS)
-			nearby_human.apply_damage(30, BRUTE, "chest", BOMB)
+			nearby_human.apply_damage(30, BRUTE, BODY_ZONE_CHEST, BOMB)
 	return ..()
 
 /obj/structure/xeno/plant/armor_fruit/on_use(mob/user)

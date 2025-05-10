@@ -31,8 +31,8 @@
 /obj/item/clothing/tie/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
 		if(user.a_intent == INTENT_HELP)
-			var/body_part = parse_zone(user.zone_selected)
-			if(body_part)
+			var/body_zone = parse_zone(user.zone_selected)
+			if(body_zone)
 				var/sound = "pulse"
 				var/sound_strength
 
@@ -41,8 +41,8 @@
 					sound = "anything"
 				else
 					sound_strength = "hear a weak"
-					switch(body_part)
-						if("chest")
+					switch(body_zone)
+						if(BODY_ZONE_CHEST)
 							if(M.oxyloss < 50)
 								sound_strength = "hear a healthy"
 							sound = "pulse and respiration"
@@ -52,7 +52,7 @@
 						else
 							sound_strength = "hear a weak"
 
-				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [M.p_their()] [body_part]. You [sound_strength] [sound].")
+				user.visible_message("[user] places [src] against [M]'s [body_zone] and listens attentively.", "You place [src] against [M.p_their()] [body_zone]. You [sound_strength] [sound].")
 				return
 	return ..(M,user)
 

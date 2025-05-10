@@ -182,8 +182,8 @@
 		if(emote_flags & EMOTE_ARMS_CHECK)
 			///okay snapper
 			var/mob/living/carbon/snapper = user
-			var/datum/limb/left_hand = snapper.get_limb("l_hand")
-			var/datum/limb/right_hand = snapper.get_limb("r_hand")
+			var/datum/limb/left_hand = snapper.get_limb(BODY_ZONE_PRECISE_L_HAND)
+			var/datum/limb/right_hand = snapper.get_limb(BODY_ZONE_PRECISE_R_HAND)
 			if((!left_hand.is_usable()) && (!right_hand.is_usable()))
 				to_chat(user, span_notice("You cannot [key] without a working hand."))
 				return FALSE

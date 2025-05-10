@@ -25,7 +25,7 @@
 	max_duration = 80
 
 /datum/surgery_step/internal/remove_embryo/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
-	if(affected.body_part != CHEST)
+	if(affected.body_zone != BODY_ZONE_CHEST)
 		return SURGERY_CANNOT_USE
 	if(..())
 		if(locate(/obj/item/alien_embryo) in target)
@@ -75,7 +75,7 @@
 
 /datum/surgery_step/internal/fix_organ/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
 	if(..())
-		if(affected.body_part == HEAD)//brain and eye damage is fixed by a separate surgery
+		if(affected.body_zone == BODY_ZONE_HEAD)//brain and eye damage is fixed by a separate surgery
 			return SURGERY_CANNOT_USE
 		for(var/datum/internal_organ/I in affected.internal_organs)
 			if(I.damage > 0 && I.robotic != ORGAN_ROBOT)
@@ -132,7 +132,7 @@
 
 /datum/surgery_step/internal/fix_organ_robotic/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
 	if(..())
-		if(affected.body_part == HEAD)//brain and eye damage is fixed by a separate surgery
+		if(affected.body_zone == BODY_ZONE_HEAD)//brain and eye damage is fixed by a separate surgery
 			return SURGERY_CANNOT_USE
 		for(var/datum/internal_organ/I in affected.internal_organs)
 			if(I.damage > 0 && I.robotic == ORGAN_ROBOT)

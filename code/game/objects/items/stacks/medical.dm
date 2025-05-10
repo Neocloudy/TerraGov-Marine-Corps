@@ -244,7 +244,7 @@
 			return FALSE
 
 	var/datum/limb/affecting = .
-	if(M == user && ((!user.hand && affecting.body_part == ARM_RIGHT) || (user.hand && affecting.body_part == ARM_LEFT)))
+	if(M == user && ((!user.hand && affecting.body_zone == BODY_ZONE_R_ARM) || (user.hand && affecting.body_zone == BODY_ZONE_L_ARM)))
 		user.balloon_alert(user, "You are using that arm!")
 		return
 	if(affecting.apply_splints(src, user == M ? (applied_splint_health*max(user.skills.getRating(SKILL_MEDICAL) - 1, 0)) : applied_splint_health*user.skills.getRating(SKILL_MEDICAL), user, M))

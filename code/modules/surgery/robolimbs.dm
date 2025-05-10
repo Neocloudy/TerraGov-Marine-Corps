@@ -16,7 +16,7 @@
 		return SURGERY_CANNOT_USE
 	if(affected.limb_replacement_stage != limb_step)
 		return SURGERY_CANNOT_USE
-	if(affected.body_part == HEAD) //head has its own steps
+	if(affected.body_zone == BODY_ZONE_HEAD) //head has its own steps
 		return SURGERY_CANNOT_USE
 	return SURGERY_CAN_USE
 

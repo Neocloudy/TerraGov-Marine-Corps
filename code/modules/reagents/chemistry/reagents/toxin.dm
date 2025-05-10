@@ -392,7 +392,7 @@
 	if(!isxeno(L))
 		if(ishuman(L) && volume >= 10)
 			var/mob/living/carbon/human/H = L
-			var/datum/limb/affecting = H.get_limb("head")
+			var/datum/limb/affecting = H.get_limb(BODY_ZONE_HEAD)
 			if(affecting)
 				if(affecting.take_damage_limb(4 * toxpwr, 2 * toxpwr))
 					H.UpdateDamageIcon()

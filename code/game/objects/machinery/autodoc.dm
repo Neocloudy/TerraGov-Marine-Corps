@@ -260,7 +260,7 @@
 			if(L.limb_status & LIMB_BROKEN)
 				surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_BROKEN)
 			if(L.limb_status & LIMB_DESTROYED)
-				if(!(L.parent.limb_status & LIMB_DESTROYED) && L.body_part != HEAD)
+				if(!(L.parent.limb_status & LIMB_DESTROYED) && L.body_zone != BODY_ZONE_HEAD)
 					surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_MISSING)
 			if(L.limb_status & LIMB_NECROTIZED)
 				surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_NECRO)
@@ -270,10 +270,10 @@
 					if(embedded.is_beneficial_implant())
 						continue
 					surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_SHRAPNEL)
-					if(L.body_part == CHEST)
+					if(L.body_zone == BODY_ZONE_CHEST)
 						skip_embryo_check = TRUE
 			var/obj/item/alien_embryo/A = locate() in M
-			if(A && L.body_part == CHEST && !skip_embryo_check) //If we're not already doing a shrapnel removal surgery on the chest, add an extraction surgery to remove it
+			if(A && L.body_zone == BODY_ZONE_CHEST && !skip_embryo_check) //If we're not already doing a shrapnel removal surgery on the chest, add an extraction surgery to remove it
 				surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_SHRAPNEL)
 			if(L.germ_level > INFECTION_LEVEL_ONE)
 				surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_GERMS)
@@ -388,7 +388,7 @@
 							continue
 						open_incision(occupant, S.limb_ref)
 
-						if(S.limb_ref.body_part != GROIN)
+						if(S.limb_ref.body_zone != BODY_ZONE_PRECISE_GROIN)
 							open_encased(occupant, S.limb_ref)
 
 						if(!istype(S.organ_ref,/datum/internal_organ/brain))
@@ -405,7 +405,7 @@
 							say("Organ is missing.")
 
 						// close them
-						if(S.limb_ref.body_part != GROIN) // TODO: fix brute damage before closing
+						if(S.limb_ref.body_zone != BODY_ZONE_PRECISE_GROIN) // TODO: fix brute damage before closing
 							close_encased(occupant, S.limb_ref)
 						close_incision(occupant, S.limb_ref)
 
@@ -557,9 +557,9 @@
 							continue
 
 						open_incision(occupant, S.limb_ref)
-						if(S.limb_ref.body_part == CHEST || S.limb_ref.body_part == HEAD)
+						if(S.limb_ref.body_zone == BODY_ZONE_CHEST || S.limb_ref.body_zone == BODY_ZONE_CHEST)
 							open_encased(occupant, S.limb_ref)
-						if(S.limb_ref.body_part == CHEST) //if it's the chest check for gross parasites
+						if(S.limb_ref.body_zone == BODY_ZONE_CHEST) //if it's the chest check for gross parasites
 							var/obj/item/alien_embryo/A = locate() in occupant
 							if(A)
 								for(A in occupant)
@@ -580,7 +580,7 @@
 									continue
 								sleep(HEMOSTAT_REMOVE_MAX_DURATION*surgery_mod)
 								embedded.unembed_ourself(TRUE)
-						if(S.limb_ref.body_part == CHEST || S.limb_ref.body_part == HEAD)
+						if(S.limb_ref.body_zone == BODY_ZONE_CHEST || S.limb_ref.body_zone == BODY_ZONE_HEAD)
 							close_encased(occupant, S.limb_ref)
 						if(!surgery)
 							break
@@ -1262,7 +1262,7 @@
 		if(href_list["missing"])
 			for(var/i in connected.occupant.limbs)
 				var/datum/limb/L = i
-				if(L.limb_status & LIMB_DESTROYED && !(L.parent.limb_status & LIMB_DESTROYED) && L.body_part != HEAD)
+				if(L.limb_status & LIMB_DESTROYED && !(L.parent.limb_status & LIMB_DESTROYED) && L.body_zone != BODY_ZONE_HEAD)
 					N.fields["autodoc_manual"] += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_MISSING)
 					needed++
 			if(!needed)
@@ -1288,9 +1288,9 @@
 						continue
 					N.fields["autodoc_manual"] += create_autodoc_surgery(L, LIMB_SURGERY,ADSURGERY_SHRAPNEL)
 					needed++
-					if(L.body_part == CHEST)
+					if(L.body_zone == BODY_ZONE_CHEST)
 						skip_embryo_check = TRUE
-				if(A && L.body_part == CHEST && !skip_embryo_check) //If we're not already doing a shrapnel removal surgery of the chest proceed.
+				if(A && L.body_zone == BODY_ZONE_CHEST && !skip_embryo_check) //If we're not already doing a shrapnel removal surgery of the chest proceed.
 					N.fields["autodoc_manual"] += create_autodoc_surgery(L, LIMB_SURGERY,ADSURGERY_SHRAPNEL)
 					needed++
 

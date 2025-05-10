@@ -506,7 +506,7 @@
 	if(ishuman(hugged))
 		var/mob/living/carbon/human/H = hugged
 
-		if(!H.has_limb(HEAD))
+		if(!H.has_limb(BODY_ZONE_HEAD))
 			visible_message(span_warning("[src] looks for a face to hug on [H], but finds none!"))
 			return FALSE
 

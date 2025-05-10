@@ -25,7 +25,7 @@
 	if (istype(H.wear_suit, /obj/item/clothing/suit/straight_jacket))
 		return
 
-	var/datum/limb/O = H.get_limb(H.hand?"l_hand":"r_hand")
+	var/datum/limb/O = H.get_limb(H.hand? BODY_ZONE_PRECISE_L_HAND : BODY_ZONE_PRECISE_R_HAND)
 	if (!O) return
 
 	var/s = span_warning("[H.name] chews on [H.p_their()] [O.display_name]!")

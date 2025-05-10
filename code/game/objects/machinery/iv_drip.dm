@@ -105,7 +105,7 @@
 
 	if(!(get_dist(src, attached) <= 1 && isturf(attached.loc)))
 		visible_message("The needle is ripped out of [attached], doesn't that hurt?")
-		attached.apply_damage(3, BRUTE, pick("r_arm", "l_arm"))
+		attached.apply_damage(3, BRUTE, pick(BODY_ZONE_R_ARM, BODY_ZONE_L_ARM))
 		attached = null
 		update_icon()
 		STOP_PROCESSING(SSobj, src)

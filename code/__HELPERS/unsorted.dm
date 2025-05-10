@@ -613,21 +613,21 @@
 /proc/parse_zone(zone)
 	switch(zone)
 		if("r_hand")
-			return "right hand"
+			return BODY_ZONE_PRECISE_R_HAND
 		if ("l_hand")
-			return "left hand"
+			return BODY_ZONE_PRECISE_L_HAND
 		if ("l_arm")
-			return "left arm"
+			return BODY_ZONE_L_ARM
 		if ("r_arm")
-			return "right arm"
+			return BODY_ZONE_R_ARM
 		if ("l_leg")
-			return "left leg"
+			return BODY_ZONE_L_LEG
 		if ("r_leg")
-			return "right leg"
+			return BODY_ZONE_R_LEG
 		if ("l_foot")
-			return "left foot"
+			return BODY_ZONE_PRECISE_L_FOOT
 		if ("r_foot")
-			return "right foot"
+			return BODY_ZONE_PRECISE_R_FOOT
 		else
 			return zone
 

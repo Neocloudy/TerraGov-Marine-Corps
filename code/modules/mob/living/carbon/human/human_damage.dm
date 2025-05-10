@@ -333,7 +333,7 @@ This function restores all limbs.
 	zone = check_zone(zone)
 	for(var/X in limbs)
 		var/datum/limb/EO = X
-		if(EO.name != zone)
+		if(EO.body_zone != zone)
 			continue
 		return EO
 

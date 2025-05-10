@@ -119,7 +119,7 @@
 		GLOB.round_statistics.workout_counts[user.faction] += 1
 	if(plates >= 5 && prob(10) && ishuman(user)) // the flesh is weak
 		var/mob/living/carbon/human/breaker = user
-		var/datum/limb/broken = breaker.get_limb(pick("l_arm", "r_arm"))
+		var/datum/limb/broken = breaker.get_limb(pick(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM))
 		broken.fracture()
 		return
 	if(!HAS_TRAIT(user, TRAIT_WORKED_OUT))

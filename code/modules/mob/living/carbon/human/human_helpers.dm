@@ -180,7 +180,6 @@
 		// Might need re-wording.
 		to_chat(user, span_alert("There is no exposed flesh or thin material [target_zone == "head" ? "on their head" : "on their body"] to inject into."))
 
-
 /mob/living/carbon/human/has_brain()
 	if(get_organ_slot(ORGAN_SLOT_BRAIN))
 		var/datum/internal_organ/brain = get_organ_slot(ORGAN_SLOT_BRAIN)
@@ -206,12 +205,79 @@
 		return FALSE
 	return TRUE
 
+// For finding out what body parts a body zone covers, the inverse of the below basically
+/proc/body_zone2cover_flags(def_zone)
+	switch(def_zone)
+		if(BODY_ZONE_CHEST)
+			return CHEST|GROIN
+		if(BODY_ZONE_HEAD)
+			return HEAD
+		if(BODY_ZONE_L_ARM)
+			return ARM_LEFT|HAND_LEFT
+		if(BODY_ZONE_R_ARM)
+			return ARM_RIGHT|HAND_RIGHT
+		if(BODY_ZONE_L_LEG)
+			return LEG_LEFT|FOOT_LEFT
+		if(BODY_ZONE_R_LEG)
+			return LEG_RIGHT|FOOT_RIGHT
+
+/// Turns a Body_parts_covered bitfield into a list of organ/limb names.
+/proc/cover_flags2body_zones(bpc)
+	var/list/covered_parts = list()
+
+	if(!bpc)
+		return 0
+
+	if(bpc == FULL_BODY)
+		covered_parts |= list(BODY_ZONE_L_ARM,BODY_ZONE_R_ARM,BODY_ZONE_HEAD,BODY_ZONE_CHEST,BODY_ZONE_L_LEG,BODY_ZONE_R_LEG)
+
+	else
+		if(bpc & HEAD)
+			covered_parts |= list(BODY_ZONE_HEAD)
+		if(bpc & CHEST)
+			covered_parts |= list(BODY_ZONE_CHEST)
+		if(bpc & GROIN)
+			covered_parts |= list(BODY_ZONE_CHEST)
+
+		if(bpc & ARMS)
+			covered_parts |= list(BODY_ZONE_L_ARM,BODY_ZONE_R_ARM)
+		else
+			if(bpc & ARM_LEFT)
+				covered_parts |= list(BODY_ZONE_L_ARM)
+			if(bpc & ARM_RIGHT)
+				covered_parts |= list(BODY_ZONE_R_ARM)
+
+		if(bpc & HANDS)
+			covered_parts |= list(BODY_ZONE_L_ARM,BODY_ZONE_R_ARM)
+		else
+			if(bpc & HAND_LEFT)
+				covered_parts |= list(BODY_ZONE_L_ARM)
+			if(bpc & HAND_RIGHT)
+				covered_parts |= list(BODY_ZONE_R_ARM)
+
+		if(bpc & LEGS)
+			covered_parts |= list(BODY_ZONE_L_LEG,BODY_ZONE_R_LEG)
+		else
+			if(bpc & LEG_LEFT)
+				covered_parts |= list(BODY_ZONE_L_LEG)
+			if(bpc & LEG_RIGHT)
+				covered_parts |= list(BODY_ZONE_R_LEG)
+
+		if(bpc & FEET)
+			covered_parts |= list(BODY_ZONE_L_LEG,BODY_ZONE_R_LEG)
+		else
+			if(bpc & FOOT_LEFT)
+				covered_parts |= list(BODY_ZONE_L_LEG)
+			if(bpc & FOOT_RIGHT)
+				covered_parts |= list(BODY_ZONE_R_LEG)
+
+	return covered_parts
 
 /mob/living/carbon/human/has_legs()
 	. = 0
-	if(has_limb(FOOT_RIGHT) && has_limb(LEG_RIGHT))
+	if(has_limb(BODY_ZONE_PRECISE_R_FOOT) && has_limb(BODY_ZONE_R_LEG))
 		.++
-	if(has_limb(FOOT_LEFT) && has_limb(LEG_LEFT))
+	if(has_limb(BODY_ZONE_PRECISE_L_FOOT) && has_limb(BODY_ZONE_L_LEG))
 		.++
 
 /mob/living/carbon/human/get_permeability_protection()
@@ -309,7 +375,7 @@
  */
 /mob/living/carbon/human/proc/check_defib(additional_health_increase = 0)
 
-	var/datum/limb/head/head = get_limb("head")
+	var/datum/limb/head/head = get_limb(BODY_ZONE_HEAD)
 	if(head.limb_status & LIMB_DESTROYED)
 		return DEFIB_FAIL_DECAPITATED
 

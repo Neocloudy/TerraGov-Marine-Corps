@@ -247,7 +247,7 @@
 	if(light_on)
 		var/prot = 0
 		var/mob/living/carbon/human/H = user
-		var/datum/limb/limb_check = H.get_limb(H.hand? "l_hand" : "r_hand")
+		var/datum/limb/limb_check = H.get_limb(H.hand? BODY_ZONE_PRECISE_L_HAND : BODY_ZONE_PRECISE_R_HAND)
 
 		if(istype(H))
 

@@ -379,11 +379,11 @@
 		return FALSE
 
 	// Check if they have a functioning hand
-	var/datum/limb/E = user.get_limb("l_hand")
+	var/datum/limb/E = user.get_limb(BODY_ZONE_PRECISE_L_HAND)
 	if(E?.is_usable())
 		return TRUE
 
-	E = user.get_limb("r_hand")
+	E = user.get_limb(BODY_ZONE_PRECISE_R_HAND)
 	if(E?.is_usable())
 		return TRUE
 	return FALSE

@@ -16,15 +16,16 @@ Contains most of the procs that are called when a mob is attacked by something
 
 	var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes) // What all are we checking?
 	for(var/obj/item/clothing/C in clothing_items)
-		if(istype(C) && (C.armor_protection_flags & def_zone.body_part)) // Is that body part being targeted covered?
+		if(istype(C) && (C.armor_protection_flags & def_zone.body_zone)) // Is that body part being targeted covered?
 			siemens_coefficient *= C.siemens_coefficient
 
 	return siemens_coefficient
 
 /mob/living/carbon/human/proc/add_limb_armor(obj/item/armor_item)
+	var/zones = cover_flags2body_zones(armor_item.armor_protection_flags)
 	for(var/i in limbs)
 		var/datum/limb/limb_to_check = i
-		if(!(limb_to_check.body_part & armor_item.armor_protection_flags))
+		if(!(limb_to_check.body_zone in zones))
 			continue
 		limb_to_check.add_limb_soft_armor(armor_item.soft_armor)
 		limb_to_check.add_limb_hard_armor(armor_item.hard_armor)
@@ -37,7 +38,7 @@ Contains most of the procs that are called when a mob is attacked by something
 /mob/living/carbon/human/proc/remove_limb_armor(obj/item/armor_item)
 	for(var/i in limbs)
 		var/datum/limb/limb_to_check = i
-		if(!(limb_to_check.body_part & armor_item.armor_protection_flags))
+		if(!(limb_to_check.body_zone & armor_item.armor_protection_flags))
 			continue
 		limb_to_check.remove_limb_soft_armor(armor_item.soft_armor)
 		limb_to_check.remove_limb_hard_armor(armor_item.hard_armor)

@@ -273,7 +273,7 @@
 	if(load_into_chamber() && istype(in_chamber, /atom/movable/projectile))
 		//Setup projectile
 		in_chamber.original_target = target
-		in_chamber.def_zone = pick("chest","chest","chest","head")
+		in_chamber.def_zone = pick(BODY_ZONE_CHEST, BODY_ZONE_CHEST, BODY_ZONE_CHEST, BODY_ZONE_HEAD)
 		//Shoot at the thing
 		var/angle = Get_Angle(src, target)
 		playsound(loc, gunnoise, 65, 1)

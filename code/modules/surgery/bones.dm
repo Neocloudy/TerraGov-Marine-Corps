@@ -56,7 +56,7 @@
 
 
 /datum/surgery_step/bone/set_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
-	if(affected.body_part == HEAD)
+	if(affected.body_zone == BODY_ZONE_HEAD)
 		user.visible_message(span_notice("[user] is beginning to piece together [target]'s skull with \the [tool].")  , \
 		span_notice("You are beginning to piece together [target]'s skull with \the [tool]."))
 	else
@@ -67,7 +67,7 @@
 	..()
 
 /datum/surgery_step/bone/set_bone/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
-	if(affected.body_part == HEAD)
+	if(affected.body_zone == BODY_ZONE_HEAD)
 		user.visible_message(span_notice("[user] sets [target]'s skull with \the [tool].") , \
 		span_notice("You set [target]'s skull with \the [tool]."))
 	else
@@ -81,7 +81,7 @@
 
 /datum/surgery_step/bone/set_bone/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
 	target.balloon_alert_to_viewers("Slipped!")
-	if(affected.body_part == HEAD)
+	if(affected.body_zone == BODY_ZONE_HEAD)
 		user.visible_message(span_warning("[user]'s hand slips, damaging [target]'s face with \the [tool]!")  , \
 		span_warning("Your hand slips, damaging [target]'s face with \the [tool]!"))
 		var/datum/limb/head/h = affected

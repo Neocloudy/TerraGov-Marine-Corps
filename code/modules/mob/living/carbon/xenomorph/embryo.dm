@@ -202,7 +202,7 @@
 	if(AE)
 		qdel(AE)
 
-	victim.apply_damage(200, BRUTE, victim.get_limb("chest"), updating_health = TRUE) //lethal armor ignoring brute damage
+	victim.apply_damage(200, BRUTE, victim.get_limb(BODY_ZONE_CHEST), updating_health = TRUE) //lethal armor ignoring brute damage
 	var/datum/internal_organ/O
 	for(var/i in list(ORGAN_SLOT_HEART, ORGAN_SLOT_LUNGS, ORGAN_SLOT_LIVER, ORGAN_SLOT_KIDNEYS, ORGAN_SLOT_APPENDIX)) //Bruise all torso internal organs
 		O = victim.get_organ_slot(i)
@@ -212,7 +212,7 @@
 		else
 			O.take_damage(O.min_bruised_damage, TRUE)
 
-	var/datum/limb/chest = victim.get_limb("chest")
+	var/datum/limb/chest = victim.get_limb(BODY_ZONE_CHEST)
 	new /datum/wound/internal_bleeding(15, chest) //Apply internal bleeding to chest
 	chest.fracture()
 

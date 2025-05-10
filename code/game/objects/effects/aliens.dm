@@ -207,14 +207,14 @@
 	span_danger("Corrosive substances burn and seethe all over you upon retrieving the acid-soaked [item]!"))
 	playsound(human_user, SFX_ACID_HIT, 25)
 	human_user.emote("pain")
-	var/list/affected_limbs = list("l_hand", "r_hand", "l_arm", "r_arm")
+	var/list/affected_limbs = list(BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM)
 	var/limb_count = null
 	for(var/datum/limb/limb AS in human_user.limbs)
 		if(limb_count > 4)
 			break
-		if(!affected_limbs.Find(limb.name))
+		if(!affected_limbs.Find(limb.body_zone))
 			continue
-		limb.take_damage_limb(0, human_user.modify_by_armor(acid_damage * 0.25 * randfloat(0.75, 1.25), ACID, def_zone = limb.name))
+		limb.take_damage_limb(0, human_user.modify_by_armor(acid_damage * 0.25 * randfloat(0.75, 1.25), ACID, def_zone = limb.body_zone))
 		limb_count++
 	human_user.UpdateDamageIcon()
 	UPDATEHEALTH(human_user)

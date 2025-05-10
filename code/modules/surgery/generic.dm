@@ -203,7 +203,7 @@
 	open_step = 1
 
 /datum/surgery_step/generic/retract_skin/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
-	if(target_zone == "groin")
+	if(target_zone == BODY_ZONE_PRECISE_GROIN)
 		user.visible_message(span_notice("[user] starts to pry open the incision and rearrange the organs in [target]'s lower abdomen with \the [tool]."), \
 		span_notice("You start to pry open the incision and rearrange the organs in [target]'s lower abdomen with \the [tool]."))
 	else
@@ -214,10 +214,10 @@
 	..()
 
 /datum/surgery_step/generic/retract_skin/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
-	if(target_zone == "chest")
+	if(target_zone == BODY_ZONE_CHEST)
 		user.visible_message(span_notice("[user] keeps the ribcage open on [target]'s torso with \the [tool]."), \
 		span_notice("You keep the ribcage open on [target]'s torso with \the [tool]."))
-	else if(target_zone == "groin")
+	else if(target_zone == BODY_ZONE_PRECISE_GROIN)
 		user.visible_message(span_notice("[user] keeps the incision open on [target]'s lower abdomen with \the [tool]."), \
 		span_notice("You keep the incision open on [target]'s lower abdomen with \the [tool]."))
 	else
@@ -228,10 +228,10 @@
 	return ..()
 
 /datum/surgery_step/generic/retract_skin/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
-	if(target_zone == "chest")
+	if(target_zone == BODY_ZONE_CHEST)
 		user.visible_message(span_warning("[user]'s hand slips, damaging several organs in [target]'s torso with \the [tool]!"), \
 		span_warning("Your hand slips, damaging several organs in [target]'s torso with \the [tool]!"))
-	if(target_zone == "groin")
+	if(target_zone == BODY_ZONE_PRECISE_GROIN)
 		user.visible_message(span_warning("[user]'s hand slips, damaging several organs in [target]'s lower abdomen with \the [tool]!"), \
 		span_warning("Your hand slips, damaging several organs in [target]'s lower abdomen with \the [tool]!"))
 	else

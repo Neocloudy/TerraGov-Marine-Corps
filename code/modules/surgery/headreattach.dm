@@ -11,7 +11,7 @@
 		return SURGERY_CANNOT_USE
 	if(!(affected.limb_status & LIMB_DESTROYED))
 		return SURGERY_CANNOT_USE
-	if(affected.body_part != HEAD)
+	if(affected.body_zone != BODY_ZONE_HEAD)
 		return SURGERY_CANNOT_USE
 	if(affected.limb_replacement_stage == reattach_step)
 		return SURGERY_CAN_USE

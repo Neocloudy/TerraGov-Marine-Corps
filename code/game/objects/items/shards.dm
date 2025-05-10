@@ -109,7 +109,7 @@
 		INVOKE_ASYNC(src, PROC_REF(pierce_foot), H)
 
 /obj/item/shard/proc/pierce_foot(mob/living/carbon/human/target)
-	var/datum/limb/affecting = target.get_limb(pick("l_foot", "r_foot"))
+	var/datum/limb/affecting = target.get_limb(pick(BODY_ZONE_PRECISE_L_FOOT, BODY_ZONE_PRECISE_R_FOOT))
 	if(affecting.limb_status & LIMB_ROBOT)
 		return
 	target.Paralyze(6 SECONDS)

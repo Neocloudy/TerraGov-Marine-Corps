@@ -58,19 +58,19 @@
 
 //The base miss chance for the different defence zones
 GLOBAL_LIST_INIT(base_miss_chance, list(
-	"head" = 10,
-	"chest" = 0,
-	"groin" = 5,
-	"l_leg" = 10,
-	"r_leg" = 10,
-	"l_arm" = 10,
-	"r_arm" = 10,
-	"l_hand" = 30,
-	"r_hand" = 30,
-	"l_foot" = 40,
-	"r_foot" = 40,
-	"eyes" = 20,
-	"mouth" = 15,
+	BODY_ZONE_HEAD = 10,
+	BODY_ZONE_CHEST = 0,
+	BODY_ZONE_PRECISE_GROIN = 5,
+	BODY_ZONE_L_LEG = 10,
+	BODY_ZONE_R_LEG = 10,
+	BODY_ZONE_L_ARM = 10,
+	BODY_ZONE_R_ARM = 10,
+	BODY_ZONE_PRECISE_L_HAND = 30,
+	BODY_ZONE_PRECISE_R_HAND = 30,
+	BODY_ZONE_PRECISE_L_FOOT = 40,
+	BODY_ZONE_PRECISE_R_FOOT = 40,
+	BODY_ZONE_PRECISE_EYES = 20,
+	BODY_ZONE_PRECISE_MOUTH = 15,
 ))
 
 //Used to weight organs when an organ is hit randomly (i.e. not a directed, aimed attack).
@@ -92,11 +92,12 @@ GLOBAL_LIST_INIT(organ_rel_size, list(
 ))
 
 /proc/check_zone(zone)
-	if(!zone)	return "chest"
+	if(!zone)
+		return BODY_ZONE_CHEST
 	switch(zone)
-		if("eyes")
+		if(BODY_ZONE_PRECISE_EYES)
 			zone = "head"
-		if("mouth")
+		if(BODY_ZONE_PRECISE_MOUTH)
 			zone = "head"
 	return zone
 

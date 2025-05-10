@@ -9,9 +9,9 @@
 	. = ..()
 	if(!.)
 		return
-	var/flag_to_check = part.body_part == FOOT_RIGHT ? FOOT_LEFT : FOOT_RIGHT
+	var/flag_to_check = part.body_zone == BODY_ZONE_PRECISE_R_FOOT ? BODY_ZONE_PRECISE_L_FOOT : BODY_ZONE_PRECISE_R_FOOT
 	for(var/datum/limb/limb AS in target.limbs)
-		if(limb.body_part != flag_to_check)
+		if(limb.body_zone != flag_to_check)
 			continue
 		if(!(locate(type) in limb.implants)) //you need two
 			return

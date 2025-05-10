@@ -421,7 +421,7 @@
 				switch(extra_ouch)
 					if(TRUE)
 						playsound(src, 'sound/effects/grillehit.ogg', 50, TRUE)
-						var/datum/limb/head/head = victim_living.get_limb("head")
+						var/datum/limb/head/head = victim_living.get_limb(BODY_ZONE_HEAD)
 						if(head)
 							log_combat(src, victim_living, "beheaded")
 							head.droplimb(TRUE)

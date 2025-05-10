@@ -2,7 +2,13 @@
 	element_flags = ELEMENT_BESPOKE
 	argument_hash_start_idx = 2
 
-	var/limbs_to_support = FULL_BODY
+	var/limbs_to_support = list(
+		BODY_ZONE_HEAD, BODY_ZONE_CHEST, BODY_ZONE_PRECISE_GROIN,
+		BODY_ZONE_L_ARM, BODY_ZONE_R_ARM,
+		BODY_ZONE_L_LEG, BODY_ZONE_R_LEG,
+		BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND,
+		BODY_ZONE_PRECISE_L_FOOT, BODY_ZONE_PRECISE_R_FOOT
+	)
 
 /datum/element/limb_support/Attach(datum/target, limbflags)
 	. = ..()
@@ -39,7 +45,7 @@
 	var/obj/item/clothing/worn_suit = injured_mob.wear_suit
 
 	for(var/datum/limb/limb in injured_mob.limbs)
-		if(!(limbs_to_support & limb.body_part))
+		if(!(limbs_to_support & limb.body_zone))
 			continue
 
 		if(dropped && (limb.limb_status & LIMB_STABILIZED))

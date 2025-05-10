@@ -184,7 +184,7 @@
 			msg += "[span_warning("[t_He] [t_is] twitching ever so slightly.")]\n"
 
 	//splints
-	for(var/organ in list("l_leg","r_leg","l_arm","r_arm","l_foot","r_foot","l_hand","r_hand","chest","groin","head"))
+	for(var/organ in list(BODY_ZONE_PRECISE_L_FOOT, BODY_ZONE_PRECISE_R_FOOT, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_HEAD, BODY_ZONE_CHEST, BODY_ZONE_PRECISE_GROIN))
 		var/datum/limb/o = get_limb(organ)
 		if(o)
 			if(o.limb_status & LIMB_SPLINTED)

@@ -1,12 +1,12 @@
 //XENOMORPH ORGANS
 /datum/internal_organ/xenos/eggsac
 	name = "egg sac"
-	parent_limb = "groin"
+	parent_limb = BODY_ZONE_PRECISE_GROIN
 	removed_type = /obj/item/organ/xenos/eggsac
 
 /datum/internal_organ/xenos/plasmavessel
 	name = "plasma vessel"
-	parent_limb = "chest"
+	parent_limb = BODY_ZONE_CHEST
 	removed_type = /obj/item/organ/xenos/plasmavessel
 	var/stored_plasma = 0
 	var/max_plasma = 500
@@ -32,7 +32,7 @@
 
 /datum/internal_organ/xenos/hivenode
 	name = "hive node"
-	parent_limb = "chest"
+	parent_limb = BODY_ZONE_CHEST
 	removed_type = /obj/item/organ/xenos/hivenode
 
 /datum/internal_organ/xenos/resinspinner

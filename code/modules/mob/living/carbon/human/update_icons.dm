@@ -268,22 +268,22 @@ There are several things that need to be remembered:
 
 GLOBAL_LIST_EMPTY(damage_icon_parts)
 ///fetches the damage icon part, and caches it if it made a new one
-/mob/living/carbon/human/proc/get_damage_icon_part(damage_state, body_part)
-	if(GLOB.damage_icon_parts["[damage_state]_[species.blood_color]_[body_part]"])
-		return GLOB.damage_icon_parts["[damage_state]_[species.blood_color]_[body_part]"]
+/mob/living/carbon/human/proc/get_damage_icon_part(damage_state, body_zone)
+	if(GLOB.damage_icon_parts["[damage_state]_[species.blood_color]_[body_zone]"])
+		return GLOB.damage_icon_parts["[damage_state]_[species.blood_color]_[body_zone]"]
 
 	var/brute_state = copytext(damage_state, 1, 2)
 	var/burn_state = copytext(damage_state, 2)
 	var/icon/brute_state_icon = icon('icons/mob/dam_human.dmi', "[species.brute_damage_icon_state]_[brute_state]")
 	var/icon/burn_state_icon = icon('icons/mob/dam_human.dmi', "[species.burn_damage_icon_state]_[burn_state]")
-	var/icon/damage_mask_icon = icon(species.damage_mask_icon, body_part)
+	var/icon/damage_mask_icon = icon(species.damage_mask_icon, body_zone)
 	var/icon/DI = icon('icons/mob/dam_human.dmi', "00") //starts blank
 	if(species.species_flags & GREYSCALE_BLOOD)
 		DI.Blend(species.blood_color, ICON_MULTIPLY) 	//coloring with species' blood color
 	DI.Blend(brute_state_icon, ICON_OVERLAY)			//add bruises
 	DI.Blend(burn_state_icon, ICON_OVERLAY)				//add burns
 	DI.Blend(damage_mask_icon, ICON_MULTIPLY)			//mask with this organ's pixels
-	GLOB.damage_icon_parts["[damage_state]_[species.blood_color]_[body_part]"] = DI
+	GLOB.damage_icon_parts["[damage_state]_[species.blood_color]_[body_zone]"] = DI
 	return DI
 
 //DAMAGE OVERLAYS
@@ -379,7 +379,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 
 		//Robotic limbs are handled in get_icon() so all we worry about are missing or dead limbs.
 		//No icon stored, so we need to start with a basic one.
-		var/datum/limb/chest = get_limb("chest")
+		var/datum/limb/chest = get_limb(BODY_ZONE_CHEST)
 		base_icon = chest.get_icon(race_icon, physique_key)
 
 		if(chest.limb_status & LIMB_NECROTIZED)
@@ -474,7 +474,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 	if(species.species_flags & HAS_NO_HAIR)
 		return
 
-	var/datum/limb/head/head_organ = get_limb("head")
+	var/datum/limb/head/head_organ = get_limb(BODY_ZONE_HEAD)
 	if(!head_organ || (head_organ.limb_status & LIMB_DESTROYED) )
 		return
 
@@ -605,8 +605,8 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 
 	if(!blood_color || !bloody_hands)
 		return
-	var/datum/limb/left_hand = get_limb("l_hand")
-	var/datum/limb/right_hand = get_limb("r_hand")
+	var/datum/limb/left_hand = get_limb(BODY_ZONE_PRECISE_L_HAND)
+	var/datum/limb/right_hand = get_limb(BODY_ZONE_PRECISE_R_HAND)
 	var/mutable_appearance/bloodsies
 	if(left_hand.limb_status & LIMB_DESTROYED)
 		if(right_hand.limb_status & LIMB_DESTROYED)

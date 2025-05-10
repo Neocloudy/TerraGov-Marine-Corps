@@ -21,17 +21,21 @@
 	if(amount > 10 && ishuman(src))
 		var/mob/living/carbon/human/H = src
 
-		var/datum/limb/right_hand = H.get_limb("r_hand")
-		var/datum/limb/left_hand = H.get_limb("l_hand")
+		var/datum/limb/right_hand = H.get_limb(BODY_ZONE_PRECISE_R_HAND)
+		var/datum/limb/left_hand = H.get_limb(BODY_ZONE_PRECISE_L_HAND)
 		if(!H.stat && amount > 50 && prob(amount * 0.1))
 			msg = "You [pick("wince","shiver","grimace")] in pain"
-			var/i
+			var/lost_control_of_num
 			for(var/datum/limb/O in list(right_hand, left_hand))
-				if(!O || !O.is_usable()) continue //Not if the organ can't possibly function.
-				if(O.body_part == HAND_LEFT) 	drop_l_hand()
-				else 					drop_r_hand()
-				i++
-			if(i) msg += ", [pick("fumbling with","struggling with","losing control of")] your [i < 2 ? "hand" : "hands"]"
+				if(!O || !O.is_usable())
+					continue //Not if the organ can't possibly function.
+				if(O.body_zone == BODY_ZONE_PRECISE_L_HAND)
+					drop_l_hand()
+				else if(O.body_zone == BODY_ZONE_PRECISE_R_HAND)
+					drop_r_hand()
+				lost_control_of_num++
+			if(lost_control_of_num)
+				msg += ", [pick("fumbling with","struggling with","losing control of")] your [lost_control_of_num < 2 ? "hand" : "hands"]"
 			to_chat(H, span_warning("[msg]."))
 
 	if(burning)

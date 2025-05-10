@@ -26,7 +26,7 @@
 
 
 
-/mob/living/brain/proc/handle_temperature_damage(body_part, exposed_temperature)
+/mob/living/brain/proc/handle_temperature_damage(body_zone, exposed_temperature)
 	if(status_flags & GODMODE)
 		return
 

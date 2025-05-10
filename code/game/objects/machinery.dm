@@ -480,7 +480,7 @@
 					unknown_body++
 		if(e.hidden)
 			unknown_body++
-		if(e.body_part == CHEST) //embryo in chest?
+		if(e.body_zone == BODY_ZONE_CHEST) //embryo in chest?
 			if(locate(/obj/item/alien_embryo) in H)
 				imp += "Larva present; extract immediately:<br>"
 		if(unknown_body)

@@ -42,7 +42,7 @@
 		var/damage = xeno_owner.xeno_caste.melee_damage
 		var/affecting = H.get_limb(ran_zone(null, 0))
 		if(!affecting) //Still nothing??
-			affecting = H.get_limb("chest") //Gotta have a torso?!
+			affecting = H.get_limb(BODY_ZONE_CHEST) //Gotta have a torso?!
 		H.knockback(xeno_owner, sweep_range, 4)
 		H.apply_damage(damage, BRUTE, affecting, MELEE)
 		H.apply_damage(damage, STAMINA, updating_health = TRUE)
@@ -404,7 +404,7 @@
 		var/damage = xeno_owner.xeno_caste.melee_damage/2
 		var/affecting = slapped.get_limb(ran_zone(null, 0))
 		if(!affecting)
-			affecting = slapped.get_limb("chest")
+			affecting = slapped.get_limb(BODY_ZONE_CHEST)
 		slapped.knockback(xeno_owner, 1, 4)
 		slapped.apply_damage(damage, BRUTE, affecting, MELEE)
 		slapped.apply_damage(damage, STAMINA, updating_health = TRUE)

@@ -13,7 +13,7 @@
 	var/min_broken_damage = 30
 	///The effects when this limb is damaged. Used by health analyzers.
 	var/damage_description
-	var/parent_limb = "chest"
+	var/parent_limb = BODY_ZONE_CHEST
 	var/robotic = 0 //1 for 'assisted' organs (e.g. pacemaker), 2 for actual cyber organ.
 	var/removed_type //When removed, forms this object.
 	var/robotic_type //robotic version of removed_type, used in mechanize().
@@ -110,7 +110,7 @@
 
 /datum/internal_organ/heart // This is not set to vital because death immediately occurs in blood.dm if it is removed. Also, all damage effects are handled there.
 	name = "heart"
-	parent_limb = "chest"
+	parent_limb = BODY_ZONE_CHEST
 	removed_type = /obj/item/organ/heart
 	robotic_type = /obj/item/organ/heart/prosthetic
 	organ_id = ORGAN_HEART
@@ -138,7 +138,7 @@
 
 /datum/internal_organ/lungs
 	name = "lungs"
-	parent_limb = "chest"
+	parent_limb = BODY_ZONE_CHEST
 	removed_type = /obj/item/organ/lungs
 	robotic_type = /obj/item/organ/lungs/prosthetic
 	organ_id = ORGAN_LUNGS
@@ -170,7 +170,7 @@
 
 /datum/internal_organ/liver
 	name = "liver"
-	parent_limb = "chest"
+	parent_limb = BODY_ZONE_CHEST
 	removed_type = /obj/item/organ/liver
 	robotic_type = /obj/item/organ/liver/prosthetic
 	organ_id = ORGAN_LIVER
@@ -223,7 +223,7 @@
 
 /datum/internal_organ/kidneys
 	name = "kidneys"
-	parent_limb = "groin"
+	parent_limb = BODY_ZONE_PRECISE_GROIN
 	removed_type = /obj/item/organ/kidneys
 	robotic_type = /obj/item/organ/kidneys/prosthetic
 	organ_id = ORGAN_KIDNEYS
@@ -359,7 +359,7 @@
 
 /datum/internal_organ/appendix
 	name = "appendix"
-	parent_limb = "groin"
+	parent_limb = BODY_ZONE_PRECISE_GROIN
 	removed_type = /obj/item/organ/appendix
 	organ_id = ORGAN_APPENDIX
 
