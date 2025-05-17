@@ -114,7 +114,7 @@ Contains most of the procs that are called when a mob is attacked by something
 
 	var/datum/limb/affecting = get_limb(target_zone)
 	if(affecting.limb_status & LIMB_MISSING)
-		to_chat(user, "What [affecting.display_name]?")
+		to_chat(user, span_warning("They don't have \a [affecting.display_name]!"))
 		log_combat(user, src, "attacked", I, "(FAILED: target limb missing) (INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(I.damtype)])")
 		return FALSE
 	var/hit_area = affecting.display_name
