@@ -320,12 +320,6 @@ This function restores all limbs.
 		updatehealth()
 
 
-/mob/living/carbon/human/proc/HealDamage(zone, brute, burn)
-	var/datum/limb/E = get_limb(zone)
-	if(E.heal_limb_damage(brute, burn))
-		UpdateDamageIcon()
-
-
 /mob/living/proc/get_limb(zone)
 	return
 
