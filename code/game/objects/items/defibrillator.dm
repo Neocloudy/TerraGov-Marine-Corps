@@ -10,24 +10,24 @@
 	force = 5
 	throwforce = 6
 	w_class = WEIGHT_CLASS_NORMAL
-	///If the defibrillator is ready to use (paddles out)
+	/// If the defibrillator is ready to use (paddles out)
 	var/ready = FALSE
-	///Whether this defibrillator has to be turned on to use
+	/// Whether this defibrillator has to be turned on to use
 	var/ready_needed = TRUE
-	///Fumble when using this is removed at this skill.
-	///Healing, setup speed and charge cost will also shift based on this.
+	/// Fumble when using this is removed at this skill.
+	/// Healing, setup speed and charge cost will also shift based on this.
 	var/minimum_skill = SKILL_MEDICAL_PRACTICED
-	///The base healing number when someone is shocked (can be changed by medical skill)
+	/// The base healing number when someone is shocked (can be changed by medical skill)
 	var/defibrillator_healing = DEFIBRILLATOR_BASE_HEALING_VALUE
-	///How fast the first progress bar is (can be changed by medical skill)
+	/// How fast the first progress bar is (can be changed by medical skill)
 	var/setup_speed = DEFIB_BASE_SETUP_SPEED
-	///How much charge is used on a shock (can be changed by medical skill)
+	/// How much charge is used on a shock (can be changed by medical skill)
 	var/charge_cost = DEFIB_BASE_CHARGE_COST
-	///The defibrillator's power cell
+	/// The defibrillator's power cell
 	var/obj/item/cell/dcell = null
-	///Var for quickly creating sparks on shock
+	/// Var for quickly creating sparks on shock
 	var/datum/effect_system/spark_spread/sparks
-	///The cooldown for using the defib, applied to shocking *and* toggling
+	/// The cooldown for using the defib, applied to shocking *and* toggling
 	COOLDOWN_DECLARE(defib_cooldown)
 
 
