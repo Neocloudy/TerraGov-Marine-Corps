@@ -9,7 +9,7 @@
 /datum/surgery_step/head/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
 	if(!affected)
 		return SURGERY_CANNOT_USE
-	if(!(affected.limb_status & LIMB_DESTROYED))
+	if(!(affected.limb_status & LIMB_MISSING))
 		return SURGERY_CANNOT_USE
 	if(affected.body_zone != BODY_ZONE_HEAD)
 		return SURGERY_CANNOT_USE

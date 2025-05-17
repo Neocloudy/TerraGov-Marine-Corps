@@ -75,7 +75,7 @@
 	var/datum/limb/affecting = .
 	var/mob/living/carbon/human/patient = M //If we've got to this point, the parent proc already checked they're human
 
-	if(affecting.limb_status & LIMB_DESTROYED)
+	if(affecting.limb_status & LIMB_MISSING)
 		patient.balloon_alert(user, "limb destroyed")
 		return FALSE
 
@@ -106,7 +106,7 @@
 /obj/item/stack/medical/heal_pack/proc/can_heal_limb(datum/limb/affecting)
 	if(!affecting)
 		return FALSE
-	if(affecting.limb_status & LIMB_DESTROYED)
+	if(affecting.limb_status & LIMB_MISSING)
 		return FALSE
 	if(!can_affect_limb(affecting))
 		return FALSE

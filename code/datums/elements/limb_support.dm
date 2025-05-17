@@ -54,7 +54,7 @@
 			playsound(worn_suit, 'sound/machines/hiss.ogg', 15, 0, 1)
 			continue
 
-		if(!dropped && ((limb.limb_status & LIMB_BROKEN) && !(limb.limb_status & LIMB_STABILIZED)))
+		if(!dropped && ((limb.limb_status & LIMB_FRACTURED) && !(limb.limb_status & LIMB_STABILIZED)))
 			limb.limb_status |= LIMB_STABILIZED
 			playsound(worn_suit, 'sound/voice/b18/fracture.ogg', 15, 0, 1)
 			to_chat(injured_mob, span_notice("<b>You feel [worn_suit] constrict about your [limb.display_name], stabilizing it.</b>"))

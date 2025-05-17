@@ -27,7 +27,7 @@
 	for(var/i in limbs)
 		var/datum/limb/E = i
 
-		if((E.name in list("l_leg", "l_foot", "r_leg", "r_foot")) && !lying_angle) //Need to do this before checking need_process in order to catch missing limbs
+		if((E.body_zone in list(BODY_ZONE_L_LEG, BODY_ZONE_PRECISE_L_FOOT, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_R_FOOT)) && !lying_angle) //Need to do this before checking need_process in order to catch missing limbs
 			if(!E.is_usable() || E.is_malfunctioning() || E.is_broken())
 				leg_tally++			//let it fail even if just foot&leg
 

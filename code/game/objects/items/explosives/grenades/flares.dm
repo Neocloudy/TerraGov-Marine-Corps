@@ -63,7 +63,7 @@
 
 		var/target_zone = check_zone(living_target.zone_selected)
 		if(!target_zone || rand(40))
-			target_zone = "chest"
+			target_zone = BODY_ZONE_CHEST
 		if(launched && CHECK_BITFIELD(resistance_flags, ON_FIRE) && !living_target.on_fire)
 			living_target.apply_damage(randfloat(throwforce * 0.75, throwforce * 1.25), BURN, target_zone, FIRE, updating_health = TRUE) //Do more damage if launched from a proper launcher and active
 

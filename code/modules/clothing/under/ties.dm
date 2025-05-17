@@ -46,7 +46,7 @@
 							if(M.oxyloss < 50)
 								sound_strength = "hear a healthy"
 							sound = "pulse and respiration"
-						if("eyes","mouth")
+						if(BODY_ZONE_PRECISE_EYES,BODY_ZONE_PRECISE_MOUTH)
 							sound_strength = "cannot hear"
 							sound = "anything"
 						else

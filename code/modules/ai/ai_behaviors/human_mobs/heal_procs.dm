@@ -28,7 +28,7 @@
 		if(limb.germ_level > INFECTION_LEVEL_ONE)
 			infection = TRUE
 
-		if((limb.limb_status & LIMB_BROKEN) && !(limb.limb_status & LIMB_SPLINTED))
+		if((limb.limb_status & LIMB_FRACTURED) && !(limb.limb_status & LIMB_SPLINTED))
 			broken_limbs += limb
 
 		if(!internal_bleeding)

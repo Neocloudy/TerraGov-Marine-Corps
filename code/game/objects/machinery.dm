@@ -442,7 +442,7 @@
 			stabilized = "Stabilized:<br>"
 		if(e.limb_status & LIMB_BLEEDING)
 			bled = "Bleeding:<br>"
-		if(e.limb_status & LIMB_BROKEN)
+		if(e.limb_status & LIMB_FRACTURED)
 			AN = "Broken:<br>"
 		if(e.limb_status & LIMB_NECROTIZED)
 			necrosis = "Necrotizing:<br>"
@@ -491,7 +491,7 @@
 
 		if(!AN && !open && !infected && !imp && !necrosis && !bled && !internal_bleeding && !lung_ruptured)
 			AN = "None:"
-		if(!(e.limb_status & LIMB_DESTROYED))
+		if(!(e.limb_status & LIMB_MISSING))
 			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][stabilized][open][infected][necrosis][imp][internal_bleeding][lung_ruptured]</td>"
 		else
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"

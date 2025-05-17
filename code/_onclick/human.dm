@@ -52,9 +52,9 @@
 	if(proximity && istype(G) && G.Touch(A, 1))
 		return
 
-	var/datum/limb/temp = get_limb(hand ? "l_hand" : "r_hand")
+	var/datum/limb/temp = get_limb(hand ? BODY_ZONE_PRECISE_L_HAND : BODY_ZONE_PRECISE_R_HAND)
 	if(temp && !temp.is_usable())
-		to_chat(src, "<span class='notice'>You try to move your [temp.display_name], but cannot!")
+		to_chat(src, span_warning("You look at your [temp.display_name] and sigh."))
 		return
 
 	if(LAZYACCESS(modifiers, "right"))

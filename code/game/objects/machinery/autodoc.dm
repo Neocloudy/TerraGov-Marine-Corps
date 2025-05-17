@@ -257,10 +257,10 @@
 				if(H.disfigured || H.face_surgery_stage > 0)
 					surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_FACIAL)
 
-			if(L.limb_status & LIMB_BROKEN)
+			if(L.limb_status & LIMB_FRACTURED)
 				surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_BROKEN)
-			if(L.limb_status & LIMB_DESTROYED)
-				if(!(L.parent.limb_status & LIMB_DESTROYED) && L.body_zone != BODY_ZONE_HEAD)
+			if(L.limb_status & LIMB_MISSING)
+				if(!(L.parent.limb_status & LIMB_MISSING) && L.body_zone != BODY_ZONE_HEAD)
 					surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_MISSING)
 			if(L.limb_status & LIMB_NECROTIZED)
 				surgery_list += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_NECRO)
@@ -484,7 +484,7 @@
 							S.limb_ref.heal_limb_damage(S.limb_ref.brute_dam - 20)
 						if(!surgery)
 							break
-						S.limb_ref.remove_limb_flags(LIMB_BROKEN | LIMB_SPLINTED | LIMB_STABILIZED)
+						S.limb_ref.remove_limb_flags(LIMB_FRACTURED | LIMB_SPLINTED | LIMB_STABILIZED)
 						S.limb_ref.add_limb_flags(LIMB_REPAIRED)
 						close_incision(occupant, S.limb_ref)
 
@@ -508,7 +508,7 @@
 
 						stored_metal -= LIMB_METAL_AMOUNT
 
-						if(S.limb_ref.parent.limb_status & LIMB_DESTROYED) // there's nothing to attach to
+						if(S.limb_ref.parent.limb_status & LIMB_MISSING) // there's nothing to attach to
 							say("Limb attachment failed.")
 							playsound(loc, 'sound/machines/buzz-two.ogg', 15, TRUE)
 							surgery_todo_list -= S
@@ -1253,7 +1253,7 @@
 		if(href_list["broken"])
 			for(var/i in connected.occupant.limbs)
 				var/datum/limb/L = i
-				if(L.limb_status & LIMB_BROKEN)
+				if(L.limb_status & LIMB_FRACTURED)
 					N.fields["autodoc_manual"] += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_BROKEN)
 					needed++
 			if(!needed)
@@ -1262,7 +1262,7 @@
 		if(href_list["missing"])
 			for(var/i in connected.occupant.limbs)
 				var/datum/limb/L = i
-				if(L.limb_status & LIMB_DESTROYED && !(L.parent.limb_status & LIMB_DESTROYED) && L.body_zone != BODY_ZONE_HEAD)
+				if(L.limb_status & LIMB_MISSING && !(L.parent.limb_status & LIMB_MISSING) && L.body_zone != BODY_ZONE_HEAD)
 					N.fields["autodoc_manual"] += create_autodoc_surgery(L,LIMB_SURGERY,ADSURGERY_MISSING)
 					needed++
 			if(!needed)

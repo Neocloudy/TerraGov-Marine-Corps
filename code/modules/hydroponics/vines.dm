@@ -141,7 +141,7 @@
 					victim.adjustBruteLoss(damage)
 					return
 
-				var/datum/limb/affecting = victim.get_limb(pick(BODY_ZONE_PRECISE_L_FOOT, BODY_ZONE_PRECISE_R_FOOT, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_HEAD, BODY_ZONE_CHEST, BODY_ZONE_PRECISE_GROIN))
+				var/datum/limb/affecting = victim.get_limb(pick(GLOB.human_body_parts))
 
 				if(affecting)
 					affecting.take_damage_limb(damage, updating_health = TRUE)

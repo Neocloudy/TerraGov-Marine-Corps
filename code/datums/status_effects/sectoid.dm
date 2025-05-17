@@ -119,10 +119,10 @@
 		var/mob/living/carbon/human/human_owner = owner
 		human_owner.reagent_shock_modifier -= PAIN_REDUCTION_VERY_HEAVY //oof ow ouch
 		for(var/datum/limb/limb_to_fix AS in human_owner.limbs)
-			if(limb_to_fix.limb_status & (LIMB_BROKEN | LIMB_SPLINTED | LIMB_STABILIZED))
+			if(limb_to_fix.limb_status & (LIMB_FRACTURED | LIMB_SPLINTED | LIMB_STABILIZED))
 				if((prob(50) || limb_to_fix.brute_dam > limb_to_fix.min_broken_damage))
 					continue
-				limb_to_fix.remove_limb_flags(LIMB_BROKEN | LIMB_SPLINTED | LIMB_STABILIZED)
+				limb_to_fix.remove_limb_flags(LIMB_FRACTURED | LIMB_SPLINTED | LIMB_STABILIZED)
 				limb_to_fix.add_limb_flags(LIMB_REPAIRED)
 				break
 

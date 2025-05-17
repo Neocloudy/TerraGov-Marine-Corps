@@ -780,7 +780,7 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 /datum/action/ability/activable/xeno/dislocate/use_ability(atom/target)
 	var/mob/living/carbon/carbon_target = target
 	var/datum/limb/target_limb = carbon_target.get_limb(xeno_owner.zone_selected)
-	if(!target_limb || (target_limb.limb_status & LIMB_DESTROYED))
+	if(!target_limb || (target_limb.limb_status & LIMB_MISSING))
 		target_limb = carbon_target.get_limb(BODY_ZONE_CHEST)
 
 	xeno_owner.face_atom(target)

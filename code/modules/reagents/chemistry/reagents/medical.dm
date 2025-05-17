@@ -1265,10 +1265,10 @@
 	host.reagent_shock_modifier -= PAIN_REDUCTION_VERY_HEAVY //oof ow ouch
 	if(host.bodytemperature < 170)
 		for(var/datum/limb/limb_to_fix AS in host.limbs)
-			if(limb_to_fix.limb_status & (LIMB_BROKEN | LIMB_SPLINTED | LIMB_STABILIZED))
+			if(limb_to_fix.limb_status & (LIMB_FRACTURED | LIMB_SPLINTED | LIMB_STABILIZED))
 				if(!(prob(20) || limb_to_fix.brute_dam > limb_to_fix.min_broken_damage))
 					continue //Once every 10s average while active, but guaranteed if the limb'll just break again so we get maximum crunchtube.
-				limb_to_fix.remove_limb_flags(LIMB_BROKEN | LIMB_SPLINTED | LIMB_STABILIZED)
+				limb_to_fix.remove_limb_flags(LIMB_FRACTURED | LIMB_SPLINTED | LIMB_STABILIZED)
 				limb_to_fix.add_limb_flags(LIMB_REPAIRED)
 				break
 
@@ -1277,7 +1277,7 @@
 		return
 	var/mob/living/carbon/human/host = L
 	for(var/datum/limb/limb_to_unfix AS in host.limbs)
-		if(limb_to_unfix.limb_status & (LIMB_BROKEN | LIMB_SPLINTED | LIMB_STABILIZED | LIMB_DESTROYED | LIMB_AMPUTATED))
+		if(limb_to_unfix.limb_status & (LIMB_FRACTURED | LIMB_SPLINTED | LIMB_STABILIZED | LIMB_MISSING | LIMB_AMPUTATED))
 			continue
 		limb_to_unfix.fracture()
 		break
@@ -1466,7 +1466,7 @@
 	var/mob/living/carbon/human/human = L
 	var/limb_regrown = FALSE
 	for(var/datum/limb/limb AS in human.limbs)
-		if(!(limb.limb_status & LIMB_DESTROYED))
+		if(!(limb.limb_status & LIMB_MISSING))
 			continue
 		limb_regrown = TRUE
 		limb.biotize()

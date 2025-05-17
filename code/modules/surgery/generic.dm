@@ -12,7 +12,7 @@
 		return SURGERY_CANNOT_USE
 	if(!affected)
 		return SURGERY_CANNOT_USE
-	if(affected.limb_status & LIMB_DESTROYED)
+	if(affected.limb_status & LIMB_MISSING)
 		return SURGERY_CANNOT_USE
 	if(!isnull(open_step) && affected.surgery_open_stage != open_step)
 		return SURGERY_CANNOT_USE

@@ -164,7 +164,7 @@
 		return SURGERY_CANNOT_USE
 	if(!affected)
 		return SURGERY_CANNOT_USE
-	if(affected.limb_status & (LIMB_DESTROYED | LIMB_ROBOT))
+	if(affected.limb_status & (LIMB_MISSING | LIMB_ROBOT))
 		return SURGERY_CANNOT_USE
 	if(affected.surgery_open_stage < 2)
 		return SURGERY_CANNOT_USE

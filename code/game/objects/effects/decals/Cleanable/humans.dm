@@ -66,7 +66,7 @@
 	var/datum/limb/foot/l_foot = perp.get_limb(BODY_ZONE_PRECISE_L_FOOT)
 	var/datum/limb/foot/r_foot = perp.get_limb(BODY_ZONE_PRECISE_R_FOOT)
 	var/hasfeet = 1
-	if((!l_foot || l_foot.limb_status & LIMB_DESTROYED) && (!r_foot || r_foot.limb_status & LIMB_DESTROYED))
+	if((!l_foot || l_foot.limb_status & LIMB_MISSING) && (!r_foot || r_foot.limb_status & LIMB_MISSING))
 		hasfeet = 0
 	if(perp.shoes && !perp.buckled)//Adding blood to shoes
 		var/obj/item/clothing/shoes/S = perp.shoes

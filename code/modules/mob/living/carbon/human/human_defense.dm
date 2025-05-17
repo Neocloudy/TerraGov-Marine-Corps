@@ -16,16 +16,15 @@ Contains most of the procs that are called when a mob is attacked by something
 
 	var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes) // What all are we checking?
 	for(var/obj/item/clothing/C in clothing_items)
-		if(istype(C) && (C.armor_protection_flags & def_zone.body_zone)) // Is that body part being targeted covered?
+		if(istype(C) && (C.armor_protection_flags in cover_flags2body_zones(def_zone.body_zone))) // Is that body part being targeted covered?
 			siemens_coefficient *= C.siemens_coefficient
 
 	return siemens_coefficient
 
 /mob/living/carbon/human/proc/add_limb_armor(obj/item/armor_item)
-	var/zones = cover_flags2body_zones(armor_item.armor_protection_flags)
 	for(var/i in limbs)
 		var/datum/limb/limb_to_check = i
-		if(!(limb_to_check.body_zone in zones))
+		if(!(limb_to_check.body_zone in cover_flags2body_zones(armor_item.armor_protection_flags)))
 			continue
 		limb_to_check.add_limb_soft_armor(armor_item.soft_armor)
 		limb_to_check.add_limb_hard_armor(armor_item.hard_armor)
@@ -38,7 +37,7 @@ Contains most of the procs that are called when a mob is attacked by something
 /mob/living/carbon/human/proc/remove_limb_armor(obj/item/armor_item)
 	for(var/i in limbs)
 		var/datum/limb/limb_to_check = i
-		if(!(limb_to_check.body_zone & armor_item.armor_protection_flags))
+		if(!(limb_to_check.body_zone in cover_flags2body_zones(armor_item.armor_protection_flags)))
 			continue
 		limb_to_check.remove_limb_soft_armor(armor_item.soft_armor)
 		limb_to_check.remove_limb_hard_armor(armor_item.hard_armor)
@@ -114,7 +113,7 @@ Contains most of the procs that are called when a mob is attacked by something
 		return FALSE
 
 	var/datum/limb/affecting = get_limb(target_zone)
-	if(affecting.limb_status & LIMB_DESTROYED)
+	if(affecting.limb_status & LIMB_MISSING)
 		to_chat(user, "What [affecting.display_name]?")
 		log_combat(user, src, "attacked", I, "(FAILED: target limb missing) (INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(I.damtype)])")
 		return FALSE
@@ -178,7 +177,7 @@ Contains most of the procs that are called when a mob is attacked by something
 
 
 		switch(hit_area)
-			if("head")//Harder to score a stun but if you do it lasts a bit longer
+			if(BODY_ZONE_HEAD)//Harder to score a stun but if you do it lasts a bit longer
 				if(prob(applied_damage - 15) && stat == CONSCIOUS)
 					ParalyzeNoChain(modify_by_armor(10 SECONDS, MELEE, def_zone = target_zone) * 100 / maxHealth)
 					visible_message(span_danger("[src] has been knocked unconscious!"),
@@ -196,7 +195,7 @@ Contains most of the procs that are called when a mob is attacked by something
 						glasses.add_mob_blood(src)
 						update_inv_glasses(0)
 
-			if("chest")//Easier to score a stun but lasts less time
+			if(BODY_ZONE_CHEST)//Easier to score a stun but lasts less time
 				if(prob((applied_damage - 5)) && stat == CONSCIOUS)
 					ParalyzeNoChain(modify_by_armor(6 SECONDS, MELEE, def_zone = target_zone) * 100 / maxHealth)
 					visible_message(span_danger("[src] has been knocked down!"),
@@ -207,10 +206,10 @@ Contains most of the procs that are called when a mob is attacked by something
 					bloody_body(src)
 
 	//Melee weapon embedded object code.
-	if(affecting.limb_status & LIMB_DESTROYED)
+	if(affecting.limb_status & LIMB_MISSING)
 		hit_report += "(delimbed [affecting.display_name])"
 
-	record_melee_damage(user, applied_damage, affecting.limb_status & LIMB_DESTROYED)
+	record_melee_damage(user, applied_damage, affecting.limb_status & LIMB_MISSING)
 	log_combat(user, src, "attacked", I, "(INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(I.damtype)]) [hit_report.Join(" ")]")
 	if(damage && !user.mind?.bypass_ff && !mind?.bypass_ff && user.faction == faction)
 		var/turf/T = get_turf(src)
@@ -254,7 +253,7 @@ Contains most of the procs that are called when a mob is attacked by something
 		if(living_thrower)
 			zone = check_zone(living_thrower.zone_selected)
 		else
-			zone = ran_zone("chest", 75)	//Hits a random part of the body, geared towards the chest
+			zone = ran_zone(BODY_ZONE_CHEST, 75)	//Hits a random part of the body, geared towards the chest
 
 		//check if we hit
 		zone = get_zone_with_miss_chance(zone, src)
@@ -276,7 +275,7 @@ Contains most of the procs that are called when a mob is attacked by something
 
 		var/datum/limb/affecting = get_limb(zone)
 
-		if(affecting.limb_status & LIMB_DESTROYED)
+		if(affecting.limb_status & LIMB_MISSING)
 			log_combat(living_thrower, src, "thrown at", thrown_item, "(FAILED: target limb missing)")
 			return FALSE
 
@@ -295,7 +294,7 @@ Contains most of the procs that are called when a mob is attacked by something
 		hit_report += "(RAW DMG: [throw_damage])"
 
 		//thrown weapon embedded object code.
-		if(affecting.limb_status & LIMB_DESTROYED)
+		if(affecting.limb_status & LIMB_MISSING)
 			hit_report += "(delimbed [affecting.display_name])"
 		else if(thrown_item.embedding && thrown_item.damtype == BRUTE && is_sharp(thrown_item) && prob(thrown_item.embedding.embed_chance))
 			thrown_item.embed_into(src, affecting)

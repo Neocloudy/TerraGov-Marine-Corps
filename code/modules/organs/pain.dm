@@ -99,17 +99,15 @@
 	var/dam
 	var/datum/limb/damaged_organ = null
 	for(var/datum/limb/E in limbs)
-		/*
-		Amputated, dead, or missing limbs don't cause pain messages.
-		Broken limbs that are also splinted do not cause pain messages either.
-		*/
-		if(E.limb_status & (LIMB_NECROTIZED|LIMB_DESTROYED))
+		// Amputated, dead, or missing limbs don't cause pain messages.
+		// Broken limbs that are also splinted do not cause pain messages either.
+		if(E.limb_status & (LIMB_NECROTIZED|LIMB_MISSING))
 			continue
 
 		dam = E.get_damage()
-		if(E.limb_status & LIMB_BROKEN)
+		if(E.limb_status & LIMB_FRACTURED)
 			if(E.limb_status & LIMB_SPLINTED || E.limb_status & LIMB_STABILIZED)
-				dam -= E.min_broken_damage //If they have a splinted body part, and it's broken, we want to subtract bone break damage.
+				dam -= E.min_broken_damage // If they have a splinted body part, and it's broken, we want to subtract bone break damage.
 		// make the choice of the organ depend on damage,
 		// but also sometimes use one of the less damaged ones
 		if(dam > maxdam && (maxdam == 0 || prob(70)) )

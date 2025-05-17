@@ -374,7 +374,7 @@
 	icon_state = "zone_sel"
 	screen_loc = ui_zonesel
 	mouse_over_pointer = MOUSE_HAND_POINTER
-	var/selecting = "chest"
+	var/selecting = BODY_ZONE_CHEST
 	var/list/hover_overlays_cache = list()
 	var/hovering
 	var/z_prefix

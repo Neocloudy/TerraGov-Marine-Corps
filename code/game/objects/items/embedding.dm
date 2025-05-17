@@ -83,7 +83,7 @@
 		stack_trace("limb_embed called for TRAIT_NODROP or DELONDROP [embedding]")
 		embedding.unembed_ourself()
 		return FALSE
-	if(limb_status & LIMB_DESTROYED)
+	if(limb_status & LIMB_MISSING)
 		return FALSE
 	if(!silent)
 		owner.visible_message(span_danger("\The [embedding] sticks in the wound!"))

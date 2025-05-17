@@ -625,7 +625,7 @@
 	if(!iscarbon(src))
 		var/mob/living/carbon/carbon_target = src
 		target_limb = carbon_target.get_limb(xeno.zone_selected)
-		if(!target_limb || (target_limb.limb_status & LIMB_DESTROYED))
+		if(!target_limb || (target_limb.limb_status & LIMB_MISSING))
 			target_limb = carbon_target.get_limb(BODY_ZONE_CHEST)
 	xeno.face_atom(src)
 	xeno.do_attack_animation(src)

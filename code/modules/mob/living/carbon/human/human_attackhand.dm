@@ -252,8 +252,6 @@
 		else if(org.limb_status & LIMB_BLEEDING)
 			status += "bleeding"
 
-
-
 		if(brutedamage > 0 && burndamage > 0)
 			status += " and "
 
@@ -278,7 +276,7 @@
 			status += " <b>(STABILIZED)</b>"
 		if(org.limb_status & LIMB_NECROTIZED)
 			status = "rotting"
-		if(org.limb_status & LIMB_DESTROYED)
+		if(org.limb_status & LIMB_MISSING)
 			status = "MISSING!"
 
 		if(brute_treated && brutedamage > 0)
@@ -291,7 +289,6 @@
 			treat += "(Salved)"
 		var/msg = "My [org.display_name] is [status]. [treat]"
 		final_msg += status=="OK" ? span_notice(msg) : span_alert (msg)
-
 
 	switch(staminaloss)
 		if(1 to 30)

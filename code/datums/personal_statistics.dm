@@ -610,7 +610,7 @@ The alternative is scattering them everywhere under their respective objects whi
 		return FALSE
 
 	//If neither of these flags was enabled after being damaged, then no internal injury occurred
-	if(!(CHECK_BITFIELD(old_status, LIMB_BROKEN|LIMB_BLEEDING) ^ CHECK_BITFIELD(new_status, LIMB_BROKEN|LIMB_BLEEDING)))
+	if(!(CHECK_BITFIELD(old_status, LIMB_FRACTURED|LIMB_BLEEDING) ^ CHECK_BITFIELD(new_status, LIMB_FRACTURED|LIMB_BLEEDING)))
 		return FALSE
 
 	if(victim.ckey)

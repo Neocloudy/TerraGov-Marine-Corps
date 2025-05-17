@@ -219,32 +219,40 @@ GLOBAL_LIST_INIT(tier_as_number, list(XENO_TIER_MINION = -1, XENO_TIER_ZERO = 0,
 
 GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVALID, XENO_UPGRADE_NORMAL, XENO_UPGRADE_PRIMO, XENO_UPGRADE_MANIFESTATION))
 
-//=================================================
-
-///////////////////HUMAN BLOODTYPES///////////////////
-
-#define HUMAN_BLOODTYPES list("O-","O+","A-","A+","B-","B+","AB-","AB+")
-
-//limb_status
+// Limb defines
+/// The limb is bleeding
 #define LIMB_BLEEDING (1<<0)
-#define LIMB_BROKEN (1<<1)
-#define LIMB_DESTROYED (1<<2) //limb is missing
+/// The limb has a fracture
+#define LIMB_FRACTURED (1<<1)
+/// The limb is missing
+#define LIMB_MISSING (1<<2)
+/// This limb is not organic and needs engineering tools to repair but takes less damage *if* we did not start with this limb type,
 #define LIMB_ROBOT (1<<3)
+/// In addition to [LIMB_FRACTURED] this will prevent most of the negative effects of a fracture
 #define LIMB_SPLINTED (1<<4)
-#define LIMB_NECROTIZED (1<<5) //necrotizing limb, nerves are dead.
-#define LIMB_AMPUTATED (1<<6) //limb was amputated cleanly or destroyed limb was cleaned up, thus causing no pain
-#define LIMB_REPAIRED (1<<7) //we just repaired the bone, stops the gelling after setting
-#define LIMB_STABILIZED (1<<8) //certain suits will support a broken limb while worn such as the b18
-#define LIMB_BIOTIC (1<<9) //limb is biotic
-
-//limb_wound_status
-#define LIMB_WOUND_BANDAGED (1<<0)
-#define LIMB_WOUND_SALVED (1<<1)
-#define LIMB_WOUND_DISINFECTED (1<<2)
-#define LIMB_WOUND_CLAMPED (1<<3)
+/// Like [LIMB_SPLINTED] but with slightly different flavor, set by [/datum/component/suit_autodoc]
+#define LIMB_STABILIZED (1<<5)
+/// Necrotized, will not function and will cause debilitating effects
+#define LIMB_NECROTIZED (1<<6)
+/// In addition to [LIMB_MISSING] this will prevent pain from missing the limb
+#define LIMB_AMPUTATED (1<<7)
+/// Surgery flag set when setting the bone, prevents using bone gel
+#define LIMB_REPAIRED (1<<8)
+/// Inverse of [LIMB_ROBOT]: this limb is still organic but takes extra damage *if* we did not start with this limb type,
+#define LIMB_BIOTIC (1<<9)
 
 /// If the limb's total damage percent is higher than this, it can be severed.
 #define LIMB_MAX_DAMAGE_SEVER_RATIO 0.8
+
+// Wound defines
+/// For [CUT] and [BRUISE] wounds, this is bandaged and won't accumulate germs
+#define LIMB_WOUND_BANDAGED (1<<0)
+/// For [BURN] wounds, this is salved and won't accumulate germs
+#define LIMB_WOUND_SALVED (1<<1)
+/// In addition to any wound type, having this will disallow germs from accumulating
+#define LIMB_WOUND_DISINFECTED (1<<2)
+/// In addition to any wound type, having this will increase the bleed rate by 0.6cl
+#define LIMB_WOUND_CLAMPED (1<<3)
 
 /////////////////MOVE DEFINES//////////////////////
 #define MOVE_INTENT_WALK 0
@@ -879,18 +887,19 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define BODY_ZONE_PRECISE_L_FOOT "l_foot"
 #define BODY_ZONE_PRECISE_R_FOOT "r_foot"
 
-GLOBAL_LIST_INIT(human_body_parts, list(BODY_ZONE_HEAD,
-										BODY_ZONE_CHEST,
-										BODY_ZONE_PRECISE_GROIN,
-										BODY_ZONE_L_ARM,
-										BODY_ZONE_PRECISE_L_HAND,
-										BODY_ZONE_R_ARM,
-										BODY_ZONE_PRECISE_R_HAND,
-										BODY_ZONE_L_LEG,
-										BODY_ZONE_PRECISE_L_FOOT,
-										BODY_ZONE_R_LEG,
-										BODY_ZONE_PRECISE_R_FOOT
-										))
+GLOBAL_LIST_INIT(human_body_parts, list(
+	BODY_ZONE_HEAD,
+	BODY_ZONE_CHEST,
+	BODY_ZONE_PRECISE_GROIN,
+	BODY_ZONE_L_ARM,
+	BODY_ZONE_PRECISE_L_HAND,
+	BODY_ZONE_R_ARM,
+	BODY_ZONE_PRECISE_R_HAND,
+	BODY_ZONE_L_LEG,
+	BODY_ZONE_PRECISE_L_FOOT,
+	BODY_ZONE_R_LEG,
+	BODY_ZONE_PRECISE_R_FOOT,
+))
 
 //Hostile simple animals
 #define AI_ON 1

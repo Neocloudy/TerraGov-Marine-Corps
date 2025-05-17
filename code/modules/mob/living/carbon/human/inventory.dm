@@ -58,7 +58,7 @@
 	for(var/X in limbs)
 		var/datum/limb/E = X
 		if(E.body_zone == org_name)
-			return !(E.limb_status & LIMB_DESTROYED)
+			return !(E.limb_status & LIMB_MISSING)
 
 /mob/living/carbon/human/proc/has_limb_for_slot(slot)
 	switch(slot)

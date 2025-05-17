@@ -184,15 +184,15 @@
 			msg += "[span_warning("[t_He] [t_is] twitching ever so slightly.")]\n"
 
 	//splints
-	for(var/organ in list(BODY_ZONE_PRECISE_L_FOOT, BODY_ZONE_PRECISE_R_FOOT, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_HEAD, BODY_ZONE_CHEST, BODY_ZONE_PRECISE_GROIN))
-		var/datum/limb/o = get_limb(organ)
-		if(o)
-			if(o.limb_status & LIMB_SPLINTED)
-				msg += "[span_warning("[t_He] [t_has] a splint on [t_his] [o.display_name]!")]\n"
-			if(o.limb_status & LIMB_STABILIZED)
-				msg += "[span_warning("[t_He] [t_has] a suit brace stabilizing [t_his] [o.display_name]!")]\n"
-			if(o.limb_status & LIMB_NECROTIZED)
-				msg += "[span_deadsay("<b>An infection has rotted [t_his] [o.display_name] into uselessness!</b>")]\n"
+	for(var/iterating_base in GLOB.human_body_parts)
+		var/datum/limb/iterating_limb = get_limb(iterating_base)
+		if(iterating_limb)
+			if(iterating_limb.limb_status & LIMB_SPLINTED)
+				msg += "[span_warning("[t_He] [t_has] a splint on [t_his] [iterating_limb.display_name]!")]\n"
+			if(iterating_limb.limb_status & LIMB_STABILIZED)
+				msg += "[span_warning("[t_He] [t_has] a suit brace stabilizing [t_his] [iterating_limb.display_name]!")]\n"
+			if(iterating_limb.limb_status & LIMB_NECROTIZED)
+				msg += "[span_deadsay("<b>An infection has rotted [t_his] [iterating_limb.display_name] into uselessness!</b>")]\n"
 
 	if(holo_card_color)
 		msg += "[t_He] [t_has] a [holo_card_color] holo card on [t_his] chest.\n"
@@ -301,7 +301,7 @@
 	var/list/is_destroyed = list()
 	var/list/is_bleeding = list()
 	for(var/datum/limb/temp_limb AS in limbs)
-		if(temp_limb.limb_status & LIMB_DESTROYED)
+		if(temp_limb.limb_status & LIMB_MISSING)
 			is_destroyed["[temp_limb.display_name]"] = 1
 			wound_flavor_text["[temp_limb.display_name]"] = "[span_boldwarning("<b>[t_He] [t_is] missing [t_his] [temp_limb.display_name].</b>")]\n"
 			continue

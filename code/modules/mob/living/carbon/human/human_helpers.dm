@@ -205,7 +205,7 @@
 		return FALSE
 	return TRUE
 
-// For finding out what body parts a body zone covers, the inverse of the below basically
+// For finding out what body parts an armor zone covers, the inverse of the below basically
 /proc/body_zone2cover_flags(def_zone)
 	switch(def_zone)
 		if(BODY_ZONE_CHEST)
@@ -221,7 +221,7 @@
 		if(BODY_ZONE_R_LEG)
 			return LEG_RIGHT|FOOT_RIGHT
 
-/// Turns a Body_parts_covered bitfield into a list of organ/limb names.
+/// Turns the `bpc` bitfield into a list of organ/limb names.
 /proc/cover_flags2body_zones(bpc)
 	var/list/covered_parts = list()
 
@@ -376,7 +376,7 @@
 /mob/living/carbon/human/proc/check_defib(additional_health_increase = 0)
 
 	var/datum/limb/head/head = get_limb(BODY_ZONE_HEAD)
-	if(head.limb_status & LIMB_DESTROYED)
+	if(head.limb_status & LIMB_MISSING)
 		return DEFIB_FAIL_DECAPITATED
 
 	if(HAS_TRAIT(src, TRAIT_UNDEFIBBABLE))

@@ -296,7 +296,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 	var/damage_appearance = ""
 
 	for(var/datum/limb/O in limbs)
-		if(O.limb_status & LIMB_DESTROYED)
+		if(O.limb_status & LIMB_MISSING)
 			damage_appearance += "d"
 		else
 			damage_appearance += O.damage_state
@@ -349,10 +349,10 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 	var/icon_key = "[species.race_key][physique_key][ethnicity]"
 	for(var/datum/limb/part in limbs)
 
-		if(istype(part,/datum/limb/head) && !(part.limb_status & LIMB_DESTROYED))
+		if(istype(part,/datum/limb/head) && !(part.limb_status & LIMB_MISSING))
 			has_head = 1
 
-		if(part.limb_status & LIMB_DESTROYED)
+		if(part.limb_status & LIMB_MISSING)
 			icon_key = "[icon_key]0"
 		else if(part.limb_status & LIMB_ROBOT)
 			icon_key = "[icon_key]2"
@@ -390,7 +390,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 
 			var/icon/temp //Hold the bodypart icon for processing.
 
-			if(part.limb_status & LIMB_DESTROYED)
+			if(part.limb_status & LIMB_MISSING)
 				continue
 
 			if(istype(part, /datum/limb/chest)) //already done above
@@ -475,7 +475,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 		return
 
 	var/datum/limb/head/head_organ = get_limb(BODY_ZONE_HEAD)
-	if(!head_organ || (head_organ.limb_status & LIMB_DESTROYED) )
+	if(!head_organ || (head_organ.limb_status & LIMB_MISSING) )
 		return
 
 	//masks and helmets can obscure our hair.
@@ -608,11 +608,11 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 	var/datum/limb/left_hand = get_limb(BODY_ZONE_PRECISE_L_HAND)
 	var/datum/limb/right_hand = get_limb(BODY_ZONE_PRECISE_R_HAND)
 	var/mutable_appearance/bloodsies
-	if(left_hand.limb_status & LIMB_DESTROYED)
-		if(right_hand.limb_status & LIMB_DESTROYED)
+	if(left_hand.limb_status & LIMB_MISSING)
+		if(right_hand.limb_status & LIMB_MISSING)
 			return //No hands.
 		bloodsies = mutable_appearance(icon = 'icons/effects/blood.dmi', icon_state = "bloodyhand_right") //Only right hand.
-	else if(right_hand.limb_status & LIMB_DESTROYED)
+	else if(right_hand.limb_status & LIMB_MISSING)
 		bloodsies = mutable_appearance(icon = 'icons/effects/blood.dmi', icon_state = "bloodyhand_left") //Only left hand.
 	else
 		bloodsies = mutable_appearance(icon = 'icons/effects/blood.dmi', icon_state = "bloodyhands") //Both hands.

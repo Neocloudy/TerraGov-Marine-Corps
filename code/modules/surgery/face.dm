@@ -11,7 +11,7 @@
 /datum/surgery_step/face/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
 	if(target_zone != "mouth")
 		return SURGERY_CANNOT_USE
-	if(affected.limb_status & LIMB_DESTROYED)
+	if(affected.limb_status & LIMB_MISSING)
 		return SURGERY_CANNOT_USE
 	var/datum/limb/head/H = affected
 	if(!istype(H) || !H.disfigured || H.face_surgery_stage != face_step)

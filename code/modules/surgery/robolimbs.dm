@@ -10,9 +10,9 @@
 /datum/surgery_step/limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
 	if(!affected)
 		return SURGERY_CANNOT_USE
-	if(!(affected.limb_status & LIMB_DESTROYED))
+	if(!(affected.limb_status & LIMB_MISSING))
 		return SURGERY_CANNOT_USE
-	if(affected.parent && (affected.parent.limb_status & LIMB_DESTROYED))//parent limb is destroyed
+	if(affected.parent && (affected.parent.limb_status & LIMB_MISSING))//parent limb is destroyed
 		return SURGERY_CANNOT_USE
 	if(affected.limb_replacement_stage != limb_step)
 		return SURGERY_CANNOT_USE

@@ -330,12 +330,13 @@ This function restores all limbs.
 	return
 
 /mob/living/carbon/human/get_limb(zone)
+	if(!(zone in (GLOB.human_body_parts + list(BODY_ZONE_PRECISE_MOUTH, BODY_ZONE_PRECISE_EYES))))
+		stack_trace("[type]/get_limb called with an invalid body zone: [zone]")
 	zone = check_zone(zone)
-	for(var/X in limbs)
-		var/datum/limb/EO = X
-		if(EO.body_zone != zone)
+	for(var/datum/limb/limb in limbs)
+		if(limb.body_zone != zone)
 			continue
-		return EO
+		return limb
 
 /mob/living/carbon/human/apply_damage(damage = 0, damagetype = BRUTE, def_zone, blocked = 0, sharp = FALSE, edge = FALSE, updating_health = FALSE, penetration)
 	if(status_flags & (GODMODE))

@@ -206,7 +206,7 @@
 
 	if(species_flags & ROBOTIC_LIMBS)
 		for(var/datum/limb/robotic_limb AS in organless_human.limbs)
-			if(robotic_limb.limb_status & LIMB_DESTROYED)
+			if(robotic_limb.limb_status & LIMB_MISSING)
 				continue
 			robotic_limb.add_limb_flags(LIMB_ROBOT)
 		for(var/datum/internal_organ/my_cold_heart in organless_human.internal_organs)

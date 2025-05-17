@@ -250,7 +250,7 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 
 	var/total_unknown_implants = 0
 	for(var/datum/limb/limb AS in patient.limbs)
-		if((limb.parent?.limb_status & LIMB_DESTROYED) && !(istype(limb.parent, /datum/limb/groin) && istype(limb.parent, /datum/limb/chest) && istype(limb.parent, /datum/limb/head)))
+		if((limb.parent?.limb_status & LIMB_MISSING) && !(istype(limb.parent, /datum/limb/groin) && istype(limb.parent, /datum/limb/chest) && istype(limb.parent, /datum/limb/head)))
 			// avoid showing right arm and right hand as missing, for example
 			continue
 		var/infected = FALSE
@@ -279,7 +279,7 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 				total_unknown_implants++
 				implants++
 
-		if(!limb.brute_dam && !limb.burn_dam && !CHECK_BITFIELD(limb.limb_status, LIMB_DESTROYED) && !CHECK_BITFIELD(limb.limb_status, LIMB_BROKEN) && !CHECK_BITFIELD(limb.limb_status, LIMB_BLEEDING) && !CHECK_BITFIELD(limb.limb_status, LIMB_NECROTIZED) && !implants && !infected )
+		if(!limb.brute_dam && !limb.burn_dam && !CHECK_BITFIELD(limb.limb_status, LIMB_MISSING) && !CHECK_BITFIELD(limb.limb_status, LIMB_FRACTURED) && !CHECK_BITFIELD(limb.limb_status, LIMB_BLEEDING) && !CHECK_BITFIELD(limb.limb_status, LIMB_NECROTIZED) && !implants && !infected )
 			continue
 		var/list/current_list = list(
 			"name" = limb.display_name,
@@ -287,7 +287,7 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 			"burn" = round(limb.burn_dam),
 			"bandaged" = limb.is_bandaged(),
 			"salved" = limb.is_salved(),
-			"missing" = CHECK_BITFIELD(limb.limb_status, LIMB_DESTROYED),
+			"missing" = CHECK_BITFIELD(limb.limb_status, LIMB_MISSING),
 			"limb_status" = null,
 			"limb_type" = null,
 			"bleeding" = CHECK_BITFIELD(limb.limb_status, LIMB_BLEEDING),
@@ -304,7 +304,7 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 			limb_type = "Biotic"
 
 		var/limb_status = ""
-		if(CHECK_BITFIELD(limb.limb_status, LIMB_BROKEN) && !CHECK_BITFIELD(limb.limb_status, LIMB_STABILIZED) && !CHECK_BITFIELD(limb.limb_status, LIMB_SPLINTED))
+		if(CHECK_BITFIELD(limb.limb_status, LIMB_FRACTURED) && !CHECK_BITFIELD(limb.limb_status, LIMB_STABILIZED) && !CHECK_BITFIELD(limb.limb_status, LIMB_SPLINTED))
 			limb_status = "Fracture"
 		else if(CHECK_BITFIELD(limb.limb_status, LIMB_STABILIZED))
 			limb_status = "Stable"

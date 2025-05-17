@@ -15,7 +15,7 @@
 /datum/surgery_step/cut_limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
 	if(!affected)
 		return SURGERY_CANNOT_USE
-	if(affected.limb_status & LIMB_DESTROYED) //already missing
+	if(affected.limb_status & LIMB_MISSING) //already missing
 		return SURGERY_CANNOT_USE
 	if(affected.surgery_open_stage) //avoids conflict with sawing skull open
 		return SURGERY_CANNOT_USE

@@ -76,19 +76,19 @@ GLOBAL_LIST_INIT(base_miss_chance, list(
 //Used to weight organs when an organ is hit randomly (i.e. not a directed, aimed attack).
 //Also used to weight the protection value that armour provides for covering that body part when calculating protection from full-body effects. Totals 102; 2 added to chest for limb loops that don't count mouth/eyes.
 GLOBAL_LIST_INIT(organ_rel_size, list(
-	"head" = 4,
-	"chest" = 32,
-	"groin" = 10,
-	"l_leg" = 12,
-	"r_leg" = 12,
-	"l_arm" = 9,
-	"r_arm" = 9,
-	"l_hand" = 3,
-	"r_hand" = 3,
-	"l_foot" = 3,
-	"r_foot" = 3,
-	"eyes" = 1,
-	"mouth" = 1,
+	BODY_ZONE_HEAD = 4,
+	BODY_ZONE_CHEST = 32,
+	BODY_ZONE_PRECISE_GROIN = 10,
+	BODY_ZONE_L_LEG = 12,
+	BODY_ZONE_R_LEG = 12,
+	BODY_ZONE_L_ARM = 9,
+	BODY_ZONE_R_ARM = 9,
+	BODY_ZONE_PRECISE_L_HAND = 3,
+	BODY_ZONE_PRECISE_R_HAND = 3,
+	BODY_ZONE_PRECISE_L_FOOT = 3,
+	BODY_ZONE_PRECISE_R_FOOT = 3,
+	BODY_ZONE_PRECISE_EYES = 1,
+	BODY_ZONE_PRECISE_MOUTH = 1,
 ))
 
 /proc/check_zone(zone)
@@ -105,25 +105,25 @@ GLOBAL_LIST_INIT(organ_rel_size, list(
 // Do not use this if someone is intentionally trying to hit a specific body part.
 // Use get_zone_with_miss_chance() for that.
 /proc/ran_zone(zone, probability)
-	if (zone)
+	if(zone)
 		zone = check_zone(zone)
-		if (prob(probability))
+		if(prob(probability))
 			return zone
 
 	var/ran_zone = zone
-	while (ran_zone == zone)
+	while(ran_zone == zone)
 		ran_zone = pick (
-			GLOB.organ_rel_size["head"]; "head",
-			GLOB.organ_rel_size["chest"]; "chest",
-			GLOB.organ_rel_size["groin"]; "groin",
-			GLOB.organ_rel_size["l_arm"]; "l_arm",
-			GLOB.organ_rel_size["r_arm"]; "r_arm",
-			GLOB.organ_rel_size["l_leg"]; "l_leg",
-			GLOB.organ_rel_size["r_leg"]; "r_leg",
-			GLOB.organ_rel_size["l_hand"]; "l_hand",
-			GLOB.organ_rel_size["r_hand"]; "r_hand",
-			GLOB.organ_rel_size["l_foot"]; "l_foot",
-			GLOB.organ_rel_size["r_foot"]; "r_foot",
+			GLOB.organ_rel_size[BODY_ZONE_HEAD]; "head",
+			GLOB.organ_rel_size[BODY_ZONE_CHEST]; "chest",
+			GLOB.organ_rel_size[BODY_ZONE_PRECISE_GROIN]; "groin",
+			GLOB.organ_rel_size[BODY_ZONE_L_ARM]; "l_arm",
+			GLOB.organ_rel_size[BODY_ZONE_R_ARM]; "r_arm",
+			GLOB.organ_rel_size[BODY_ZONE_L_LEG]; "l_leg",
+			GLOB.organ_rel_size[BODY_ZONE_R_LEG]; "r_leg",
+			GLOB.organ_rel_size[BODY_ZONE_PRECISE_L_HAND]; "l_hand",
+			GLOB.organ_rel_size[BODY_ZONE_PRECISE_R_HAND]; "r_hand",
+			GLOB.organ_rel_size[BODY_ZONE_PRECISE_L_FOOT]; "l_foot",
+			GLOB.organ_rel_size[BODY_ZONE_PRECISE_R_FOOT]; "r_foot",
 		)
 
 	return ran_zone

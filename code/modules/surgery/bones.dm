@@ -7,7 +7,7 @@
 	var/bone_step
 
 /datum/surgery_step/bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
-	if(affected.surgery_open_stage >= 2 && !(affected.limb_status & LIMB_DESTROYED) && affected.bone_repair_stage == bone_step && !(affected.limb_status & LIMB_REPAIRED))
+	if(affected.surgery_open_stage >= 2 && !(affected.limb_status & LIMB_MISSING) && affected.bone_repair_stage == bone_step && !(affected.limb_status & LIMB_REPAIRED))
 		return SURGERY_CAN_USE
 	return SURGERY_CANNOT_USE
 
@@ -74,7 +74,7 @@
 		user.visible_message(span_notice("[user] sets the bone in [target]'s [affected.display_name] in place with \the [tool]."), \
 		span_notice("You set the bone in [target]'s [affected.display_name] in place with \the [tool]."))
 	target.balloon_alert_to_viewers("Success")
-	affected.remove_limb_flags(LIMB_BROKEN | LIMB_SPLINTED | LIMB_STABILIZED)
+	affected.remove_limb_flags(LIMB_FRACTURED | LIMB_SPLINTED | LIMB_STABILIZED)
 	affected.add_limb_flags(LIMB_REPAIRED)
 	affected.bone_repair_stage = 0
 	return ..()

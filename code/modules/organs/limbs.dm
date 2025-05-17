@@ -1,11 +1,13 @@
 /****************************************************
 				EXTERNAL ORGANS
 ****************************************************/
+/// A representation of a limb on a person. Not to be confused with [/obj/item/limb]
+/// which is for amputated limbs in the world. Yes this code is extremely old confusing
 /datum/limb
-	/// Actual name of the limb. You may not use this for limb zones.
-	/// I will find you if you try. Use [body_zone] for that.
+	/// Internal name of the limb. This is not for limb zones OR showing to players.
+	/// Use `body_zone` and `display_name` respectively for those.
 	var/name = "limb"
-	/// Player friendly name of the limb.
+	/// Player friendly, plain text name of the limb
 	var/display_name
 	/// Icon state of this limb
 	var/icon_name = null
@@ -19,7 +21,7 @@
 	var/brute_dam = 0
 	/// burn damage this limb has taken as a part
 	var/burn_dam = 0
-	/// Max damage the limb can take. Extremities sever when they have at least LIMB_MAX_DAMAGE_SEVER_RATIO as a fraction of this in brute damage.
+	/// Max damage the limb can take. Extremities sever when they have at least LIMB_MAX_DAMAGE_SEVER_RATIO as a fraction of this in brute damage
 	var/max_damage = 0
 	/// Amount of damage this limb regenerates per tick while treated before multi-limb regen penalty
 	var/base_regen = 2
@@ -51,7 +53,7 @@
 	var/necro_surgery_stage = 0
 	/// Whether someone is currently doing surgery on this limb
 	var/in_surgery_op = FALSE
-	/// Do we have a rib cage or skull or something that needs to be opened to reach this in srugery
+	/// Do we have a rib cage or skull or something that needs to be opened to reach this in srugery?
 	/// If so, this is the name of that, like `"ribcage"`
 	var/encased
 	/// If this limb has a hidden implant within
@@ -59,9 +61,9 @@
 	/// [/obj/item/implant] Implants contained within this specific limb
 	var/list/implants = list()
 	/// Status flags like robotic/fractured/etc
-	var/limb_status = NONE //limb status flags
+	var/limb_status = NONE
 	/// Wound treatment flags
-	var/limb_wound_status = NONE //for wound treatment flags
+	var/limb_wound_status = NONE
 	/// Human owner mob of this limb
 	var/mob/living/carbon/human/owner = null
 	/// Whether this limb is vital, if true you die on losing it (todo make a flag)
@@ -137,7 +139,7 @@
 /datum/limb/proc/emp_act(severity)
 	for(var/datum/internal_organ/organ AS in internal_organs)
 		organ.emp_act(severity)
-	if(!(limb_status & LIMB_ROBOT))	//meatbags do not care about EMP
+	if(!(limb_status & LIMB_ROBOT))	// meatbags do not care about EMP
 		return
 	take_damage_limb(0, (5 - severity) * 7, blocked = soft_armor.energy, updating_health = TRUE)
 
@@ -147,18 +149,18 @@
 		return FALSE
 	var/hit_percent = (100 - blocked) * 0.01
 
-	if(hit_percent <= 0) //total negation
+	if(hit_percent <= 0) // total negation
 		return FALSE
 
 	if(brute)
-		brute *= CLAMP01(hit_percent) //Percentage reduction
+		brute *= CLAMP01(hit_percent) // Percentage reduction
 	if(burn)
-		burn *= CLAMP01(hit_percent) //Percentage reduction
+		burn *= CLAMP01(hit_percent) // Percentage reduction
 
 	if((brute <= 0) && (burn <= 0))
 		return 0
 
-	if(limb_status & LIMB_DESTROYED)
+	if(limb_status & LIMB_MISSING)
 		return 0
 
 	if(limb_status & LIMB_ROBOT && !(owner.species.species_flags & ROBOTIC_LIMBS))
@@ -169,24 +171,24 @@
 		brute *= 1.3 // 130% damage for biotic limbs
 		burn *= 1.3
 
-	//High brute damage or sharp objects may damage internal organs
+	// High brute damage or sharp objects may damage internal organs
 	if(internal_organs && ((sharp && brute >= 10) || brute >= 20) && prob(5))
-		//Damage an internal organ
+		// Damage an internal organ
 		var/datum/internal_organ/I = pick(internal_organs)
 		I.take_damage(brute / 2)
 		brute -= brute / 2
 
-	if(limb_status & LIMB_BROKEN && prob(40) && brute)
+	if(limb_status & LIMB_FRACTURED && prob(40) && brute)
 		if(!(owner.species && (owner.species.species_flags & NO_PAIN)))
-			owner.emote("scream") //Getting hit on broken hand hurts
+			owner.emote("scream") // Getting hit on broken hand hurts
 
-	//Possibly trigger an internal wound, too.
+	// Possibly trigger an internal wound, too.
 	var/local_damage = brute_dam + burn_dam + brute
 	if(brute > 15 && local_damage > 30 && prob(brute*0.5) && !(limb_status & LIMB_ROBOT) && !(SSticker.mode?.round_type_flags & MODE_NO_PERMANENT_WOUNDS))
 		new /datum/wound/internal_bleeding(min(brute - 15, 15), src)
 		owner.custom_pain("You feel something rip in your [display_name]!", 1)
 
-	//If they have it splinted and no splint health, the splint won't hold.
+	// If they have it splinted and no splint health, the splint won't hold.
 	if(limb_status & LIMB_SPLINTED)
 		if(splint_health <= 0)
 			remove_limb_flags(LIMB_SPLINTED)
@@ -207,8 +209,8 @@
 		if(burn)
 			createwound(BURN, burn)
 	else
-		//If we can't inflict the full amount of damage, spread the damage in other ways
-		//How much damage can we actually cause?
+		// If we can't inflict the full amount of damage, spread the damage in other ways
+		// How much damage can we actually cause?
 		var/can_inflict = max_damage - (brute_dam + burn_dam)
 		var/remain_brute = brute
 		var/remain_burn = burn
@@ -220,20 +222,20 @@
 				else
 					createwound(BRUISE, min(brute, can_inflict))
 				var/temp = can_inflict
-				//How much more damage can we inflict
+				// How much more damage can we inflict
 				can_inflict = max(0, can_inflict - brute)
-				//How much brute damage is left to inflict
+				// How much brute damage is left to inflict
 				remain_brute = max(0, brute - temp)
 
 			if(burn > 0 && can_inflict)
-				//Inflict all burn damage we can
+				// Inflict all burn damage we can
 				createwound(BURN, min(burn,can_inflict))
-				//How much burn damage is left to inflict
+				// How much burn damage is left to inflict
 				remain_burn = max(0, burn - can_inflict)
 
-		//If there are still hurties to dispense
+		// If there are still hurties to dispense
 		if(remain_burn || remain_brute)
-			//List organs we can pass it to
+			// List organs we can pass it to
 			var/list/datum/limb/possible_points = list()
 			if(parent)
 				possible_points += parent
@@ -246,21 +248,21 @@
 				var/datum/limb/target = pick(possible_points)
 				target.take_damage_limb(remain_brute, remain_burn, sharp, edge, blocked, FALSE, forbidden_limbs + src)
 
-	//Bone fractures
+	// Bone fractures
 	if(CONFIG_GET(flag/bones_can_break) && brute_dam > min_broken_damage && !(limb_status & LIMB_ROBOT))
 		fracture()
 
-	//Sync the organ's damage with its wounds
+	// Sync the organ's damage with its wounds
 	update_bleeding()
 
-	//If limb took enough damage, try to cut or tear it off
+	// If limb took enough damage, try to cut or tear it off
 
 	if(body_zone == BODY_ZONE_CHEST || body_zone == BODY_ZONE_PRECISE_GROIN)
 		if(updating_health)
 			owner.updatehealth()
 		return update_icon()
 	var/obj/item/clothing/worn_helmet = owner.head
-	if(body_zone == BODY_ZONE_HEAD && worn_helmet && (worn_helmet.armor_features_flags & ARMOR_NO_DECAP)) //Early return if the body part is a head but target is wearing decap-protecting headgear.
+	if(body_zone == BODY_ZONE_HEAD && worn_helmet && (worn_helmet.armor_features_flags & ARMOR_NO_DECAP)) // Early return if the body part is a head but target is wearing decap-protecting headgear.
 		if(updating_health)
 			owner.updatehealth()
 		return update_icon()
@@ -295,7 +297,7 @@
 /// This proc completely restores a damaged organ to perfect condition.
 /datum/limb/proc/rejuvenate(updating_health = FALSE, updating_icon = FALSE)
 	damage_state = "00"
-	remove_limb_flags(LIMB_BROKEN | LIMB_BLEEDING | LIMB_SPLINTED | LIMB_STABILIZED | LIMB_AMPUTATED | LIMB_DESTROYED | LIMB_NECROTIZED | LIMB_REPAIRED)
+	remove_limb_flags(LIMB_FRACTURED | LIMB_BLEEDING | LIMB_SPLINTED | LIMB_STABILIZED | LIMB_AMPUTATED | LIMB_MISSING | LIMB_NECROTIZED | LIMB_REPAIRED)
 	brute_dam = 0
 	burn_dam = 0
 	germ_level = 0
@@ -352,7 +354,7 @@
 
 /// Essentially checks that this limb is not destroyed and has health differences
 /datum/limb/proc/need_process()
-	if(limb_status & LIMB_DESTROYED)	//Missing limb is missing
+	if(limb_status & LIMB_MISSING)	//Missing limb is missing
 		return 0
 	if(limb_status && !(limb_status & LIMB_ROBOT)) // Any status other than destroyed or robotic requires processing
 		return 1
@@ -399,7 +401,7 @@
 */
 /datum/limb/proc/update_germs()
 
-	if(limb_status & (LIMB_ROBOT|LIMB_DESTROYED)) //Robotic limbs shouldn't be infected, nor should nonexistant limbs.
+	if(limb_status & (LIMB_ROBOT|LIMB_MISSING)) //Robotic limbs shouldn't be infected, nor should nonexistant limbs.
 		germ_level = 0
 		return
 
@@ -545,25 +547,25 @@
 		add_limb_flags(to_change_flags)
 
 /// Wrapper for removing flags from this limb, checks we don't already have the flag.
-/// If we're removing [LIMB_DESTROYED] we send the [COMSIG_LIMB_UNDESTROYED] signal
+/// If we're removing [LIMB_MISSING] we send the [COMSIG_LIMB_UNDESTROYED] signal
 /datum/limb/proc/remove_limb_flags(to_remove_flags)
 	if(!(limb_status & to_remove_flags))
 		return //Nothing old to remove.
 	. = limb_status
 	limb_status &= ~to_remove_flags
 	var/changed_flags = . & to_remove_flags
-	if((changed_flags & LIMB_DESTROYED))
+	if((changed_flags & LIMB_MISSING))
 		SEND_SIGNAL(src, COMSIG_LIMB_UNDESTROYED)
 
 /// Wrapper for adding flags to this limb, checks we don't already have the flag.
-/// If we're adding [LIMB_DESTROYED] we send the [COMSIG_LIMB_DESTROYED] signal
+/// If we're adding [LIMB_MISSING] we send the [COMSIG_LIMB_DESTROYED] signal
 /datum/limb/proc/add_limb_flags(to_add_flags)
 	if(to_add_flags == (limb_status & to_add_flags))
 		return //Nothing new to add.
 	. = limb_status
 	limb_status |= to_add_flags
 	var/changed_flags = ~(. & to_add_flags) & to_add_flags
-	if((changed_flags & LIMB_DESTROYED))
+	if((changed_flags & LIMB_MISSING))
 		SEND_SIGNAL(src, COMSIG_LIMB_DESTROYED)
 
 
@@ -572,7 +574,7 @@
 	if(isnull(.))
 		return
 	var/changed_flags = . & to_remove_flags
-	if((changed_flags & LIMB_DESTROYED) && owner.has_legs())
+	if((changed_flags & LIMB_MISSING) && owner.has_legs())
 		REMOVE_TRAIT(owner, TRAIT_LEGLESS, TRAIT_LEGLESS)
 
 /datum/limb/foot/add_limb_flags(to_add_flags)
@@ -580,7 +582,7 @@
 	if(isnull(.))
 		return
 	var/changed_flags = ~(. & to_add_flags) & to_add_flags
-	if((changed_flags & LIMB_DESTROYED) && !owner.has_legs())
+	if((changed_flags & LIMB_MISSING) && !owner.has_legs())
 		ADD_TRAIT(owner, TRAIT_LEGLESS, TRAIT_LEGLESS)
 
 /// Updates damage icon state
@@ -593,7 +595,7 @@
 
 /// Getter for damage icon states
 /datum/limb/proc/damage_state_text()
-	if(limb_status & LIMB_DESTROYED)
+	if(limb_status & LIMB_MISSING)
 		return "00"
 
 	var/tburn = 0
@@ -652,16 +654,16 @@
 /// This is what you use for "removing" this limb,
 /// handles checks, icon updates and effects
 /datum/limb/proc/droplimb(amputation, delete_limb = FALSE)
-	if(limb_status & LIMB_DESTROYED)
+	if(limb_status & LIMB_MISSING)
 		return FALSE
 
 	if(body_zone == BODY_ZONE_CHEST)
 		return FALSE
 
 	if(amputation)
-		set_limb_flags(LIMB_AMPUTATED|LIMB_DESTROYED)
+		set_limb_flags(LIMB_AMPUTATED|LIMB_MISSING)
 	else
-		set_limb_flags(LIMB_DESTROYED)
+		set_limb_flags(LIMB_MISSING)
 
 	if(owner.species.species_flags & ROBOTIC_LIMBS)
 		limb_status |= LIMB_ROBOT
@@ -833,9 +835,9 @@
 		return TRUE
 	return limb_wound_status & LIMB_WOUND_SALVED || !burn_dam
 
-/// Sets the fracture status on the limb and does cool effects
+/// Sets the fracture status on the limb and does related effects
 /datum/limb/proc/fracture()
-	if(limb_status & (LIMB_BROKEN|LIMB_DESTROYED|LIMB_ROBOT) )
+	if(limb_status & (LIMB_FRACTURED|LIMB_MISSING|LIMB_ROBOT) )
 		return
 
 	owner.visible_message(\
@@ -844,14 +846,14 @@
 		span_warning("You hear a sickening crack!"))
 	var/soundeffect = pick('sound/effects/bone_break1.ogg','sound/effects/bone_break2.ogg','sound/effects/bone_break3.ogg','sound/effects/bone_break4.ogg','sound/effects/bone_break5.ogg','sound/effects/bone_break6.ogg','sound/effects/bone_break7.ogg')
 	playsound(owner, soundeffect, 45, 1)
-	if(!(owner.species?.species_flags & NO_PAIN) && prob(35))
+	if(!(owner.species?.species_flags & NO_PAIN) && prob(70))
 		owner.emote("scream")
 
-	add_limb_flags(LIMB_BROKEN)
+	add_limb_flags(LIMB_FRACTURED)
 	remove_limb_flags(LIMB_REPAIRED)
 
 	// Fractures have a chance of getting you out of restraints
-	if (prob(25))
+	if(prob(25))
 		release_restraints()
 
 	/// Emit a signal for autodoc to support the life if available
@@ -899,11 +901,11 @@
 
 /// Getter for if this limb isn't missing and isn't necrotized
 /datum/limb/proc/is_usable()
-	return !(limb_status & (LIMB_DESTROYED|LIMB_NECROTIZED))
+	return !(limb_status & (LIMB_MISSING|LIMB_NECROTIZED))
 
 /// Getter for if this limb is fractured and not splinted/stabilized
 /datum/limb/proc/is_broken()
-	return ((limb_status & LIMB_BROKEN) && !(limb_status & LIMB_SPLINTED) && !(limb_status & LIMB_STABILIZED))
+	return ((limb_status & LIMB_FRACTURED) && !(limb_status & LIMB_SPLINTED) && !(limb_status & LIMB_STABILIZED))
 
 /// Getter for if this limb has enough damage to malfunction and is robotic
 /datum/limb/proc/is_malfunctioning()
@@ -932,7 +934,7 @@
 	if(!istype(user))
 		return
 
-	if(limb_status & LIMB_DESTROYED)
+	if(limb_status & LIMB_MISSING)
 		target.balloon_alert(user, "limb missing")
 		return FALSE
 
@@ -958,7 +960,7 @@
 /datum/limb/proc/extra_splint_checks(applied_health)
 	if(limb_status & LIMB_SPLINTED && applied_health <= splint_health)
 		return FALSE
-	return !(limb_status & LIMB_DESTROYED)
+	return !(limb_status & LIMB_MISSING)
 
 
 /// Called when limb is removed or robotized, any ongoing surgery and related vars are reset
