@@ -100,9 +100,9 @@
 	if(crosser.throwing || crosser.buckled)
 		return
 
-	if(isvehicle(crosser))
-		var/obj/vehicle/vehicle = crosser
-		vehicle.last_move_time += slow_amt
+	if(issealedvehicle(crosser))
+		var/obj/vehicle/sealed/vehicle = crosser
+		COOLDOWN_INCREMENT(vehicle, cooldown_vehicle_move, WEED_SLOWDOWN)
 		return
 
 	if(!ishuman(crosser))
@@ -133,6 +133,14 @@
 		deconstruct(TRUE)
 		return
 
+	return ..()
+
+/obj/alien/resin/sticky/can_z_move(direction, turf/start, turf/destination, z_move_flags, mob/living/rider)
+	z_move_flags |= ZMOVE_ALLOW_ANCHORED
+	return ..()
+
+/obj/alien/resin/sticky/onZImpact(turf/impacted_turf, levels, impact_flags = NONE)
+	impact_flags |= ZIMPACT_NO_SPIN
 	return ..()
 
 // Hivelord Sticky Resin spit uses this.
@@ -284,7 +292,7 @@
 	icon = 'icons/Xeno/xeno_materials.dmi'
 	icon_state = "resin_jelly"
 	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 200, ACID = 0)
-	var/immune_time = 15 SECONDS
+	var/immune_time = 30 SECONDS
 	///Holder to ensure only one user per resin jelly.
 	var/current_user
 
@@ -292,16 +300,7 @@
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
-	if(xeno_attacker.xeno_caste.can_flags & CASTE_CAN_HOLD_JELLY)
-		return attack_hand(xeno_attacker)
-	if(xeno_attacker.do_actions || !isnull(current_user))
-		return
-	current_user = xeno_attacker
-	xeno_attacker.balloon_alert(xeno_attacker, "Applying...")
-	if(!do_after(xeno_attacker, RESIN_SELF_TIME, NONE, xeno_attacker, BUSY_ICON_MEDICAL))
-		current_user = null
-		return
-	activate_jelly(xeno_attacker)
+	return attack_hand(xeno_attacker)
 
 /obj/item/resin_jelly/attack_self(mob/living/carbon/xenomorph/user)
 	//Activates if the item itself is clicked in hand.

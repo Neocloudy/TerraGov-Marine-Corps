@@ -154,6 +154,8 @@
 ///from /datum/emote/living/carbon/human/medic/run_emote()
 #define COMSIG_GLOB_MOB_CALL_MEDIC "!mob_call_medic"
 
+///from /obj/effect/build_designator/Initialize()
+#define COMSIG_GLOB_HOLO_BUILD_INITIALIZED "!holo_build_initialized"
 //////////////////////////////////////////////////////////////////
 // /datum/component signals
 #define COMSIG_AUTOFIRE_ONMOUSEDOWN "autofire_onmousedown"
@@ -231,6 +233,8 @@
 #define COMSIG_CLIENT_MOB_LOGOUT "client_mob_logout" //! Called on the client that just logged out from the mob: (/mob)
 #define COMSIG_CLIENT_GET_LARVA_QUEUE_POSITION "client_get_larva_queue_position" //! from /datum/component/larva_queue
 #define COMSIG_CLIENT_SET_LARVA_QUEUE_POSITION "client_set_larva_queue_position" //! from /datum/component/larva_queue
+// from /client/proc/change_view() : (new_size)
+#define COMSIG_VIEW_SET "view_set"
 
 // /atom signals
 #define COMSIG_ATOM_ATTACKBY "atom_attackby"			        //from base of atom/attackby(): (/obj/item, /mob/living)
@@ -310,6 +314,8 @@
 #define COMSIG_ATOM_UPDATE_ICON_STATE "atom_update_icon_state"
 ///from base of [/atom/update_overlays]: (list/new_overlays)
 #define COMSIG_ATOM_UPDATE_OVERLAYS "atom_update_overlays"
+///called after [/atom/update_overlays]: (list/new_overlays)
+#define COMSIG_ATOM_POST_UPDATE_OVERLAYS "atom_post_update_overlays"
 ///from base of [/atom/update_icon]: (signalOut, did_anything)
 #define COMSIG_ATOM_UPDATED_ICON "atom_updated_icon"
 
@@ -323,7 +329,7 @@
 ///from base of atom/contents_explosion(): (severity)
 #define COMSIG_CONTENTS_EX_ACT "contents_ex_act"
 #define COMSIG_ATOM_SET_LIGHT "atom_set_light"					//from base of atom/set_light(): (l_range, l_power, l_color)
-#define COMSIG_ATOM_BULLET_ACT "atom_bullet_act"				//from base of atom/bullet_act(): (/obj/projectile)
+#define COMSIG_ATOM_BULLET_ACT "atom_bullet_act"				//from base of atom/bullet_act(): (/atom/movable/projectile)
 #define COMSIG_ATOM_INITIALIZED_ON "atom_initialized_on"		//called from atom/Initialize() of target: (atom/target)
 //from SSatoms InitAtom - Only if the  atom was not deleted or failed initialization
 #define COMSIG_ATOM_AFTER_SUCCESSFUL_INITIALIZE "atom_init_success"
@@ -798,6 +804,7 @@
 
 ///after attacking, accounts for armor
 #define COMSIG_XENOMORPH_POSTATTACK_LIVING "xenomorph_postattack_living"
+#define COMSIG_XENOMORPH_ATTACK_TURF "xenomorph_attack_turf"
 #define COMSIG_XENOMORPH_ATTACK_HUMAN "xenomorph_attack_human"
 #define COMSIG_XENOMORPH_DISARM_HUMAN "xenomorph_disarm_human"
 	#define COMPONENT_BYPASS_SHIELDS (1<<0)
@@ -902,6 +909,10 @@
 
 #define COMSIG_ABILITY_SUCCEED_ACTIVATE "xeno_action_succeed_activate"
 	#define SUCCEED_ACTIVATE_CANCEL (1<<0)
+
+//From /obj/machinery/computer/camera_advanced/overwatch/military/proc/attempt_radial()
+#define COMSIG_DO_OVERWATCH_RADIAL "do_overwatch_radial"
+	#define OVERWATCH_RADIAL_HIDE (1<<0)
 
 //Signals for CIC orders
 #define COMSIG_ORDER_SELECTED "order_selected"

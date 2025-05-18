@@ -266,16 +266,22 @@
 			shake_camera(carbon_victim, 3 * severity, 3 * severity)
 			carbon_victim.apply_effect(1 SECONDS, EFFECT_PARALYZE)
 			to_chat(carbon_victim, "You are smashed to the ground!")
-		else if(isvehicle(victim) || ishitbox(victim))
+			continue
+		if(isvehicle(victim) || ishitbox(victim))
 			var/obj/obj_victim = victim
 			var/hitbox_penalty = 0
 			if(ishitbox(victim))
 				hitbox_penalty = 20
 			obj_victim.take_damage((SHATTERING_ROAR_DAMAGE - hitbox_penalty) * 5 * severity, BRUTE, MELEE)
-		else if(istype(victim, /obj/structure/window))
+		continue
+		if(istype(victim, /obj/structure/window))
 			var/obj/structure/window/window_victim = victim
 			if(window_victim.damageable)
 				window_victim.ex_act(EXPLODE_DEVASTATE)
+			continue
+		if(isfire(victim))
+			var/obj/fire/fire = victim
+			fire.reduce_fire(10)
 
 ///cleans up when the charge up is finished or interrupted
 /datum/action/ability/activable/xeno/shattering_roar/proc/finish_charging()
@@ -312,6 +318,8 @@
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_ZEROFORMBEAM,
 	)
+	///last attempted move direction. we use this to allow diagonal beaming.
+	var/last_attempted_movedir
 	///list of turfs we are hitting while shooting our beam
 	var/list/turf/targets
 	///ref to beam that is currently active
@@ -330,6 +338,18 @@
 /datum/action/ability/xeno_action/zero_form_beam/New(Target)
 	. = ..()
 	sound_loop = new
+
+/datum/action/ability/xeno_action/zero_form_beam/give_action(mob/living/L)
+	. = ..()
+	RegisterSignal(L, COMSIG_MOVABLE_PRE_MOVE, PROC_REF(set_attempted_movedir))
+
+/datum/action/ability/xeno_action/zero_form_beam/remove_action(mob/living/L)
+	UnregisterSignal(L, COMSIG_MOVABLE_PRE_MOVE)
+	return ..()
+
+/datum/action/ability/xeno_action/zero_form_beam/proc/set_attempted_movedir(atom/source, atom/newloc, direction)
+	SIGNAL_HANDLER
+	last_attempted_movedir = direction
 
 /obj/effect/ebeam/zeroform/Initialize(mapload)
 	. = ..()
@@ -350,16 +370,17 @@
 		stop_beaming()
 		return
 
-	var/turf/check_turf = get_step(owner, owner.dir)
+	var/dirtouse = last_attempted_movedir ? last_attempted_movedir : owner.dir
+	var/turf/check_turf = get_step(owner, dirtouse)
 	LAZYINITLIST(targets)
 	while(check_turf && length(targets) < ZEROFORM_BEAM_RANGE)
 		targets += check_turf
-		check_turf = get_step(check_turf, owner.dir)
+		check_turf = get_step(check_turf, dirtouse)
 	if(!LAZYLEN(targets))
 		return
 
 	var/particles_type
-	switch(owner.dir)
+	switch(owner.dir) // todo: missing diagonal particles
 		if(WEST)
 			particles_type = /particles/zero_form/west
 		if(EAST)

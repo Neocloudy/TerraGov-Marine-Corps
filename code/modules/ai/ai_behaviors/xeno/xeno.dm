@@ -185,12 +185,6 @@
 			return
 	return ..()
 
-/datum/ai_behavior/xeno/unregister_action_signals(action_type)
-	switch(action_type)
-		if(MOVING_TO_ATOM)
-			UnregisterSignal(mob_parent, COMSIG_STATE_MAINTAINED_DISTANCE)
-	return ..()
-
 ///Will try finding and resting on weeds
 /datum/ai_behavior/xeno/proc/try_to_heal()
 	var/mob/living/carbon/xenomorph/living_mob = mob_parent
@@ -237,7 +231,7 @@
 
 ///Move the ai mob on top of the window_frame
 /datum/ai_behavior/xeno/proc/climb_window_frame(turf/window_turf)
-	mob_parent.loc = window_turf
+	mob_parent.forceMove(window_turf)
 	mob_parent.last_move_time = world.time
 	LAZYDECREMENT(mob_parent.do_actions, window_turf)
 

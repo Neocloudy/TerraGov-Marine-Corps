@@ -134,7 +134,7 @@ SUBSYSTEM_DEF(persistence)
 		message += span_season_additional_info("<b>Title:</b> [season_progress[season_entry][CURRENT_SEASON_NAME]]<br>")
 		message += span_season_additional_info("<b>Description:</b> [season_progress[season_entry][CURRENT_SEASON_DESC]]<br>")
 
-	return message
+	return boxed_message(message)
 
 ///Loads seasons data, advances seasons and saves the data
 /datum/controller/subsystem/persistence/proc/LoadSeasonalItems()
@@ -250,7 +250,7 @@ SUBSYSTEM_DEF(persistence)
 		/obj/item/weapon/gun/revolver/small = -1,
 		/obj/item/ammo_magazine/revolver/small = -1,
 		/obj/item/weapon/gun/revolver/single_action/m44 = -1,
-		/obj/item/ammo_magazine/revolver = -1,
+		/obj/item/ammo_magazine/revolver/single_action/m44 = -1,
 		/obj/item/weapon/gun/revolver/judge = -1,
 		/obj/item/ammo_magazine/revolver/judge = -1,
 		/obj/item/ammo_magazine/revolver/judge/buckshot = -1,

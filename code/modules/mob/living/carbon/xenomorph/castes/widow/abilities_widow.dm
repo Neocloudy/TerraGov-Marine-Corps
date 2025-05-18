@@ -5,6 +5,9 @@
 	ability_cost = 100
 	buildable_structures = list(
 		/turf/closed/wall/resin/regenerating/thick,
+		/turf/closed/wall/resin/regenerating/special/bulletproof,
+		/turf/closed/wall/resin/regenerating/special/fireproof,
+		/turf/closed/wall/resin/regenerating/special/hardy,
 		/obj/alien/resin/sticky,
 		/obj/structure/mineral_door/resin/thick,
 	)
@@ -26,7 +29,7 @@
 
 /datum/action/ability/activable/xeno/web_spit/use_ability(atom/target)
 	var/datum/ammo/xeno/web/web_spit = GLOB.ammo_list[/datum/ammo/xeno/web]
-	var/obj/projectile/newspit = new /obj/projectile(get_turf(xeno_owner))
+	var/atom/movable/projectile/newspit = new /atom/movable/projectile(get_turf(xeno_owner))
 
 	newspit.generate_bullet(web_spit, web_spit.damage * SPIT_UPGRADE_BONUS(xeno_owner))
 	newspit.def_zone = xeno_owner.get_limbzone_target()
@@ -57,7 +60,7 @@
 		return fail_activate()
 	var/datum/ammo/xeno/leash_ball = GLOB.ammo_list[/datum/ammo/xeno/leash_ball]
 	leash_ball.hivenumber = xeno_owner.hivenumber
-	var/obj/projectile/newspit = new (get_turf(xeno_owner))
+	var/atom/movable/projectile/newspit = new (get_turf(xeno_owner))
 
 	newspit.generate_bullet(leash_ball)
 	newspit.fire_at(target, xeno_owner, xeno_owner, newspit.ammo.max_range)
@@ -116,7 +119,7 @@
 	return ..()
 
 /// Humans caught in the aoe_leash will be pulled back if they leave it's radius
-/obj/structure/xeno/aoe_leash/proc/check_dist(datum/leash_victim, atom/newloc)
+/obj/structure/xeno/aoe_leash/proc/check_dist(atom/source, atom/newloc, direction)
 	SIGNAL_HANDLER
 	if(get_dist(newloc, src) >= leash_radius)
 		return COMPONENT_MOVABLE_BLOCK_PRE_MOVE
@@ -274,7 +277,7 @@
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_BURROW,
 	)
-	use_state_flags = ABILITY_USE_BURROWED
+	use_state_flags = ABILITY_USE_BURROWED|ABILITY_USE_LYING
 
 /datum/action/ability/xeno_action/burrow/action_activate()
 	. = ..()
@@ -308,6 +311,7 @@
 	xeno_owner.update_icons()
 	add_cooldown()
 	owner.unbuckle_all_mobs(TRUE)
+	xeno_owner.get_up()
 
 /// Called by xeno_burrow only when burrowing
 /datum/action/ability/xeno_action/burrow/proc/xeno_burrow_doafter()

@@ -184,8 +184,8 @@
 	var/obj/machinery/computer/dropship_weapons/linked_console
 	///whether they get a button when shown on the shuttle console's equipment list.
 	var/obj/docking_port/mobile/marine_dropship/linked_shuttle
-	///used by the dropship console code when this equipment is selected
-	var/screen_mode = 0
+	///used by the dropship console code when this equipment is selected TODO we should really kill this off
+	var/screen_mode = FALSE
 	///how many points it costs to build this with the fabricator, set to 0 if unbuildable.
 	var/point_cost = 0
 	///what kind of ammo this uses if any
@@ -325,7 +325,7 @@
 
 
 /obj/structure/dropship_equipment/shuttle/nade_launcher/equipment_interact(mob/user)
-	if(!COOLDOWN_CHECK(src, deploy_cooldown)) //prevents spamming deployment
+	if(!COOLDOWN_FINISHED(src, deploy_cooldown)) //prevents spamming deployment
 		user.balloon_alert(user, "Busy")
 		return
 	if(length(loaded_grenades) <= 0) //check for inserted flares
@@ -429,7 +429,7 @@
 /obj/structure/dropship_equipment/shuttle/tangle_emitter/update_icon_state()
 	. = ..()
 	if(ship_base)
-		if(COOLDOWN_CHECK(src, use_cooldown))
+		if(COOLDOWN_FINISHED(src, use_cooldown))
 			icon_state = "tfoot_system_installed"
 			if(enabled)
 				icon_state = "tfoot_system_enabled"
@@ -446,7 +446,7 @@
 	var/turf/landing_spot = get_turf(console.eyeobj)
 	if(new_mode != SHUTTLE_PREARRIVAL || console.next_fly_state != SHUTTLE_ON_GROUND || !enabled || !landing_spot)
 		return
-	if(!COOLDOWN_CHECK(src, use_cooldown))
+	if(!COOLDOWN_FINISHED(src, use_cooldown))
 		console.say("Emitter system recharging. Unable to deploy smoke.")
 		playsound(console, 'sound/machines/buzz-sigh.ogg', 25)
 		return
@@ -757,7 +757,7 @@
 	bound_width = 32
 	bound_height = 64
 	dropship_equipment_flags = USES_AMMO|IS_WEAPON|IS_INTERACTABLE|FIRE_MISSION_ONLY
-	screen_mode = 1
+	screen_mode = TRUE
 	///used for weapon cooldown after use
 	COOLDOWN_DECLARE(last_fired)
 	///primary firing sound on the plane

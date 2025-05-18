@@ -77,7 +77,7 @@
 	desc = "Designed for mounting on modular armor. It shields you from the effects of fire, and prevents you from being set alight by any means. Wearing this in combination with the corresponding helmet module will render you completely impervious to fire. Will definitely impact mobility."
 	icon_state = "mod_fire"
 	worn_icon_state = "mod_fire_a"
-	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 45, ACID = 0)
+	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 40, ACID = 0)
 	slowdown = 0.4
 	slot = ATTACHMENT_SLOT_MODULE
 	variants_by_parent_type = list(/obj/item/clothing/suit/modular/xenonauten = "mod_fire_xn", /obj/item/clothing/suit/modular/tdf/heavy = "mod_fire_tdf")
@@ -98,7 +98,7 @@
 	icon = 'icons/mob/modular/modular_armor_modules.dmi'
 	icon_state = "mod_fire_head"
 	worn_icon_state = "mod_fire_head_a"
-	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 45, ACID = 0)
+	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 40, ACID = 0)
 	slot = ATTACHMENT_SLOT_HEAD_MODULE
 	variants_by_parent_type = list(/obj/item/clothing/head/modular/m10x = "mod_fire_head_xn", /obj/item/clothing/head/modular/tdf = "")
 
@@ -107,6 +107,7 @@
 	desc = "Designed for mounting on modular SOM armor. It provides near-immunity to the effects of fire, and prevents you from being set alight by any means. Wearing this in combination with the corresponding helmet module will render you completely impervious to fire. Will not actually provide any resistance against volkite weaponry. Will impact mobility."
 	icon_state = "mod_fire_som"
 	worn_icon_state = "mod_fire_som_a"
+	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 35, ACID = 0)
 
 /**
  * Extra armor module
@@ -504,7 +505,7 @@
 	COOLDOWN_DECLARE(mirage_cooldown)
 
 /obj/item/armor_module/module/mirage/activate(mob/living/user)
-	if(!COOLDOWN_CHECK(src, mirage_cooldown))
+	if(!COOLDOWN_FINISHED(src, mirage_cooldown))
 		balloon_alert(user, "[COOLDOWN_TIMELEFT(src, mirage_cooldown)*0.1] seconds")
 		return
 	var/alpha_mod = user.alpha * 0.95
@@ -547,7 +548,7 @@
 	locked_armor_mod = null
 
 /obj/item/armor_module/module/armorlock/activate(mob/living/user)
-	if(!COOLDOWN_CHECK(src, armorlock_cooldown))
+	if(!COOLDOWN_FINISHED(src, armorlock_cooldown))
 		balloon_alert(user, "[COOLDOWN_TIMELEFT(src, armorlock_cooldown)*0.1] seconds")
 		return
 

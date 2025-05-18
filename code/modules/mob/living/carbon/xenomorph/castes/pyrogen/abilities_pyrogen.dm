@@ -89,7 +89,7 @@
 
 	playsound(get_turf(xeno_owner), 'sound/effects/alien/fireball.ogg', 50)
 
-	var/obj/projectile/magic_bullshit = new(get_turf(src))
+	var/atom/movable/projectile/magic_bullshit = new(get_turf(src))
 	magic_bullshit.generate_bullet(/datum/ammo/xeno/fireball)
 	magic_bullshit.fire_at(target, xeno_owner, xeno_owner, PYROGEN_FIREBALL_MAXDIST, PYROGEN_FIREBALL_SPEED)
 	succeed_activate()
@@ -315,6 +315,14 @@
 	QDEL_IN(src, 2 SECONDS)
 	for(var/mob/living/living_victim in loc)
 		mob_act(living_victim)
+
+/obj/effect/xenomorph/firenado/can_z_move(direction, turf/start, turf/destination, z_move_flags, mob/living/rider)
+	z_move_flags |= ZMOVE_ALLOW_ANCHORED
+	return ..()
+
+/obj/effect/xenomorph/firenado/onZImpact(turf/impacted_turf, levels, impact_flags = NONE)
+	impact_flags |= ZIMPACT_NO_SPIN
+	return ..()
 
 /obj/effect/xenomorph/firenado/Bump(atom/target)
 	. = ..()

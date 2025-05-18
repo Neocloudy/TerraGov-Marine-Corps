@@ -26,6 +26,7 @@
 	throw_range = 1
 	worn_layer = FACEHUGGER_LAYER
 	layer = FACEHUGGER_LAYER
+	strip_delay = 2 SECONDS
 
 	///Whether the hugger is dead, active or inactive
 	var/stat = CONSCIOUS
@@ -275,12 +276,9 @@
 
 /obj/item/clothing/mask/facehugger/update_overlays()
 	. = ..()
-	if(overlays)
-		cut_overlays()
-
 	if(!about_to_jump)
 		return
-	add_overlay(image('icons/obj/items/grenade.dmi', "danger"))
+	. += image('icons/obj/items/grenade.dmi', "danger")
 
 ///Applies an alert overlay when the hugger is about to jump
 /obj/item/clothing/mask/facehugger/proc/apply_danger_overlay()
@@ -639,7 +637,7 @@
 		return
 	kill_hugger()
 
-/obj/item/clothing/mask/facehugger/bullet_act(obj/projectile/proj)
+/obj/item/clothing/mask/facehugger/bullet_act(atom/movable/projectile/proj)
 	..()
 	if(proj.ammo.ammo_behavior_flags & AMMO_XENO)
 		return FALSE //Xeno spits ignore huggers.

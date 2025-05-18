@@ -30,6 +30,13 @@
 	destroy_sound = 'sound/mecha/critdestr.ogg'
 	///The weight that we contribute to the max limit, if this is equipped to a greyscale mech
 	var/weight = 10
+	///the key will will use for weapon cooldowns, usually the type, but can be a string
+	var/cooldown_key
+
+/obj/item/mecha_parts/mecha_equipment/Initialize(mapload)
+	. = ..()
+	if(!cooldown_key)
+		cooldown_key = type
 
 /obj/item/mecha_parts/mecha_equipment/Destroy()
 	if(chassis)
@@ -91,7 +98,7 @@
 	if(obj_integrity <= 1)
 		to_chat(chassis.occupants, span_warning("Error -- Equipment critically damaged."))
 		return FALSE
-	if(!ignore_cooldown && TIMER_COOLDOWN_CHECK(chassis, COOLDOWN_MECHA_EQUIPMENT(type)))
+	if(!ignore_cooldown && TIMER_COOLDOWN_RUNNING(chassis, COOLDOWN_MECHA_EQUIPMENT(cooldown_key)))
 		return FALSE
 	if(!istype(chassis, /obj/vehicle/sealed/mecha/combat/greyscale))
 		return TRUE
@@ -106,7 +113,7 @@
 	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/proc/action(mob/source, atom/target, list/modifiers)
-	TIMER_COOLDOWN_START(chassis, COOLDOWN_MECHA_EQUIPMENT(type), equip_cooldown)//Cooldown is on the MECH so people dont bypass it by switching equipment
+	TIMER_COOLDOWN_START(chassis, COOLDOWN_MECHA_EQUIPMENT(cooldown_key), equip_cooldown)//Cooldown is on the MECH so people dont bypass it by switching equipment
 	chassis.use_power(energy_drain)
 	return TRUE
 
@@ -200,12 +207,16 @@
 	forceMove(moveto)
 	LAZYREMOVE(chassis.flat_equipment, src)
 	var/to_unequip_slot = equipment_slot
-	equipment_slot = initial(equipment_slot) // resets in case we were fucking with it earlier like with weapon swaps
 	if(equipment_slot == MECHA_WEAPON)
 		if(chassis.equip_by_category[MECHA_R_ARM] == src)
 			to_unequip_slot = MECHA_R_ARM
 		else
 			to_unequip_slot = MECHA_L_ARM
+	else if(equipment_slot == MECHA_BACK)
+		if(chassis.equip_by_category[MECHA_R_BACK] == src)
+			to_unequip_slot = MECHA_R_BACK
+		else
+			to_unequip_slot = MECHA_L_BACK
 	if(islist(chassis.equip_by_category[to_unequip_slot]))
 		chassis.equip_by_category[to_unequip_slot] -= src
 	else
