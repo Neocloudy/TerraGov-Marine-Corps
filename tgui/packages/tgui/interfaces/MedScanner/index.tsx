@@ -400,29 +400,27 @@ function PatientChemicals() {
                 </Tooltip>
               )}
               {!!chemical.metabolism_factor && (
-                <Tooltip content="Estimated time before this chemical is purged. May vary based on time dilation and other chemicals.">
-                  <MedBoxedTag
-                    icon="clock"
-                    textColor={
-                      chemical.dangerous
+                <MedBoxedTag
+                  icon="clock"
+                  textColor={
+                    chemical.dangerous
+                      ? 'white'
+                      : chemical.amount / chemical.metabolism_factor < 10
                         ? 'white'
-                        : chemical.amount / chemical.metabolism_factor < 10
-                          ? 'white'
-                          : 'black'
-                    }
-                    backgroundColor={
-                      chemical.dangerous
-                        ? 'red'
-                        : chemical.amount / chemical.metabolism_factor < 10
-                          ? 'grey'
-                          : 'white'
-                    }
-                    ml={SPACING_PIXELS}
-                  >
-                    {Math.trunc(chemical.amount / chemical.metabolism_factor) +
-                      's'}
-                  </MedBoxedTag>
-                </Tooltip>
+                        : 'black'
+                  }
+                  backgroundColor={
+                    chemical.dangerous
+                      ? 'red'
+                      : chemical.amount / chemical.metabolism_factor < 10
+                        ? 'grey'
+                        : 'white'
+                  }
+                  ml={SPACING_PIXELS}
+                >
+                  {Math.trunc(chemical.amount / chemical.metabolism_factor) +
+                    's'}
+                </MedBoxedTag>
               )}
             </Box>
           </Stack.Item>
