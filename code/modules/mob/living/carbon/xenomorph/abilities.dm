@@ -6,7 +6,7 @@
 	name = "Rest"
 	action_icon_state = "resting"
 	desc = "Rest on weeds to regenerate health and plasma."
-	use_state_flags = ABILITY_USE_LYING|ABILITY_USE_CRESTED|ABILITY_USE_SOLIDOBJECT
+	use_state_flags = ABILITY_USE_LYING|ABILITY_USE_CRESTED|ABILITY_USE_SOLIDOBJECT|ABILITY_USE_STAGGERED
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_REST,
 	)
@@ -426,7 +426,7 @@
 	if(X.current_aura && X.current_aura.aura_types[1] == phero_choice)
 		X.balloon_alert(X, "Stop emitting")
 		QDEL_NULL(X.current_aura)
-		if(isxenoqueen(X))
+		if(X.hive?.living_xeno_ruler == X)
 			X.hive?.update_leader_pheromones()
 		X.hud_set_pheromone()
 		return fail_activate()
@@ -435,7 +435,7 @@
 	X.balloon_alert(X, "[phero_choice]")
 	playsound(X.loc, SFX_ALIEN_DROOL, 25)
 
-	if(isxenoqueen(X))
+	if(X.hive?.living_xeno_ruler == X)
 		X.hive?.update_leader_pheromones()
 	X.hud_set_pheromone() //Visual feedback that the xeno has immediately started emitting pheromones
 	succeed_activate()
@@ -631,6 +631,11 @@
 	X.visible_message(span_xenowarning("\The [X] vomits globs of vile stuff all over \the [A]. It begins to sizzle and melt under the bubbling mess of acid!"), \
 	span_xenowarning("We vomit globs of vile stuff all over \the [A]. It begins to sizzle and melt under the bubbling mess of acid!"), null, 5)
 	playsound(X.loc, "sound/bullets/acid_impact1.ogg", 25)
+	if(owner.client)
+		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[owner.ckey]
+		personal_statistics.acid_applied++
+	GLOB.round_statistics.all_acid_applied++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "all_acid_applied")
 
 // ***************************************
 // *********** Super strong acid

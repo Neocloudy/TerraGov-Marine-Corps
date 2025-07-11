@@ -23,8 +23,8 @@
 #define COLLAR_LAYER 12
 #define SUIT_STORE_LAYER 11
 #define BACK_LAYER 10
-#define KAMA_LAYER 9
-#define CAPE_LAYER 8
+#define CAPE_LAYER 9
+#define KAMA_LAYER 8
 #define HANDCUFF_LAYER 7
 #define L_HAND_LAYER 6
 #define R_HAND_LAYER 5
@@ -707,7 +707,7 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 
 // Pyrogen defines
 /// Damage per melting fire stack
-#define PYROGEN_DAMAGE_PER_STACK 2.5
+#define PYROGEN_DAMAGE_PER_STACK 2
 /// Amount of ticks of fire removed when helped by another human to extinguish
 #define PYROGEN_ASSIST_REMOVAL_STRENGTH 2
 /// How fast the pyrogen moves when charging using fire charge
