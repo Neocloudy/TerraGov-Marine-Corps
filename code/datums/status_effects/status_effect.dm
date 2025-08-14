@@ -1,23 +1,31 @@
-//Status effects are used to apply temporary or permanent effects to mobs. Mobs are aware of their status effects at all times.
-//This file contains their code, plus code for applying and removing them.
-//When making a new status effect, add a define to status_effects.dm in __DEFINES for ease of use!
-
+/**
+ * ### Status Effects
+ *
+ * Status effects are used to apply effects (usually temporary) to all living mob types.
+ * In most cases, living mobs are aware of their status effects through HUD icons or other tells.
+ *
+ * ***When making a new status effect, add a define of its datum to `__DEFINES/status_effects.dm` for ease of use.***
+ */
 /datum/status_effect
-	///Used for screen alerts
+	/// Used for screen alerts
 	var/id = "effect"
-	///How long the status effect lasts in DECISECONDS. Enter -1 for an effect that never ends unless removed through some means
+	/// How long the status effect lasts in DECISECONDS. Use [STATUS_EFFECT_PERMANENT] for
+	/// a status effect that is never removed except through specific means.
 	var/duration = -1
-	///How many deciseconds between ticks, approximately. Leave at 10 for every second
+	/// When used with `alert_type`, shows the duration (or percentage of max stacks) on the alert.
+	var/show_duration = FALSE
+	/// How many deciseconds between ticks, approximately. Default is `10` for every second.
+	/// Set to [STATUS_EFFECT_AUTO_TICK] to trigger every tick.
 	var/tick_interval = 10
-	///The mob affected by the status effect.
+	/// The mob affected by the status effect.
 	var/mob/living/owner
-	///How many of the effect can be on one mob, and what happens when you try to add another
+	/// How many of the effect can be on one mob, and what happens when you try to add another
 	var/status_type = STATUS_EFFECT_UNIQUE
-	///If defined, this text will appear when the mob is examined - to use he, she etc. use "SUBJECTPRONOUN" and replace it in the examines themselves
+	/// If defined, this text will appear when the mob is examined - to use he, she etc. use "SUBJECTPRONOUN" and replace it in the examines themselves
 	var/examine_text
-	///the alert thrown by the status effect, contains name and description
+	/// The alert thrown by the status effect
 	var/alert_type = /atom/movable/screen/alert/status_effect
-	///the alert itself, if it exists
+	/// A reference to the visible thrown alert when it's thrown
 	var/atom/movable/screen/alert/status_effect/linked_alert = null
 
 /datum/status_effect/New(list/arguments)
@@ -52,10 +60,15 @@
 	return ..()
 
 /datum/status_effect/process(delta_time)
-	if(!owner)
-		qdel(src)
-		return
-	if(tick_interval < world.time)
+	SHOULD_NOT_OVERRIDE(TRUE)
+
+	if(QDELETED(owner))
+		stack_trace("[type] created with a null or deleting owner.")
+		return qdel(src)
+
+	if(tick_interval == STATUS_EFFECT_AUTO_TICK)
+		tick(delta_time)
+	else if(tick_interval != STATUS_EFFECT_NO_TICK && tick_interval < world.time)
 		tick(delta_time)
 		tick_interval = world.time + initial(tick_interval)
 
@@ -74,7 +87,7 @@
 ///Refreshed the duration
 /datum/status_effect/proc/refresh()
 	var/original_duration = initial(duration)
-	if(original_duration == -1)
+	if(original_duration == STATUS_EFFECT_PERMANENT)
 		return
 	duration = world.time + original_duration
 
@@ -87,10 +100,25 @@
 
 /// Use this for manually checking if the effect should've ended, when FASTPROCESSING just isn't fast enough
 /datum/status_effect/proc/check_duration()
-	if(duration != -1 && duration < world.time)
+	if(duration != STATUS_EFFECT_PERMANENT && duration < world.time)
 		qdel(src)
 		return TRUE
+	update_shown_duration()
 	return FALSE
+
+/// Find out if we can show the duration on the alert.
+/// Normally this is the duration in seconds, but on stacking subtypes
+/// this is how close we are to the max stacks.
+/datum/status_effect/proc/update_shown_duration()
+	PRIVATE_PROC(TRUE)
+	if(!linked_alert || !show_duration)
+		return FALSE
+
+	linked_alert.maptext = get_duration_text()
+
+/// Gets the text to show for the alert's maptext.
+/datum/status_effect/proc/get_duration_text()
+	return MAPTEXT_TINY_UNICODE("<span style='text-align:center'>[round((duration - world.time)/10, 1)]s</span>")
 
 ////////////////
 // ALERT HOOK //
@@ -166,7 +194,6 @@
 	id = "stacking_base"
 	duration = -1 //removed under specific conditions
 	alert_type = null
-
 	/// If status should be removed due to being under one stack
 	var/consumed_on_fadeout = TRUE
 	/// How many stacks are accumulated, also is # of stacks that target will have when first applied
@@ -193,6 +220,9 @@
 	var/underlay_state
 	var/mutable_appearance/status_overlay
 	var/mutable_appearance/status_underlay
+
+/datum/status_effect/stacking/get_duration_text()
+	return MAPTEXT_TINY_UNICODE("<span style='text-align:center'>[round((stacks / max_stacks)*100)]%</span>")
 
 /// What happens when threshold is crossed
 /datum/status_effect/stacking/proc/threshold_cross_effect()

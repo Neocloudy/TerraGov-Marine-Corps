@@ -495,6 +495,8 @@
 	stacks = 1
 	max_stacks = 30
 	consumed_on_threshold = FALSE
+	show_duration = TRUE
+	alert_type = /atom/movable/screen/alert/status_effect/sentinel_intoxicated
 	/// Owner of the debuff is limited to carbons.
 	var/mob/living/carbon/debuff_owner
 	/// The xenomorph who will receive healing.
@@ -523,7 +525,7 @@
 	xenomorph_to_heal = expected_xenomorph_to_heal
 	healing_per_stack = expected_healing_per_stack
 	RegisterSignal(debuff_owner, COMSIG_LIVING_DO_RESIST, PROC_REF(call_resist_debuff))
-	debuff_owner.balloon_alert(debuff_owner, "Intoxicated")
+	to_chat(debuff_owner, span_userdanger("You're covered in painful green bile! Resist to clear it away!"))
 	playsound(debuff_owner.loc, "sound/bullets/acid_impact1.ogg", 30)
 	particle_holder = new(debuff_owner, /particles/toxic_slash)
 	particle_holder.particles.spawning = 1 + round(stacks / 2)
@@ -568,16 +570,28 @@
 	if(length(debuff_owner.do_actions))
 		return
 	if(!do_after(debuff_owner, 5 SECONDS, NONE, debuff_owner, BUSY_ICON_GENERIC))
-		debuff_owner?.balloon_alert(debuff_owner, "Interrupted")
+		debuff_owner?.balloon_alert(debuff_owner, "interrupted!")
 		return
 	if(QDELETED(src))
 		return
 	playsound(debuff_owner, 'sound/effects/slosh.ogg', 30)
-	debuff_owner.balloon_alert(debuff_owner, "Succeeded")
+	debuff_owner.balloon_alert(debuff_owner, "success")
 	stacks -= SENTINEL_INTOXICATED_RESIST_REDUCTION
 	if(stacks > 0)
 		resist_debuff() // We repeat ourselves as long as the debuff persists.
 
+/atom/movable/screen/alert/status_effect/sentinel_intoxicated
+	name = "Intoxicated"
+	desc = "You're covered in burning bile from a Sentinel. Resist or click this alert to remove it."
+	icon_state = "sentinel_intoxicated"
+	boxed_message_style = "boxed_message red_box"
+
+/atom/movable/screen/alert/status_effect/sentinel_intoxicated/Click(location, control, params)
+	. = ..()
+	var/mob/living/L = usr
+	if(!istype(L) || usr != owner)
+		return
+	L.resist()
 
 // ***************************************
 // *********** Melting fire
@@ -589,6 +603,8 @@
 	stacks = 1
 	max_stacks = 10
 	consumed_on_threshold = FALSE
+	show_duration = TRUE
+	alert_type = /atom/movable/screen/alert/status_effect/pyrogen_fire
 	/// Owner of the debuff is limited to carbons.
 	var/mob/living/carbon/debuff_owner
 	/// Pyrogen creator of the debuff.
@@ -597,6 +613,19 @@
 	var/obj/vis_melt_fire/visual_fire
 	// The percentage of brute/burn healing that should be negated.
 	var/healing_debuff = 0
+
+/atom/movable/screen/alert/status_effect/pyrogen_fire
+	name = "Melting Fire"
+	desc = "You're covered in melting fire from a Pyrogen. Resist or click this alert to remove it."
+	icon_state = "melting_fire"
+	boxed_message_style = "boxed_message red_box"
+
+/atom/movable/screen/alert/status_effect/pyrogen_fire/Click(location, control, params)
+	. = ..()
+	var/mob/living/L = usr
+	if(!istype(L) || usr != owner)
+		return
+	L.resist()
 
 /obj/vis_melt_fire
 	name = "ouch ouch ouch"
@@ -613,8 +642,8 @@
 	visual_fire.icon_state = "melting_low_stacks"
 	debuff_owner = new_owner
 	debuff_owner.vis_contents += visual_fire
-	debuff_owner.balloon_alert(debuff_owner, "Melting fire")
-	playsound(debuff_owner.loc, "sound/bullets/acid_impact1.ogg", 30)
+	to_chat(new_owner, span_userdanger("You're covered in strange melting fire! Resist to put it out!"))
+	playsound(debuff_owner.loc, 'sound/bullets/acid_impact1.ogg', 30)
 	RegisterSignal(debuff_owner, COMSIG_LIVING_DO_RESIST, PROC_REF(call_resist_debuff))
 	set_creator(new_creator)
 
