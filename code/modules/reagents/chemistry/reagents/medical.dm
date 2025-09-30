@@ -7,6 +7,13 @@
 	taste_description = "bitterness"
 	reagent_ui_priority = REAGENT_UI_MEDICINE
 
+/datum/reagent/medicine/reaction_mob(mob/living/L, method = TOUCH, volume, show_message = TRUE, touch_protection = 0)
+	if(method == VAPOR)
+		if(volume < 1)
+			return FALSE //prevents microdosing from foam/smoke etc which duplicates chems
+		volume *= 0.3
+	return ..()
+
 /datum/reagent/medicine/inaprovaline
 	name = "Inaprovaline"
 	description = "Inaprovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients."
@@ -415,7 +422,7 @@
 			E.take_damage(1.5*effect_str, TRUE)
 
 /datum/reagent/medicine/dylovene/ai_should_use(mob/living/target, inject_vol)
-	if(target.reagents.get_reagent_amount(type)) //it has downsides so lets not spam it
+	if(target.reagents.get_reagent_amount(type) > 5) //it has downsides so lets not spam it
 		return FALSE
 	return ..()
 
