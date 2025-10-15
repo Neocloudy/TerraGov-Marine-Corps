@@ -261,20 +261,20 @@
 		return FALSE
 	if(!ishuman(A))
 		if(!silent)
-			xeno_owner.balloon_alert(owner, "not a human")
+			xeno_owner.balloon_alert(owner, "not a human!")
 		return FALSE
 	var/mob/living/carbon/human/human_target = A
 	if(human_target.stat == DEAD)
 		if(!silent)
-			xeno_owner.balloon_alert(owner, "already dead")
+			xeno_owner.balloon_alert(owner, "already dead!")
 		return FALSE
 	if(!human_target.has_status_effect(STATUS_EFFECT_MELTING_FIRE))
 		if(!silent)
-			xeno_owner.balloon_alert(owner, "not on fire")
+			xeno_owner.balloon_alert(owner, "not on fire!")
 		return FALSE
 	if(!line_of_sight(xeno_owner, human_target, 9))
 		if(!silent)
-			xeno_owner.balloon_alert(owner, "can't directly see")
+			xeno_owner.balloon_alert(owner, "can't directly see!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/infernal_trigger/use_ability(atom/target)

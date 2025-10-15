@@ -242,11 +242,11 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	if(current_grenades <= 0)
 		// For balance reasons, no exchanging life for healing grenades. The reason: infinite healing grenades.
 		if(!health_loss_percentage_per_grenade || xeno_owner.selected_grenade == /obj/item/explosive/grenade/globadier/heal)
-			owner.balloon_alert(owner, "No grenades!")
+			owner.balloon_alert(owner, "no grenades!")
 			return fail_activate()
 		var/health_to_lose = xeno_owner.xeno_caste.max_health * health_loss_percentage_per_grenade;
 		if(xeno_owner.health_threshold_crit > xeno_owner.health - health_to_lose) // Hugbox to stop them from suiciding into critical.
-			owner.balloon_alert(owner, "Not enough health!")
+			owner.balloon_alert(owner, "not enough health!")
 			return fail_activate()
 		xeno_owner.adjustBruteLoss(health_to_lose, TRUE)
 		current_grenades++
@@ -290,7 +290,7 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	if((current_grenades < max_grenades)) // Second if check as current_grenades has changed
 		timer = addtimer(CALLBACK(src, PROC_REF(regen_grenade)), grenade_cooldown, TIMER_UNIQUE|TIMER_STOPPABLE)
 		return
-	owner.balloon_alert(owner, "Max Grenades!")
+	owner.balloon_alert(owner, "max grenades!")
 
 /// Handles selecting which grenade the xeno wants
 /datum/action/ability/activable/xeno/toss_grenade/proc/selectgrenade()
@@ -494,12 +494,12 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	var/turf/T = get_turf(owner)
 	if(!T || !T.is_weedable() || T.density)
 		if(!silent)
-			owner.balloon_alert(owner, "We can't do that here.")
+			owner.balloon_alert(owner, "unsuitable spot!")
 		return FALSE
 
 	if(!xeno_owner.loc_weeds_type)
 		if(!silent)
-			owner.balloon_alert(owner, "We must be on weeds!")
+			owner.balloon_alert(owner, "must be on weeds!")
 		return FALSE
 
 	if(!T.check_alien_construction(owner, silent, /obj/structure/xeno/trap) || !T.check_disallow_alien_fortification(owner, silent))
@@ -543,7 +543,7 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 
 /datum/action/ability/xeno_action/acid_mine/action_activate()
 	if(current_charges <= 0)
-		owner.balloon_alert(owner, "No Mines!")
+		owner.balloon_alert(owner, "no mines!")
 		return fail_activate()
 	var/turf/T = get_turf(owner)
 	new xeno_owner.selected_grenade.minetype(T)
@@ -586,7 +586,7 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 
 /datum/action/ability/xeno_action/acid_mine/gas_mine/action_activate()
 	if(current_charges <= 0)
-		owner.balloon_alert(owner, "No Mines!")
+		owner.balloon_alert(owner, "no mines!")
 		return fail_activate()
 	var/turf/T = get_turf(owner)
 	new /obj/structure/xeno/acid_mine/gas_mine(T)

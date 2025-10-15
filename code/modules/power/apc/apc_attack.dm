@@ -40,11 +40,11 @@
 				return
 
 		if(cell)
-			balloon_alert(user, "Already installed")
+			balloon_alert(user, "already installed!")
 			return
 
 		if(machine_stat & MAINT)
-			balloon_alert(user, "No connector")
+			balloon_alert(user, "no connector!")
 			return
 
 		if(!user.transferItemToLoc(I, src))
@@ -65,19 +65,19 @@
 				return
 
 		if(opened)
-			balloon_alert(user, "Close the cover first")
+			balloon_alert(user, "close the cover first!")
 			return
 
 		if(CHECK_BITFIELD(machine_stat, PANEL_OPEN))
-			balloon_alert(user, "Close the panel first")
+			balloon_alert(user, "close the panel first!")
 			return
 
 		if(machine_stat & (BROKEN|MAINT))
-			balloon_alert(user, "Nothing happens")
+			balloon_alert(user, "nothing happens!")
 			return
 
 		if(!allowed(user))
-			balloon_alert(user, "Access denied")
+			balloon_alert(user, "access denied!")
 			return
 
 		locked = !locked
@@ -88,21 +88,21 @@
 		var/obj/item/stack/cable_coil/C = I
 
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-			balloon_alert_to_viewers("fumbles")
+			balloon_alert(user, "fumbling...")
 			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 				return
 
 		var/turf/T = get_turf(src)
 		if(T.intact_tile)
-			balloon_alert(user, "Remove the floor plating")
+			balloon_alert(user, "remove the floor plating!")
 			return
 
 		if(C.get_amount() < 10)
-			balloon_alert(user, "Not enough wires")
+			balloon_alert(user, "not enough wires!")
 			return
 
-		balloon_alert_to_viewers("starts wiring [src]")
+		balloon_alert(user, "wiring...")
 		playsound(loc, 'sound/items/deconstruct.ogg', 25, 1)
 
 		if(!do_after(user, 20, NONE, src, BUSY_ICON_BUILD) || terminal || !opened || has_electronics == APC_ELECTRONICS_SECURED)
@@ -118,53 +118,53 @@
 		if(!C.use(10))
 			return
 
-		balloon_alert_to_viewers("Wired]")
+		balloon_alert_to_viewers("wired")
 		make_terminal()
 		terminal.connect_to_network()
 
 	else if(istype(I, /obj/item/circuitboard/apc) && opened && has_electronics == APC_ELECTRONICS_MISSING && !(machine_stat & BROKEN))
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-			balloon_alert_to_viewers("fumbles")
+			balloon_alert_to_viewers("fumbling...")
 			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 				return
 
-		balloon_alert_to_viewers("Tries to insert APC board into [src]")
+		balloon_alert(user, "inserting board...")
 		playsound(loc, 'sound/items/deconstruct.ogg', 25, 1)
 
 		if(!do_after(user, 15, NONE, src, BUSY_ICON_BUILD))
 			return
 
 		has_electronics = APC_ELECTRONICS_INSTALLED
-		balloon_alert_to_viewers("Inserts APC board into [src]")
+		balloon_alert(user, "board inserted")
 		qdel(I)
 
 	else if(istype(I, /obj/item/circuitboard/apc) && opened && has_electronics == APC_ELECTRONICS_MISSING && (machine_stat & BROKEN))
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-			balloon_alert_to_viewers("fumbles")
+			balloon_alert_to_viewers("fumbling...")
 			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 				return
 
-		balloon_alert(user, "Cannot, frame damaged")
+		balloon_alert(user, "frame damaged!")
 
 	else if(istype(I, /obj/item/frame/apc) && opened && (machine_stat & BROKEN))
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-			balloon_alert_to_viewers("fumbles")
+			balloon_alert_to_viewers("fumbling...")
 			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 				return
 
 		if(has_electronics)
-			balloon_alert(user, "Cannot, electronics still inside")
+			balloon_alert(user, "electronics still inside!")
 			return
 
-		balloon_alert_to_viewers("Begins replacing front panel")
+		balloon_alert(user, "replacing front panel...")
 
 		if(!do_after(user, 50, NONE, src, BUSY_ICON_BUILD))
 			return
 
-		balloon_alert_to_viewers("Replaces front panel")
+		balloon_alert(user, "front panel replaced")
 		qdel(I)
 		DISABLE_BITFIELD(machine_stat, BROKEN)
 		if(opened == APC_COVER_REMOVED)
@@ -173,21 +173,21 @@
 
 	else if(istype(I, /obj/item/frame/apc) && opened)
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-			balloon_alert_to_viewers("fumbles")
+			balloon_alert_to_viewers("fumbling...")
 			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 				return
 
 		if(opened == APC_COVER_REMOVED)
 			opened = APC_COVER_OPENED
-		balloon_alert_to_viewers("Replaces [src]'s front panel")
+		balloon_alert(user, "front panel replaced")
 		qdel(I)
 		update_appearance()
 
 	else
 		if(((machine_stat & BROKEN)) && !opened && I.force >= 5)
 			opened = APC_COVER_REMOVED
-			balloon_alert_to_viewers("Knocks down [src]'s panel")
+			balloon_alert(user, "panel knocked down")
 			update_appearance()
 		else
 			if(issilicon(user))
@@ -195,7 +195,7 @@
 
 			if(!opened && CHECK_BITFIELD(machine_stat, PANEL_OPEN) && (ismultitool(I) || iswirecutter(I)))
 				return attack_hand(user)
-			balloon_alert_to_viewers("Hits [src] with [I]")
+			balloon_alert_to_viewers("hits [src] with [I]")
 
 //Attack with hand - remove cell (if cover open) or interact with the APC
 /obj/machinery/power/apc/attack_hand(mob/living/user)
@@ -205,11 +205,11 @@
 
 	if(opened && cell && !issilicon(user))
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-			balloon_alert_to_viewers("fumbles")
+			balloon_alert_to_viewers("fumbling...")
 			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 				return
-		balloon_alert_to_viewers("Removes [src] from [src]")
+		balloon_alert(user, "removed cell")
 		user.put_in_hands(cell)
 		cell.update_appearance()
 		set_cell(null)
@@ -232,19 +232,19 @@
 		return
 
 	if(opened)
-		balloon_alert(user, "Close the cover first")
+		balloon_alert(user, "close the cover first!")
 		return
 
 	if(CHECK_BITFIELD(machine_stat, PANEL_OPEN))
-		balloon_alert(user, "Close the panel first")
+		balloon_alert(user, "close the panel first!")
 		return
 
 	if(machine_stat & (BROKEN|MAINT))
-		balloon_alert(user, "Nothing happens")
+		balloon_alert(user, "it's not working!")
 		return
 
 	if(!allowed(user))
-		balloon_alert(user, "Access denied")
+		balloon_alert(user, "access denied!")
 		return
 
 	locked = !locked

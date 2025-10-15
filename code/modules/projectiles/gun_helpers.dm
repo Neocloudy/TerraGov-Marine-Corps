@@ -16,7 +16,7 @@
 /obj/item/weapon/gun/attack_hand_alternate(mob/user)
 	. = ..()
 	if(!active_attachable)
-		balloon_alert(user, "no attachment to unload")
+		balloon_alert(user, "no attachment to unload!")
 		return
 
 	var/mob/living/living_user = user
@@ -416,7 +416,7 @@ As sniper rifles have both and weapon mods can change them as well. ..() deals w
 	set name = "Toggle Gun Safety (Weapon)"
 	set desc = "Toggle the safety of the held gun."
 
-	balloon_alert(usr, "Safety [HAS_TRAIT(src, TRAIT_GUN_SAFETY) ? "off" : "on"].")
+	balloon_alert(usr, "safety [HAS_TRAIT(src, TRAIT_GUN_SAFETY) ? "off" : "on"]")
 	playsound(usr, 'sound/weapons/guns/interact/selector.ogg', 15, 1)
 	if(!HAS_TRAIT(src, TRAIT_GUN_SAFETY))
 		ADD_TRAIT(src, TRAIT_GUN_SAFETY, GUN_TRAIT)
@@ -445,7 +445,7 @@ As sniper rifles have both and weapon mods can change them as well. ..() deals w
 	//	if(rail && (rail.attach_features_flags & ATTACH_ACTIVATION) )
 	//		usable_attachments += rail
 	if(!length(attachments_by_slot))
-		balloon_alert(usr, "No usable attachments")
+		balloon_alert(usr, "no usable attachments!")
 		return
 
 	for(var/key in attachments_by_slot)
@@ -457,7 +457,7 @@ As sniper rifles have both and weapon mods can change them as well. ..() deals w
 			usable_attachments += attachment
 
 	if(!length(usable_attachments)) //No usable attachments.
-		balloon_alert(usr, "No usable attachments")
+		balloon_alert(usr, "no usable attachments!")
 		return
 	var/obj/item/attachable/usable_attachment
 	if(length(usable_attachments) == 1)
@@ -487,7 +487,7 @@ As sniper rifles have both and weapon mods can change them as well. ..() deals w
 
 	if(activate_attachment(ATTACHMENT_SLOT_RAIL, usr))
 		return
-	balloon_alert(usr, "No usable rail attachments")
+	balloon_alert(usr, "no usable rail attachments!")
 
 /obj/item/weapon/gun/verb/toggle_underrail_attachment()
 	set category = null
@@ -496,7 +496,7 @@ As sniper rifles have both and weapon mods can change them as well. ..() deals w
 
 	if(activate_attachment(ATTACHMENT_SLOT_UNDER, usr))
 		return
-	balloon_alert(usr, "No usable underrail attachments")
+	balloon_alert(usr, "no usable underrail attachments!")
 
 ///Toggles weapons ejecting their magazines when they're empty. This one is one a gun level and is used via right clicking the gun.
 /obj/item/weapon/gun/verb/toggle_auto_eject()
@@ -517,13 +517,13 @@ As sniper rifles have both and weapon mods can change them as well. ..() deals w
 		acceptable_guns += attached_gun
 
 	if(!length(acceptable_guns))
-		balloon_alert(usr, "Cannot toggle ejection")
+		balloon_alert(usr, "can't toggle ejection!")
 		return
 
 	if(length(acceptable_guns) == 1)
 		var/obj/item/weapon/gun/chosen_gun = acceptable_guns[1]
 		TOGGLE_BITFIELD(chosen_gun.reciever_flags, AMMO_RECIEVER_AUTO_EJECT)
-		balloon_alert(usr, "Automatic unloading [CHECK_BITFIELD(chosen_gun.reciever_flags, AMMO_RECIEVER_AUTO_EJECT) ? "enabled" : "disabled"].")
+		balloon_alert(usr, "automatic unloading [CHECK_BITFIELD(chosen_gun.reciever_flags, AMMO_RECIEVER_AUTO_EJECT) ? "enabled" : "disabled"]")
 		return
 
 	INVOKE_ASYNC(src, PROC_REF(handle_auto_eject_async), usr, acceptable_guns)
@@ -534,7 +534,7 @@ As sniper rifles have both and weapon mods can change them as well. ..() deals w
 	if(!chosen_gun)
 		return
 	TOGGLE_BITFIELD(chosen_gun.reciever_flags, AMMO_RECIEVER_AUTO_EJECT)
-	balloon_alert(usr, "Automatic unloading [CHECK_BITFIELD(chosen_gun.reciever_flags, AMMO_RECIEVER_AUTO_EJECT) ? "enabled" : "disabled"].")
+	balloon_alert(usr, "automatic unloading [CHECK_BITFIELD(chosen_gun.reciever_flags, AMMO_RECIEVER_AUTO_EJECT) ? "enabled" : "disabled"]")
 
 /obj/item/weapon/gun/item_action_slot_check(mob/user, slot)
 	if(slot != SLOT_L_HAND && slot != SLOT_R_HAND && !CHECK_BITFIELD(item_flags, IS_DEPLOYED))

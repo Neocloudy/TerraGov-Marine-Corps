@@ -146,11 +146,11 @@
 		return FALSE
 	if(length(puppets) >= xeno_owner.xeno_caste.max_puppets)
 		if(!silent)
-			xeno_owner.balloon_alert(xeno_owner, "too many puppets! (max: [xeno_owner.xeno_caste.max_puppets])")
+			xeno_owner.balloon_alert(xeno_owner, "too many puppets! (max [xeno_owner.xeno_caste.max_puppets])")
 		return FALSE
 	if(HAS_TRAIT(target, TRAIT_MAPSPAWNED) || HAS_TRAIT(target, TRAIT_HOLLOW))
 		if(!silent)
-			xeno_owner.balloon_alert(xeno_owner, "of no use!")
+			xeno_owner.balloon_alert(xeno_owner, "useless!")
 		return FALSE
 
 	if(!xeno_owner.Adjacent(target_human))
@@ -220,13 +220,13 @@
 
 	if(isclosedturf(target))
 		if(!silent)
-			target.balloon_alert(xeno_owner, "dense area")
+			target.balloon_alert(xeno_owner, "dense area!")
 		return FALSE
 
 	var/datum/action/ability/activable/xeno/refurbish_husk/huskaction = owner.actions_by_path[/datum/action/ability/activable/xeno/refurbish_husk]
 	if(length(huskaction.puppets) >= xeno_owner.xeno_caste.max_puppets)
 		if(!silent)
-			xeno_owner.balloon_alert(xeno_owner, "too many puppets! (max: [xeno_owner.xeno_caste.max_puppets])")
+			xeno_owner.balloon_alert(xeno_owner, "too many puppets! (max [xeno_owner.xeno_caste.max_puppets])")
 		return FALSE
 
 	if(!xeno_owner.Adjacent(target))
@@ -268,13 +268,13 @@
 	. = ..()
 	var/datum/action/ability/activable/xeno/refurbish_husk/huskaction = owner.actions_by_path[/datum/action/ability/activable/xeno/refurbish_husk]
 	if(length(huskaction.puppets) <= 0)
-		owner.balloon_alert(owner, "no puppets")
+		owner.balloon_alert(owner, "no puppets!")
 		return fail_activate()
 	if(!istype(victim, /mob/living/carbon/xenomorph/puppet) || !(victim in huskaction.puppets))
-		victim.balloon_alert(owner, "not our puppet")
+		victim.balloon_alert(owner, "not our puppet!")
 		return fail_activate()
 	if(!SEND_SIGNAL(victim, COMSIG_PUPPET_CHANGE_ORDER, PUPPET_SEEK_CLOSEST))
-		victim.balloon_alert(owner, "fail")
+		victim.balloon_alert(owner, "fail!")
 		return fail_activate()
 	RegisterSignal(victim, COMSIG_XENOMORPH_ATTACK_LIVING, PROC_REF(start_exploding))
 	RegisterSignal(victim, COMSIG_MOB_DEATH, PROC_REF(detonate))
@@ -327,9 +327,9 @@
 		return fail_activate()
 	var/datum/action/ability/activable/xeno/refurbish_husk/huskaction = owner.actions_by_path[/datum/action/ability/activable/xeno/refurbish_husk]
 	if(!istype(victim, /mob/living/carbon/xenomorph/puppet) || !(victim in huskaction.puppets))
-		victim.balloon_alert(owner, "not our puppet")
+		victim.balloon_alert(owner, "not our puppet!")
 		return fail_activate()
-	owner.balloon_alert(owner, "channeling voice, move or activate to cancel!")
+	owner.balloon_alert(owner, "channeling voice, activate again to stop")
 	active_target = victim
 	RegisterSignal(owner, COMSIG_MOB_SAY, PROC_REF(relay_speech))
 	RegisterSignal(owner, COMSIG_MOVABLE_MOVED, PROC_REF(cancel))
@@ -347,7 +347,7 @@
 /datum/action/ability/activable/xeno/articulate/proc/cancel(atom/target)
 	SIGNAL_HANDLER
 	if(talking)
-		owner.balloon_alert(owner, "cancelled!")
+		owner.balloon_alert(owner, "cancelled")
 	talking = FALSE
 	active_target = null
 	UnregisterSignal(owner, list(COMSIG_MOB_SAY, COMSIG_MOVABLE_MOVED, COMSIG_QDELETING))
@@ -434,7 +434,7 @@
 	if(!.)
 		return fail_activate()
 	if(!istype(target, /mob/living/carbon/xenomorph/puppet))
-		owner.balloon_alert(owner, "not a puppet")
+		owner.balloon_alert(owner, "not a puppet!")
 		return fail_activate()
 	succeed_activate()
 
@@ -476,7 +476,7 @@
 		owner.balloon_alert(owner, "success")
 		owner.visible_message(span_warning("[owner] swiftly manipulates the psychic strings of the puppets, ordering them to attack!"))
 	else
-		owner.balloon_alert(owner, "fail")
+		owner.balloon_alert(owner, "fail!")
 
 // ***************************************
 // *********** Recall puppets
@@ -495,4 +495,4 @@
 		owner.balloon_alert(owner, "success")
 		owner.visible_message(span_warning("[owner] quickly manipulates the psychic strings of the puppets, drawing them near!"))
 	else
-		owner.balloon_alert(owner, "fail")
+		owner.balloon_alert(owner, "fail!")

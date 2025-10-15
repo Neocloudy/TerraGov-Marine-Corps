@@ -193,11 +193,11 @@
 /obj/item/ammo_magazine/heavy_isg/he/attack_hand_alternate(mob/living/user)
 	if(guided)
 		default_ammo = /datum/ammo/rocket/heavy_isg/unguided
-		balloon_alert(user, "You swap the shell to unguided form")
+		balloon_alert(user, "unguided form")
 		guided = FALSE
 	else
 		default_ammo = /datum/ammo/rocket/heavy_isg
-		balloon_alert(user, "You swap the shell to guided form")
+		balloon_alert(user, "guided form")
 		guided = TRUE
 
 /obj/item/ammo_magazine/heavy_isg/sabot

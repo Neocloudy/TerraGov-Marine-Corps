@@ -275,7 +275,7 @@
 		return TRUE
 	if(isAI(user) && aidisabled)
 		if(!loud)
-			balloon_alert(user, "eee is disabled")
+			balloon_alert(user, "AI control disabled!")
 		return FALSE
 	return TRUE
 
@@ -287,7 +287,7 @@
 		if("lock")
 			if(usr.has_unlimited_silicon_privilege)
 				if((machine_stat & (BROKEN|MAINT)))
-					balloon_alert(usr, "APC unresponsive")
+					balloon_alert(usr, "APC unresponsive!")
 				else
 					locked = !locked
 					update_icon()

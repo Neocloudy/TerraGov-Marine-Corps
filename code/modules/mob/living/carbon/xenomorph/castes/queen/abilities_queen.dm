@@ -411,15 +411,15 @@
 		return
 
 	if(xeno_owner.xeno_caste.queen_leader_limit <= length(xeno_owner.hive.xeno_leader_list))
-		xeno_owner.balloon_alert(xeno_owner, "No more leadership slots")
+		xeno_owner.balloon_alert(xeno_owner, "no more leadership slots!")
 		return
 
 	set_xeno_leader(selected_xeno)
 
 /// Remove the passed xeno's leadership
 /datum/action/ability/xeno_action/set_xeno_lead/proc/unset_xeno_leader(mob/living/carbon/xenomorph/selected_xeno)
-	xeno_owner.balloon_alert(xeno_owner, "Xeno demoted")
-	selected_xeno.balloon_alert(selected_xeno, "Leadership removed")
+	xeno_owner.balloon_alert(xeno_owner, "xeno demoted")
+	selected_xeno.balloon_alert(selected_xeno, "lost leadership")
 	selected_xeno.hive.remove_leader(selected_xeno)
 	selected_xeno.hud_set_queen_overwatch()
 	selected_xeno.handle_xeno_leader_pheromones(xeno_owner)
@@ -429,13 +429,13 @@
 /// Promote the passed xeno to a hive leader, should not be called direct
 /datum/action/ability/xeno_action/set_xeno_lead/proc/set_xeno_leader(mob/living/carbon/xenomorph/selected_xeno)
 	if(!(selected_xeno.xeno_caste.can_flags & CASTE_CAN_BE_LEADER))
-		xeno_owner.balloon_alert(xeno_owner, "Xeno cannot lead")
+		xeno_owner.balloon_alert(xeno_owner, "that caste can't lead!")
 		return
 	if(selected_xeno == xeno_owner)
-		xeno_owner.balloon_alert(xeno_owner, "You are already a ruler")
+		xeno_owner.balloon_alert(xeno_owner, "you're already a ruler!")
 		return
-	xeno_owner.balloon_alert(xeno_owner, "Xeno promoted")
-	selected_xeno.balloon_alert(selected_xeno, "Promoted to leader")
+	xeno_owner.balloon_alert(xeno_owner, "xeno promoted")
+	selected_xeno.balloon_alert(selected_xeno, "promoted to leader")
 	to_chat(selected_xeno, span_xenoannounce("[xeno_owner] has selected us as a Hive Leader. The other Xenomorphs must listen to us. We will also act as a beacon for the Ruler's pheromones."))
 
 	xeno_owner.hive.add_leader(selected_xeno)
@@ -531,19 +531,19 @@
 	var/mob/living/carbon/xenomorph/receiver = target
 	if(!CHECK_BITFIELD(use_state_flags|override_flags, ABILITY_IGNORE_DEAD_TARGET) && receiver.stat == DEAD)
 		if(!silent)
-			receiver.balloon_alert(owner, "Cannot give plasma, dead")
+			receiver.balloon_alert(owner, "they're dead!")
 		return FALSE
 	if(!CHECK_BITFIELD(receiver.xeno_caste.can_flags, CASTE_CAN_BE_GIVEN_PLASMA))
 		if(!silent)
-			receiver.balloon_alert(owner, "Cannot give plasma")
+			receiver.balloon_alert(owner, "unsuitable caste!")
 			return FALSE
 	if(xeno_owner.z != receiver.z)
 		if(!silent)
-			receiver.balloon_alert(owner, "Cannot give plasma, too far")
+			receiver.balloon_alert(owner, "too far!")
 		return FALSE
 	if(receiver.plasma_stored >= receiver.xeno_caste.plasma_max)
 		if(!silent)
-			receiver.balloon_alert(owner, "Cannot give plasma, full")
+			receiver.balloon_alert(owner, "they're full!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/queen_give_plasma/give_action(mob/living/L)
@@ -577,10 +577,10 @@
 		last_xenomorph_transferred_to = target
 
 	last_xenomorph_transferred_to.gain_plasma(300)
-	last_xenomorph_transferred_to.balloon_alert_to_viewers("Queen plasma", ignored_mobs = GLOB.alive_human_list)
+	last_xenomorph_transferred_to.balloon_alert_to_viewers("received queen plasma", ignored_mobs = GLOB.alive_human_list)
 	if(get_dist(owner, last_xenomorph_transferred_to) > 7)
 		// Out of screen transfer.
-		owner.balloon_alert(owner, "Transferred plasma")
+		owner.balloon_alert(owner, "transferred plasma")
 	add_cooldown()
 	succeed_activate()
 

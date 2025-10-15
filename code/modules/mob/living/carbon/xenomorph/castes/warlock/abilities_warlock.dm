@@ -82,7 +82,7 @@
 	return ..()
 
 /datum/action/ability/activable/xeno/psychic_shield/on_cooldown_finish()
-	owner.balloon_alert(owner, "Shield ready")
+	owner.balloon_alert(owner, "shield ready")
 	return ..()
 
 //Overrides parent.
@@ -117,11 +117,11 @@
 	// Blocked by something in front of us.
 	var/turf/target_turf = get_step(owner, owner.dir)
 	if(target_turf.density)
-		owner.balloon_alert(owner, "Obstructed by [target_turf]")
+		owner.balloon_alert(owner, "obstructed by [target_turf]")
 		return
 	for(var/atom/movable/affected AS in target_turf)
 		if(affected.density)
-			owner.balloon_alert(owner, "Obstructed by [affected]")
+			owner.balloon_alert(owner, "obstructed by [affected]")
 			return
 
 	succeed_activate()
@@ -398,10 +398,10 @@
 ///Checks if the owner is close enough/can see the target
 /datum/action/ability/activable/xeno/psy_crush/proc/check_distance(atom/target, sight_needed)
 	if(get_dist(owner, target) > ability_range)
-		owner.balloon_alert(owner, "Too far!")
+		owner.balloon_alert(owner, "too far!")
 		return FALSE
 	if(sight_needed && !line_of_sight(owner, target, 9))
-		owner.balloon_alert(owner, "Out of sight!")
+		owner.balloon_alert(owner, "out of sight!")
 		return FALSE
 	return TRUE
 
@@ -522,7 +522,7 @@
 	filters_applied = null
 
 /datum/action/ability/activable/xeno/psy_crush/on_cooldown_finish()
-	owner.balloon_alert(owner, "Crush ready")
+	owner.balloon_alert(owner, "crush ready")
 	return ..()
 
 /obj/effect/xeno/crush_warning
@@ -606,7 +606,7 @@
 	selectable_ammo_types += /datum/ammo/energy/xeno/psy_blast/psy_lance
 
 /datum/action/ability/activable/xeno/psy_blast/on_cooldown_finish()
-	owner.balloon_alert(owner, "Psy blast ready")
+	owner.balloon_alert(owner, "psy blast ready")
 	return ..()
 
 /datum/action/ability/activable/xeno/psy_blast/action_activate()
@@ -649,13 +649,13 @@
 		return FALSE
 
 /datum/action/ability/activable/xeno/psy_blast/use_ability(atom/A)
-	owner.balloon_alert(owner, "We channel our psychic power")
+	owner.balloon_alert(owner, "channeling...")
 	generate_particles(A, 7)
 	var/datum/ammo/energy/xeno/ammo_type = xeno_owner.ammo
 	xeno_owner.update_glow(3, 3, ammo_type.glow_color)
 
 	if(!do_after(xeno_owner, 1 SECONDS, IGNORE_TARGET_LOC_CHANGE, A, BUSY_ICON_DANGER) || !can_use_ability(A, FALSE) || !(A in range(get_screen_size(TRUE), owner)))
-		owner.balloon_alert(owner, "Our focus is disrupted")
+		owner.balloon_alert(owner, "interrupted!")
 		end_channel()
 		return fail_activate()
 

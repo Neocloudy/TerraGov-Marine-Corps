@@ -154,7 +154,7 @@
 /obj/item/attachable/foldable/bipod/activate(mob/living/user, turn_off)
 	if(folded && !(master_gun.item_flags & WIELDED)) //no one handed bipod use
 		if(user)
-			balloon_alert(user, "Unwielded")
+			balloon_alert(user, "unwielded!")
 		return
 
 	. = ..()

@@ -209,7 +209,7 @@
 	desc = "Lunge towards a target within [starting_lunge_distance] tiles, putting them in our grasp. Usable on allies."
 
 /datum/action/ability/activable/xeno/warrior/lunge/on_cooldown_finish()
-	xeno_owner.balloon_alert(xeno_owner, "[initial(name)] ready")
+	xeno_owner.balloon_alert(xeno_owner, "[lowertext(initial(name))] ready")
 	return ..()
 
 /datum/action/ability/activable/xeno/warrior/lunge/can_use_ability(atom/A, silent = FALSE, override_flags)
@@ -218,16 +218,16 @@
 		return FALSE
 	if(!isliving(A))
 		if(!silent)
-			owner.balloon_alert(owner, "Invalid target")
+			owner.balloon_alert(owner, "invalid target!")
 		return FALSE
 	var/mob/living/living_target = A
 	if(living_target.stat == DEAD && !living_target.issamexenohive(owner))
 		if(!silent)
-			owner.balloon_alert(owner, "Dead")
+			owner.balloon_alert(owner, "dead!")
 		return FALSE
 	if(get_dist_euclidean(living_target, owner) > starting_lunge_distance)
 		if(!silent)
-			owner.balloon_alert(owner, "Too far")
+			owner.balloon_alert(owner, "too far!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/warrior/lunge/use_ability(atom/A)
@@ -273,7 +273,7 @@
 		living_target.resistance_flags |= RESTRAINED_NECKGRAB
 		living_target.drop_all_held_items()
 		living_target.Paralyze(0.1 SECONDS)
-		living_target.balloon_alert(xeno_owner, "Grabbed [living_target]")
+		living_target.balloon_alert(xeno_owner, "grabbed")
 
 	xeno_owner.swap_hand()
 	var/datum/action/ability/xeno_action/empower/empower_action = xeno_owner.actions_by_path[/datum/action/ability/xeno_action/empower]
@@ -330,16 +330,16 @@
 		return FALSE
 	if(!isliving(A))
 		if(!silent)
-			owner.balloon_alert(owner, "Invalid target")
+			owner.balloon_alert(owner, "invalid target!")
 		return FALSE
 	var/mob/living/living_target = A
 	if(living_target.stat == DEAD && !living_target.issamexenohive(owner))
 		if(!silent)
-			owner.balloon_alert(owner, "Dead")
+			owner.balloon_alert(owner, "dead!")
 		return FALSE
 	if(!living_target.Adjacent(owner))
 		if(!silent)
-			owner.balloon_alert(owner, "Not adjacent")
+			owner.balloon_alert(owner, "not adjacent!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/warrior/fling/use_ability(atom/A)
@@ -416,7 +416,7 @@
 
 /datum/action/ability/activable/xeno/warrior/grapple_toss/on_cooldown_finish()
 	var/datum/action/ability/activable/xeno/warrior/fling/fling_action = xeno_owner.actions_by_path[/datum/action/ability/activable/xeno/warrior/fling]
-	xeno_owner.balloon_alert(xeno_owner, "[fling_action ? "[initial(fling_action.name)] / " : ""][initial(name)] ready")
+	xeno_owner.balloon_alert(xeno_owner, "[fling_action ? "[initial(fling_action.name)] / " : ""][lowertext(initial(name))] ready")
 	return ..()
 
 /datum/action/ability/activable/xeno/warrior/grapple_toss/can_use_ability(atom/A, silent = FALSE, override_flags)
@@ -425,11 +425,11 @@
 		return FALSE
 	if(!owner.pulling)
 		if(!silent)
-			owner.balloon_alert(owner, "Nothing to toss")
+			owner.balloon_alert(owner, "nothing to toss!")
 		return FALSE
 	if(!owner.Adjacent(owner.pulling))
 		if(!silent)
-			owner.balloon_alert(owner, "Target not adjacent")
+			owner.balloon_alert(owner, "target not adjacent!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/warrior/grapple_toss/use_ability(atom/A)
@@ -501,25 +501,25 @@
 		return
 	if(!isliving(A) && !isstructure(A) && !ismachinery(A) && !isvehicle(A))
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot punch")
+			owner.balloon_alert(owner, "can't punch that!")
 		return FALSE
 	if(A.resistance_flags & (INDESTRUCTIBLE|CRUSHER_IMMUNE))
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot damage")
+			owner.balloon_alert(owner, "indestructible!")
 		return FALSE
 	if(isliving(A))
 		var/mob/living/living_target = A
 		if(living_target.issamexenohive(owner))
 			if(!silent)
-				owner.balloon_alert(owner, "Cannot punch")
+				owner.balloon_alert(owner, "can't punch allies!")
 			return FALSE
 		if(living_target.stat == DEAD)
 			if(!silent)
-				owner.balloon_alert(owner, "Dead")
+				owner.balloon_alert(owner, "dead!")
 			return FALSE
 	if(!A.Adjacent(owner))
 		if(!silent)
-			owner.balloon_alert(owner, "Not adjacent")
+			owner.balloon_alert(owner, "not adjacent!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/warrior/punch/use_ability(atom/A)
@@ -726,7 +726,7 @@
 
 /datum/action/ability/activable/xeno/warrior/punch/flurry/on_cooldown_finish()
 	current_charges = clamp(current_charges+1, 0, initial(current_charges))
-	owner.balloon_alert(owner, "[initial(name)] ready[current_charges > 1 ? " ([current_charges]/[initial(current_charges)])" : ""]")
+	owner.balloon_alert(owner, "[lowertext(initial(name))] ready[current_charges > 1 ? " ([current_charges]/[initial(current_charges)])" : ""]")
 	update_button_icon()
 	if(current_charges < initial(current_charges))
 		cooldown_timer = addtimer(CALLBACK(src, PROC_REF(on_cooldown_finish)), cooldown_duration, TIMER_STOPPABLE)

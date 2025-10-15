@@ -31,7 +31,7 @@
 	/// Runner should not be able to slash while evading.
 	var/datum/action/ability/xeno_action/evasion/evasion_action = actions_by_path[/datum/action/ability/xeno_action/evasion]
 	if(evasion_action?.evade_active)
-		balloon_alert(src, "Cannot slash while evading")
+		balloon_alert(src, "can't slash during evasion!")
 		return
 	return ..()
 
@@ -40,7 +40,7 @@
 	if(!ishuman(over))
 		return
 	if(!back)
-		balloon_alert(over,"This runner isn't wearing a saddle!")
+		balloon_alert(over, "it's not wearing a saddle!")
 		return
 	if(!do_after(over, 3 SECONDS, NONE, src))
 		return

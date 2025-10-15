@@ -99,7 +99,7 @@
 /datum/action/ability/xeno_action/conqueror_dash/action_activate()
 	toggled = !toggled
 	set_toggle(toggled)
-	xeno_owner.balloon_alert(xeno_owner, "[initial(name)] [toggled ? "enabled" : "disabled"]")
+	xeno_owner.balloon_alert(xeno_owner, "[lowertext(initial(name))] [toggled ? "enabled" : "disabled"]")
 	if(!toggled)
 		disable_ability()
 		return
@@ -350,13 +350,13 @@
 /datum/action/ability/activable/xeno/conqueror_will/on_cooldown_finish()
 	. = ..()
 	xeno_owner.playsound_local(xeno_owner, 'sound/effects/alien/new_larva.ogg', 30, 0)
-	xeno_owner.balloon_alert(xeno_owner, "[initial(name)] ready")
+	xeno_owner.balloon_alert(xeno_owner, "[lowertext(initial(name))] ready")
 
 /// Toggles the combo display.
 /datum/action/ability/activable/xeno/conqueror_will/alternate_action_activate()
 	. = ..()
 	display_combos = !display_combos
-	xeno_owner.balloon_alert(xeno_owner, "Combo display [display_combos ? "enabled" : "disabled"]")
+	xeno_owner.balloon_alert(xeno_owner, "combo display [display_combos ? "enabled" : "disabled"]")
 	if(!display_combos)
 		xeno_owner.hud_used?.combo_display.reset_icons()
 
@@ -827,7 +827,7 @@
 /datum/action/ability/activable/xeno/conqueror_domination/on_cooldown_finish()
 	. = ..()
 	xeno_owner.playsound_local(xeno_owner, 'sound/effects/alien/new_larva.ogg', 30, 0)
-	xeno_owner.balloon_alert(xeno_owner, "[initial(name)] ready")
+	xeno_owner.balloon_alert(xeno_owner, "[lowertext(initial(name))] ready")
 
 /datum/action/ability/activable/xeno/conqueror_domination/can_use_action(silent, override_flags, selecting)
 	. = ..()
@@ -842,10 +842,10 @@
 /datum/action/ability/activable/xeno/conqueror_domination/use_ability(atom/atom_target)
 	var/turf/turf_target = isturf(atom_target) ? atom_target : atom_target.loc
 	if(isclosedturf(turf_target) || isspaceturf(turf_target) || isspacearea(get_area(turf_target)))
-		xeno_owner.balloon_alert(xeno_owner, "Cannot go there")
+		xeno_owner.balloon_alert(xeno_owner, "can't go there!")
 		return
 	if(!line_of_sight(xeno_owner, turf_target) || IS_OPAQUE_TURF(turf_target))
-		xeno_owner.balloon_alert(xeno_owner, "No vision")
+		xeno_owner.balloon_alert(xeno_owner, "no vision!")
 		return
 	var/check_distance = min(CONQUEROR_DOMINATION_CASTING_RANGE, get_dist(xeno_owner, turf_target))
 	var/list/valid_turfs = list()
@@ -861,7 +861,7 @@
 			continue
 		new /obj/effect/temp_visual/behemoth/warning/conqueror(turf_to_affect, CONQUEROR_DOMINATION_CASTING_DELAY)
 	if(!check_distance || !length(reappearance_turfs))
-		xeno_owner.balloon_alert(xeno_owner, "Cannot go there")
+		xeno_owner.balloon_alert(xeno_owner, "can't go there!")
 		return
 	if(xeno_owner.buckled)
 		xeno_owner.buckled.unbuckle_mob(xeno_owner, TRUE)
@@ -956,7 +956,7 @@
 /datum/action/ability/xeno_action/conqueror_obliteration/on_cooldown_finish()
 	. = ..()
 	xeno_owner.playsound_local(xeno_owner, 'sound/effects/alien/new_larva.ogg', 30, 0)
-	xeno_owner.balloon_alert(xeno_owner, "[initial(name)] ready")
+	xeno_owner.balloon_alert(xeno_owner, "[lowertext(initial(name))] ready")
 
 /datum/action/ability/xeno_action/conqueror_obliteration/can_use_action(silent, override_flags, selecting)
 	. = ..()

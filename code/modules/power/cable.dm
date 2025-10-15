@@ -495,15 +495,15 @@ GLOBAL_LIST(cable_radial_layer_list)
 		return TRUE
 
 	if(!(affecting.limb_status & LIMB_ROBOT))
-		balloon_alert(user, "Limb not robotic")
+		balloon_alert(user, "limb not robotic")
 		return TRUE
 
 	if(!affecting.burn_dam)
-		balloon_alert(user, "Nothing to fix!")
+		balloon_alert(user, "nothing to fix!")
 		return TRUE
 
 	if(user.do_actions)
-		balloon_alert(user, "Already busy!")
+		balloon_alert(user, "busy!")
 		return TRUE
 
 	var/repair_time = 1 SECONDS
@@ -529,7 +529,7 @@ GLOBAL_LIST(cable_radial_layer_list)
 					continue
 				affecting = checked_limb
 			if(previous_limb == affecting)
-				H.balloon_alert(user, "Burns fully repaired.")
+				H.balloon_alert(user, "burns fully repaired")
 				break
 	return TRUE
 

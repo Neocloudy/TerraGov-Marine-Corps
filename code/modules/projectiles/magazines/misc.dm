@@ -9,7 +9,7 @@
 /obj/item/ammo_magazine/packet/attack_hand_alternate(mob/living/user)
 	. = ..()
 	if(current_rounds <= 0)
-		balloon_alert(user, "Empty")
+		balloon_alert(user, "Empty!")
 		return
 	create_handful(user)
 

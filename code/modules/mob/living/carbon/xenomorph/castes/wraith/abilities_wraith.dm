@@ -288,7 +288,7 @@
 
 	if(A == owner)
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot rewind self")
+			owner.balloon_alert(owner, "can't rewind self")
 		return FALSE
 
 	var/distance = get_dist(owner, A)
@@ -324,7 +324,7 @@
 	RegisterSignal(targeted, COMSIG_MOVABLE_MOVED, PROC_REF(save_move))
 	RegisterSignal(targeted, COMSIG_MOVABLE_Z_CHANGED, PROC_REF(cancel_timeshift))
 	targeted.add_filter("prerewind_blur", 1, radial_blur_filter(0.04))
-	targeted.balloon_alert(targeted, "You feel anchored to the past!")
+	targeted.balloon_alert(targeted, "rewind active")
 	ADD_TRAIT(targeted, TRAIT_TIME_SHIFTED, XENO_TRAIT)
 	add_cooldown()
 	succeed_activate()

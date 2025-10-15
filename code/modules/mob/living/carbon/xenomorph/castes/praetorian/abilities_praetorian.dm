@@ -162,7 +162,7 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 		return
 	if(owner.l_hand || owner.r_hand)
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot create grenade, need empty hands")
+			owner.balloon_alert(owner, "need empty hands!")
 		return FALSE
 
 /datum/action/ability/xeno_action/sticky_grenade/action_activate()
@@ -270,7 +270,7 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 	var/dodge_pass_flags = PASS_MOB|PASS_XENO
 
 /datum/action/ability/xeno_action/dodge/action_activate(atom/A)
-	owner.balloon_alert(owner, "Dodge ready!")
+	owner.balloon_alert(owner, "dodge ready")
 	toggle_particles(TRUE)
 
 	owner.add_movespeed_modifier(MOVESPEED_ID_PRAETORIAN_DANCER_DODGE_SPEED, TRUE, 0, NONE, TRUE, speed_buff)
@@ -304,7 +304,7 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 
 /// Removes the movespeed modifier and various pass_flags that was given by the dodge ability.
 /datum/action/ability/xeno_action/dodge/proc/remove_effects()
-	owner.balloon_alert(owner, "Dodge inactive!")
+	owner.balloon_alert(owner, "dodge inactive")
 	toggle_particles(FALSE)
 
 	owner.remove_movespeed_modifier(MOVESPEED_ID_PRAETORIAN_DANCER_DODGE_SPEED)
@@ -342,20 +342,20 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 		return FALSE
 	if(!iscarbon(A) && !ishitbox(A) && !isvehicle(A) && !ismachinery(A))
 		if(!silent)
-			A.balloon_alert(owner, "cannot impale")
+			A.balloon_alert(owner, "can't impale that!")
 		return FALSE
 	if(isxeno(A))
 		var/mob/living/carbon/xenomorph/xenomorph_target = A
 		if(owner.issamexenohive(xenomorph_target))
-			A.balloon_alert(owner, "cannot impale ally")
+			A.balloon_alert(owner, "can't impale allies!")
 			return FALSE
 	if(!A.Adjacent(owner))
-		A.balloon_alert(owner, "too far")
+		A.balloon_alert(owner, "too far!")
 		return FALSE
 	if(isliving(A))
 		var/mob/living/living_target = A
 		if(living_target.stat == DEAD)
-			living_target.balloon_alert(owner, "already dead")
+			living_target.balloon_alert(owner, "already dead!")
 			return FALSE
 
 /datum/action/ability/activable/xeno/impale/use_ability(atom/target_atom)
@@ -680,17 +680,17 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 		return FALSE
 	if(ability_timer)
 		if(!silent)
-			A.balloon_alert(xeno_owner, "already abducting")
+			A.balloon_alert(xeno_owner, "already abducting!")
 		return FALSE
 	var/distance_to_target = get_dist(xeno_owner, A)
 	if(!distance_to_target)
 		if(!silent)
-			A.balloon_alert(xeno_owner, "too short")
+			A.balloon_alert(xeno_owner, "too short!")
 		return FALSE
 	var/start_turf = get_step(xeno_owner, get_cardinal_dir(xeno_owner, A))
 	if(check_path(xeno_owner, start_turf, PASS_THROW) != start_turf)
 		if(!silent)
-			A.balloon_alert(xeno_owner, "path blocked")
+			A.balloon_alert(xeno_owner, "path blocked!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/oppressor/abduct/use_ability(atom/A)
@@ -803,14 +803,14 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 		var/mob/living/carbon/xenomorph/xenomorph_target = target
 		if(xeno_owner.issamexenohive(xenomorph_target))
 			if(!silent)
-				target.balloon_alert(xeno_owner, "cannot dislocate ally")
+				target.balloon_alert(xeno_owner, "can't dislocate allies!")
 			return FALSE
 	var/mob/living/carbon/carbon_target = target
 	if(!xeno_owner.Adjacent(carbon_target))
-		carbon_target.balloon_alert(xeno_owner, "too far")
+		carbon_target.balloon_alert(xeno_owner, "too far!")
 		return FALSE
 	if(carbon_target.stat == DEAD)
-		carbon_target.balloon_alert(xeno_owner, "already dead")
+		carbon_target.balloon_alert(xeno_owner, "already dead!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/oppressor/dislocate/use_ability(atom/target)
@@ -873,16 +873,16 @@ GLOBAL_LIST_INIT(acid_spray_hit, typecacheof(list(/obj/structure/barricade, /obj
 		return TRUE
 	if(!isitem(A) || isgrabitem(A))
 		if(!silent)
-			A.balloon_alert(owner, "not an item")
+			A.balloon_alert(owner, "not an item!")
 		return FALSE
 	var/obj/item/item_atom = A
 	if(!owner.Adjacent(item_atom))
 		if(!silent)
-			item_atom.balloon_alert(owner, "too far")
+			item_atom.balloon_alert(owner, "too far!")
 		return FALSE
 	if(item_atom.anchored)
 		if(!silent)
-			item_atom.balloon_alert(owner, "item is anchored")
+			item_atom.balloon_alert(owner, "item is anchored!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/item_throw/use_ability(atom/A)

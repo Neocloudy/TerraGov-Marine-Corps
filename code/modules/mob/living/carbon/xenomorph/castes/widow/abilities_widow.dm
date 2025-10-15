@@ -187,7 +187,7 @@
 		return FALSE
 	if(length(spiderlings) >= xeno_owner.xeno_caste.max_spiderlings)
 		if(!silent)
-			xeno_owner.balloon_alert(xeno_owner, "Max Spiderlings")
+			xeno_owner.balloon_alert(xeno_owner, "max spiderlings!")
 		return FALSE
 
 /// The action to create spiderlings
@@ -201,10 +201,10 @@
 
 /datum/action/ability/xeno_action/create_spiderling/alternate_action_activate()
 	if(cannibalise_charges <= 0)
-		xeno_owner.balloon_alert(xeno_owner, "No charges remaining!")
+		xeno_owner.balloon_alert(xeno_owner, "no charges remaining!")
 		return
 	if(length(spiderlings) >= xeno_owner.xeno_caste.max_spiderlings)
-		xeno_owner.balloon_alert(xeno_owner, "Max Spiderlings")
+		xeno_owner.balloon_alert(xeno_owner, "max spiderlings!")
 		return
 	INVOKE_ASYNC(src, PROC_REF(use_cannibalise))
 	return COMSIG_KB_ACTIVATED
@@ -214,10 +214,10 @@
 	if(!do_after(owner, 0.5 SECONDS, NONE, owner, BUSY_ICON_DANGER))
 		return FALSE
 	if(cannibalise_charges <= 0)
-		xeno_owner.balloon_alert(xeno_owner, "No charges remaining!")
+		xeno_owner.balloon_alert(xeno_owner, "no charges remaining!")
 		return
 	if(length(spiderlings) >= xeno_owner.xeno_caste.max_spiderlings)
-		xeno_owner.balloon_alert(xeno_owner, "Max Spiderlings")
+		xeno_owner.balloon_alert(xeno_owner, "max spiderlings!")
 		return
 	add_spiderling()
 	cannibalise_charges -= 1
@@ -260,19 +260,19 @@
 	owner.unbuckle_all_mobs(TRUE)
 	var/datum/action/ability/xeno_action/create_spiderling/create_spiderling_action = owner.actions_by_path[/datum/action/ability/xeno_action/create_spiderling]
 	if(length(create_spiderling_action.spiderlings) <= 0)
-		owner.balloon_alert(owner, "No spiderlings")
+		owner.balloon_alert(owner, "no spiderlings!")
 		return fail_activate()
 	if(!isturf(A) && !istype(A, /obj/alien/weeds))
-		owner.balloon_alert(owner, "Spiderlings attacking " + A.name)
+		owner.balloon_alert(owner, "spiderlings attacking [A.name]")
 	else
 		for(var/item in A) //Autoaim at humans if weeds or turfs are clicked
 			if(!ishuman(item))
 				continue
 			A = item
-			owner.balloon_alert(owner, "Spiderlings attacking " + A.name)
+			owner.balloon_alert(owner, "spiderlings attacking [A.name]")
 			break
 		if(!ishuman(A)) //If no human found, cancel ability
-			owner.balloon_alert(owner, "Nothing to attack, cancelled")
+			owner.balloon_alert(owner, "nothing to attack!")
 			return fail_activate()
 
 	succeed_activate()
@@ -376,7 +376,7 @@
 		return
 	var/datum/action/ability/xeno_action/create_spiderling/create_spiderling_action = xeno_owner.actions_by_path[/datum/action/ability/xeno_action/create_spiderling]
 	if(!(length(create_spiderling_action.spiderlings)))
-		xeno_owner.balloon_alert(xeno_owner, "No spiderlings")
+		xeno_owner.balloon_alert(xeno_owner, "no spiderlings!")
 		return fail_activate()
 	var/list/mob/living/carbon/xenomorph/spiderling/remaining_spiderlings = create_spiderling_action.spiderlings.Copy()
 	// First make the spiderlings stop what they are doing and return to the widow
@@ -418,10 +418,10 @@
 	if(!.)
 		return
 	if(!owner.Adjacent(A))
-		owner.balloon_alert(owner, "Not adjacent")
+		owner.balloon_alert(owner, "not adjacent!")
 		return FALSE
 	if(!istype(A, /mob/living/carbon/xenomorph/spiderling))
-		owner.balloon_alert(owner, "We can't cannibalise this")
+		owner.balloon_alert(owner, "can't cannibalise that!")
 		return FALSE
 	return TRUE
 
@@ -439,7 +439,7 @@
 		create_spiderling_action.cannibalise_charges += 1
 		owner.balloon_alert(owner, "[create_spiderling_action.cannibalise_charges]/3 charges")
 	else
-		owner.balloon_alert(owner, "We're full, no charges gained!")
+		owner.balloon_alert(owner, "full, no charges gained!")
 	playsound(owner.loc, 'sound/items/eatfood.ogg', 15, TRUE)
 	succeed_activate()
 	add_cooldown()
@@ -465,17 +465,17 @@
 	if(!.)
 		return
 	if(isliving(A))
-		owner.balloon_alert(owner, "We can't attach to that")
+		owner.balloon_alert(owner, "can't attach to that!")
 		return FALSE
 	if(!isturf(A))
 		return FALSE
 	if(get_dist(owner, A) <= WIDOW_WEB_HOOK_MIN_RANGE)
-		owner.balloon_alert(owner, "Too close")
+		owner.balloon_alert(owner, "too close!")
 		return FALSE
 	var/turf/current = get_turf(owner)
 	var/turf/target_turf = get_turf(A)
 	if(get_dist(current, target_turf) > WIDOW_WEB_HOOK_RANGE)
-		owner.balloon_alert(owner, "Too far")
+		owner.balloon_alert(owner, "too far!")
 		return FALSE
 	current = get_step_towards(current, target_turf)
 

@@ -646,21 +646,21 @@
 	switch(dist)
 		if(-1 to 1)
 			if(!silent)
-				xeno_owner.balloon_alert(target, "Too close!")
+				xeno_owner.balloon_alert(target, "too close!")
 			return FALSE
 		if(2 to 3)
 			if(!line_of_sight(xeno_owner, target, 3))
 				if(!silent)
-					xeno_owner.balloon_alert(target, "Not in line of sight!")
+					xeno_owner.balloon_alert(target, "no line of sight!")
 				return FALSE
 		if(4 to INFINITY)
 			if(!silent)
-				xeno_owner.balloon_alert(target, "Too far!")
+				xeno_owner.balloon_alert(target, "too far!")
 			return FALSE
 	var/mob/living/carbon/human/human_target = target
 	if(human_target.stat == DEAD)
 		if(!silent)
-			xeno_owner.balloon_alert(target, "Already dead!")
+			xeno_owner.balloon_alert(target, "already dead!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/psychic_choke/use_ability(atom/target)

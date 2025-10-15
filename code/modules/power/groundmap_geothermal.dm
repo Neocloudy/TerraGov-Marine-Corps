@@ -244,7 +244,7 @@ GLOBAL_VAR_INIT(generators_on_ground, 0)
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
 			user.visible_message(span_notice("[user] fumbles around figuring out the resin tendrils on [src]."),
 			span_notice("You fumble around trying to burn off the resin tendrils."))
-			user.balloon_alert(user, "You fumble around trying to burn off the resin tendrils.")
+			user.balloon_alert(user, "fumbling...")
 			var/fumbling_time = 10 SECONDS - 2 SECONDS * user.skills.getRating(SKILL_ENGINEER)
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED, extra_checks = CALLBACK(WT, TYPE_PROC_REF(/obj/item/tool/weldingtool, isOn))))
 				return
@@ -253,7 +253,7 @@ GLOBAL_VAR_INIT(generators_on_ground, 0)
 			return
 		user.visible_message(span_notice("[user] carefully starts burning [src]'s resin off."),
 		span_notice("You start carefully burning the resin off."))
-		user.balloon_alert(user, "You start carefully burning the resin off.")
+		user.balloon_alert(user, "burning resin off...")
 
 		if(!I.use_tool(src, user, 20 SECONDS - clamp((user.skills.getRating(SKILL_ENGINEER) - SKILL_ENGINEER_ENGI) * 5, 0, 20), 2, 25, null, BUSY_ICON_BUILD))
 			return FALSE
@@ -264,7 +264,7 @@ GLOBAL_VAR_INIT(generators_on_ground, 0)
 	if(buildstate != GEOTHERMAL_HEAVY_DAMAGE) //Already repaired!
 		return
 	if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-		user.balloon_alert(user, "You fumble around figuring out how the internals work.")
+		user.balloon_alert(user, "fumbling...")
 		var/fumbling_time = 10 SECONDS - 2 SECONDS * user.skills.getRating(SKILL_ENGINEER)
 		if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED, extra_checks = CALLBACK(WT, TYPE_PROC_REF(/obj/item/tool/weldingtool, isOn))) || buildstate != GEOTHERMAL_HEAVY_DAMAGE || is_on)
 			return
@@ -272,12 +272,12 @@ GLOBAL_VAR_INIT(generators_on_ground, 0)
 		to_chat(user, span_warning("You need more welding fuel to complete this task."))
 		return
 
-	user.balloon_alert(user, "You start welding the internals back together.")
+	user.balloon_alert(user, "repairing...")
 	if(!I.use_tool(src, user, 20 SECONDS - clamp((user.skills.getRating(SKILL_ENGINEER) - SKILL_ENGINEER_ENGI) * 5, 0, 20), 2, 25, null, BUSY_ICON_BUILD))
 		return FALSE
 
 	buildstate = GEOTHERMAL_MEDIUM_DAMAGE
-	user.balloon_alert(user, "You weld the internals back together.")
+	user.balloon_alert(user, "some damage repaired (wirecutters next)")
 	update_icon()
 	record_generator_repairs(user)
 	return TRUE
@@ -302,6 +302,7 @@ GLOBAL_VAR_INIT(generators_on_ground, 0)
 	buildstate = GEOTHERMAL_LIGHT_DAMAGE
 	user.visible_message(span_notice("[user] secures [src]'s wiring."),
 	span_notice("You secure [src]'s wiring."))
+	user.balloon_alert(user, "some damage repaired (wrench next)")
 	update_icon()
 	record_generator_repairs(user)
 	return TRUE
@@ -326,6 +327,7 @@ GLOBAL_VAR_INIT(generators_on_ground, 0)
 	buildstate = GEOTHERMAL_NO_DAMAGE
 	user.visible_message(span_notice("[user] repairs [src]'s tubing and plating."),
 	span_notice("You repair [src]'s tubing and plating."))
+	user.balloon_alert(user, "all damage repaired")
 	update_icon()
 	record_generator_repairs(user)
 	return TRUE

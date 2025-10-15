@@ -34,13 +34,13 @@
 	var/mob/living/carbon/human/human_victim = target_mob
 	if(proj.def_zone == BODY_ZONE_HEAD)
 		human_victim.blind_eyes(hit_eye_blind)
-		human_victim.balloon_alert(human_victim, "The web blinds you!")
+		human_victim.balloon_alert(human_victim, "the web blinds you!")
 	else if(proj.def_zone in paralyze_list)
 		human_victim.apply_effect(hit_paralyze, EFFECT_PARALYZE)
-		human_victim.balloon_alert(human_victim, "The web knocks you down!")
+		human_victim.balloon_alert(human_victim, "the web knocks you down!")
 	else if(proj.def_zone in snare_list)
 		human_victim.Immobilize(hit_immobilize, TRUE)
-		human_victim.balloon_alert(human_victim, "The web snares you!")
+		human_victim.balloon_alert(human_victim, "the web snares you!")
 
 /datum/ammo/xeno/leash_ball
 	icon_state = "widow_snareball"

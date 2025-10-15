@@ -3,23 +3,23 @@
 	if(opened)
 		if(has_electronics == APC_ELECTRONICS_INSTALLED)
 			if(terminal)
-				balloon_alert(user, "Disconnect the wires")
+				balloon_alert(user, "disconnect the wires!")
 				return
 			if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-				balloon_alert_to_viewers("Fumbles around removing cell from [src]")
+				balloon_alert_to_viewers("fumbling...")
 				var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 				if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 					return
 			I.play_tool_sound(src)
-			balloon_alert(user, "Removing APC board")
+			balloon_alert(user, "removing board...")
 			if(I.use_tool(src, user, 50))
 				if(has_electronics == APC_ELECTRONICS_INSTALLED)
 					has_electronics = APC_ELECTRONICS_MISSING
 					if(machine_stat & BROKEN)
-						balloon_alert_to_viewers("Removes the charred control board")
+						balloon_alert_to_viewers("charred board removed")
 						return
 					else
-						balloon_alert_to_viewers("Removes the control board")
+						balloon_alert_to_viewers("board removed")
 						new /obj/item/circuitboard/apc(loc)
 						return
 		else if(opened != APC_COVER_REMOVED)
@@ -29,10 +29,10 @@
 			return
 	else if(!(machine_stat & BROKEN))
 		if(coverlocked && !(machine_stat & MAINT)) // locked...
-			balloon_alert(user, "Locked")
+			balloon_alert(user, "locked!")
 			return
 		else if(machine_stat & PANEL_OPEN)
-			balloon_alert(user, "Can't, wires in way")
+			balloon_alert(user, "wires in the way!")
 			return
 		else
 			opened = APC_COVER_OPENED
@@ -48,11 +48,11 @@
 	if(opened)
 		if(cell)
 			if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-				balloon_alert_to_viewers("fumbles")
+				balloon_alert_to_viewers("fumbling...")
 				var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 				if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 					return
-			balloon_alert_to_viewers("Removes cell")
+			balloon_alert(user, "removed cell")
 			var/turf/T = get_turf(user)
 			cell.forceMove(T)
 			cell.update_appearance()
@@ -66,14 +66,14 @@
 					has_electronics = APC_ELECTRONICS_SECURED
 					machine_stat &= ~MAINT
 					I.play_tool_sound(src)
-					balloon_alert(user, "Screws circuit board in")
+					balloon_alert(user, "circuit board screwed in")
 				if(APC_ELECTRONICS_SECURED)
 					has_electronics = APC_ELECTRONICS_INSTALLED
 					machine_stat |= MAINT
 					I.play_tool_sound(src)
-					balloon_alert(user, "Unfastens electronics")
+					balloon_alert(user, "unfastened electronics")
 				else
-					balloon_alert(user, "Nothing securable")
+					balloon_alert(user, "nothing securable!")
 					return
 			update_appearance()
 	else
@@ -93,24 +93,24 @@
 		return
 
 	if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
-		balloon_alert_to_viewers("fumbles")
+		balloon_alert_to_viewers("fumbling...")
 		var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating(SKILL_ENGINEER) )
 		if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 			return
 
 	if(!I.tool_start_check(user, amount = 3))
 		return
-	balloon_alert_to_viewers("welds [src]")
+	balloon_alert_to_viewers("welding...")
 
 	if(!I.use_tool(src, user, 50, volume = 50, amount = 3))
 		return
 
 	if((machine_stat & BROKEN) || opened == APC_COVER_REMOVED)
 		new /obj/item/stack/sheet/metal(loc)
-		balloon_alert_to_viewers("cuts apart [src]")
+		balloon_alert_to_viewers("metal cut apart")
 	else
 		new /obj/item/frame/apc(loc)
-		balloon_alert_to_viewers("cuts [src] from the wall")
+		balloon_alert_to_viewers("APC cut from the wall")
 	qdel(src)
 	return TRUE
 

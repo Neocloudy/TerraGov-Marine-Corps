@@ -53,9 +53,9 @@
 
 	var/list/emagged_reagents = list()
 
-	var/list/emagged_message = list(
-		"You manipulate the internal storage comparent to load from the extended storage.", // When hacked
-		"You reset the internal storage compartment", // When de-hacked
+	var/static/list/emagged_message = list(
+		"internal storage unlocked", // When hacked
+		"internat storage reset", // When de-hacked
 	)
 
 	var/list/recording_recipe
@@ -300,7 +300,7 @@
 				for(var/reagent in recording_recipe)
 					var/reagent_id = GLOB.name2reagent[reagent]
 					if(!dispensable_reagents.Find(reagent_id))
-						balloon_alert_to_viewers("[src] buzzes")
+						balloon_alert_to_viewers("missing reagent!")
 						playsound(src, 'sound/machines/buzz-two.ogg', 50, TRUE)
 						return
 				usr.client.prefs.chem_macros[name] = recording_recipe
@@ -332,12 +332,12 @@
 
 	if(isreagentcontainer(I))
 		if(beaker)
-			balloon_alert(user, "Something already loaded")
+			balloon_alert(user, "something already loaded!")
 			return
 
 		for(var/datum/reagent/X in I.reagents.reagent_list)
 			if(X.medbayblacklist)
-				balloon_alert(user, "Harmful substance in beaker")
+				balloon_alert(user, "harmful substance in beaker!")
 				return
 
 		if(I.is_open_container())
@@ -345,29 +345,29 @@
 				return
 
 			beaker = I
-			balloon_alert(user, "Sets [I] on the machine")
+			balloon_alert(user, "[lowertext(I)] set")
 			update_icon()
 			ui_interact(user)
 			return
 
 		if(istype(I, /obj/item/reagent_containers/glass))
-			balloon_alert(user, "Take the lid off")
+			balloon_alert(user, "take the lid off!")
 			return
 
-		balloon_alert(user, "Can't use this")
+		balloon_alert(user, "can't use this!")
 		return
 
 	if(istype(I, /obj/item/cell))
 		if(!CHECK_BITFIELD(machine_stat, PANEL_OPEN))
-			balloon_alert(user, "Battery panel is closed")
+			balloon_alert(user, "battery panel is closed!")
 			return
 		if(cell)
-			balloon_alert(user, "Already has a power cell")
+			balloon_alert(user, "already has a power cell!")
 			return
 		if(!user.transferItemToLoc(I, src))
 			return
 		cell = I
-		balloon_alert(user, "Inserts")
+		balloon_alert(user, "inserted")
 		overlays.Cut()
 		start_processing()
 		update_icon()
@@ -376,7 +376,7 @@
 /obj/machinery/chem_dispenser/screwdriver_act(mob/living/user, obj/item/I)
 	TOGGLE_BITFIELD(machine_stat, PANEL_OPEN)
 	overlays.Cut()
-	balloon_alert_to_viewers("[CHECK_BITFIELD(machine_stat, PANEL_OPEN) ? "opens" : "closes"] the battery compartment")
+	balloon_alert_to_viewers("battery compartment [CHECK_BITFIELD(machine_stat, PANEL_OPEN) ? "open" : "closed"]")
 	update_icon()
 	return TRUE
 
@@ -385,7 +385,7 @@
 		return FALSE
 	cell.forceMove(loc)
 	cell = null
-	balloon_alert_to_viewers("pries out battery.")
+	balloon_alert_to_viewers("battery pried out")
 	stop_processing()
 	overlays.Cut()
 	update_icon()

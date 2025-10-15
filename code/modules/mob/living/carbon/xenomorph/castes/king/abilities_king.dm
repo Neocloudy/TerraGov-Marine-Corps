@@ -173,11 +173,11 @@
 		return
 	if(!ishuman(A))
 		if(!silent)
-			A.balloon_alert(owner, "not human")
+			A.balloon_alert(owner, "not human!")
 		return FALSE
 	if(!line_of_sight(owner, A, 9))
 		if(!silent)
-			owner.balloon_alert(owner, "Out of sight!")
+			owner.balloon_alert(owner, "out of sight!")
 		return FALSE
 	if((A.z != owner.z) || get_dist(owner, A) > OFF_GUARD_RANGE)
 		if(!silent)
@@ -186,7 +186,7 @@
 	var/mob/living/carbon/human/target = A
 	if(target.stat == DEAD)
 		if(!silent)
-			target.balloon_alert(owner, "already dead")
+			target.balloon_alert(owner, "already dead!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/off_guard/use_ability(atom/target)
@@ -383,7 +383,7 @@
 		return
 	if(SSmonitor.gamestate == SHUTTERS_CLOSED && is_ground_level(owner.z))
 		if(!silent)
-			owner.balloon_alert(owner, "too early")
+			owner.balloon_alert(owner, "too early!")
 		return FALSE
 
 /datum/action/ability/xeno_action/zero_form_beam/action_activate()
@@ -541,7 +541,7 @@
 		return
 	if(length(xeno_owner.hive.get_all_xenos()) <= 1)
 		if(!silent)
-			owner.balloon_alert(owner, "noone to call")
+			owner.balloon_alert(owner, "noone to call!")
 		return FALSE
 
 GLOBAL_LIST_EMPTY(active_summons)

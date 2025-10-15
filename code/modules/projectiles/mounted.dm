@@ -336,7 +336,7 @@
 		return
 
 	if(anchor_time)
-		balloon_alert(user, "You begin [anchored ? "unanchoring" : "anchoring"] [src]")
+		balloon_alert(user, "[anchored ? "unanchoring" : "anchoring"]...")
 		if(!do_after(user, anchor_time, NONE, src))
 			balloon_alert(user, "Interrupted!")
 			return
@@ -344,4 +344,4 @@
 	anchored = !anchored
 	update_icon()
 
-	balloon_alert(user, "You [anchored ? "anchor" : "unanchor"] [src]")
+	balloon_alert(user, "[anchored ? "anchored" : "unanchored"]")

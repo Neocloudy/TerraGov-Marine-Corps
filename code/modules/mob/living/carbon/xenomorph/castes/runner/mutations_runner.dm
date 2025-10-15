@@ -85,7 +85,7 @@
 	critical_threshold_boosted = !critical_threshold_boosted
 	if(critical_threshold_boosted)
 		if(!silent)
-			xenomorph_owner.balloon_alert(xenomorph_owner, "Borrowed time ready!");
+			xenomorph_owner.balloon_alert(xenomorph_owner, "borrowed time ready!");
 		xenomorph_owner.health_threshold_crit -= critical_threshold_amount
 		return
 	xenomorph_owner.health_threshold_crit += critical_threshold_amount
@@ -108,7 +108,7 @@
 	xenomorph_owner.Stagger(borrowed_time_length)
 	critical_threshold_timer = addtimer(CALLBACK(src, PROC_REF(reverse_critical_threshold)), borrowed_time_length, TIMER_UNIQUE|TIMER_STOPPABLE)
 	INVOKE_ASYNC(xenomorph_owner, TYPE_PROC_REF(/mob, emote), "roar")
-	xenomorph_owner.balloon_alert(xenomorph_owner, "On borrowed time!");
+	xenomorph_owner.balloon_alert(xenomorph_owner, "on borrowed time!");
 
 /// Effectively removes the effects of this mutation ands its active effect.
 /datum/mutation_upgrade/shell/borrowed_time/proc/reverse_critical_threshold()

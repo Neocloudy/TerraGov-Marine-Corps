@@ -1752,7 +1752,7 @@
 		to_chat(user, span_notice("You cannot fire [src] without it attached to a gun!"))
 		return FALSE
 	if(overheat_timer)
-		balloon_alert(user, "overheat")
+		balloon_alert(user, "overheating!")
 		return FALSE
 	return TRUE
 

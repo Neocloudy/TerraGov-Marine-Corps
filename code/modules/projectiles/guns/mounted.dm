@@ -595,7 +595,7 @@
 /obj/machinery/deployable/mounted/moveable/atgun/attackby(obj/item/I, mob/user, params)
 	var/obj/item/weapon/gun/standard_atgun/internal_gun = get_internal_item()
 	if(user.interactee == src && (I.type in internal_gun?.allowed_ammo_types))
-		balloon_alert(user, "Busy manning!")
+		balloon_alert(user, "busy manning!")
 		return
 
 	if(!sponson.attackby(I, user, params))
@@ -603,7 +603,7 @@
 
 /obj/machinery/deployable/mounted/moveable/atgun/attack_hand_alternate(mob/living/user)
 	if(user.interactee == src)
-		balloon_alert(user, "Busy manning!")
+		balloon_alert(user, "busy manning!")
 		return
 
 	return sponson.attack_hand_alternate(user)
@@ -613,7 +613,7 @@
 		return FALSE
 
 	if(usr.interactee == src)
-		balloon_alert(usr, "Busy manning!")
+		balloon_alert(usr, "busy manning!")
 		return
 
 	if(over == usr && Adjacent(usr)) //This must come before the screen objects only block

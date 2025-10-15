@@ -943,12 +943,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(target == user)
 		delay *= 3
 
-	target.balloon_alert_to_viewers("Splinting [display_name]...")
+	target.balloon_alert_to_viewers("splinting [display_name]...")
 
 	if(!do_after(user, delay, NONE, target, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL, extra_checks = CALLBACK(src, PROC_REF(extra_splint_checks), applied_health)))
 		return FALSE
 
-	target.balloon_alert_to_viewers("Splinted [display_name]")
+	target.balloon_alert_to_viewers("splinted [display_name]")
 	add_limb_flags(LIMB_SPLINTED)
 	splint_health = applied_health
 	return TRUE

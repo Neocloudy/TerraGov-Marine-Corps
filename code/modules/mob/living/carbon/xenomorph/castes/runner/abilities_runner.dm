@@ -50,7 +50,7 @@
 
 /datum/action/ability/activable/xeno/pounce/runner/alternate_action_activate()
 	savage_activated = !savage_activated
-	owner.balloon_alert(owner, "Savage [savage_activated ? "activated" : "deactivated"]")
+	owner.balloon_alert(owner, "savage [savage_activated ? "active" : "inactive"]")
 	action_icon_state = "pounce_savage_[savage_activated? "on" : "off"]"
 	update_button_icon()
 
@@ -72,12 +72,12 @@
 	if(!savage_activated)
 		return
 	if(!COOLDOWN_FINISHED(src, savage_cooldown))
-		owner.balloon_alert(owner, "Savage on cooldown ([COOLDOWN_TIMELEFT(src, savage_cooldown) * 0.1]s)")
+		owner.balloon_alert(owner, "wait [DisplayTimeText(COOLDOWN_TIMELEFT(src, savage_cooldown))]!")
 		return
 	var/savage_damage = max(RUNNER_SAVAGE_DAMAGE_MINIMUM, xeno_owner.plasma_stored * savage_plasma_conversion_rate)
 	var/savage_cost = savage_damage * 2
 	if(xeno_owner.plasma_stored < savage_cost)
-		owner.balloon_alert(owner, "Not enough plasma to Savage ([savage_cost])")
+		owner.balloon_alert(owner, "not enough plasma! (need [savage_cost])")
 		return
 	if(savage_damage_conversion_rate)
 		start_buff(savage_damage * savage_damage_conversion_rate)
@@ -99,7 +99,7 @@
 /datum/action/ability/activable/xeno/pounce/runner/process()
 	if(COOLDOWN_FINISHED(src, savage_cooldown))
 		button.cut_overlay(visual_references[VREF_MUTABLE_SAVAGE_COOLDOWN])
-		owner.balloon_alert(owner, "Savage ready")
+		owner.balloon_alert(owner, "savage ready")
 		owner.playsound_local(owner, 'sound/effects/alien/new_larva.ogg', 25, 0, 1)
 		STOP_PROCESSING(SSprocessing, src)
 		return
@@ -172,21 +172,21 @@
 
 /datum/action/ability/xeno_action/evasion/on_cooldown_finish()
 	. = ..()
-	owner.balloon_alert(owner, "Evasion ready")
+	owner.balloon_alert(owner, "evasion ready")
 	owner.playsound_local(owner, 'sound/effects/alien/new_larva.ogg', 25, 0, 1)
 
 /datum/action/ability/xeno_action/evasion/can_use_action(silent, override_flags, selecting)
 	. = ..()
 	if(xeno_owner.on_fire)
 		if(!silent)
-			xeno_owner.balloon_alert(xeno_owner, "Can't while on fire!")
+			xeno_owner.balloon_alert(xeno_owner, "on fire!")
 		return FALSE
 
 /datum/action/ability/xeno_action/evasion/alternate_action_activate()
 	if(!auto_evasion_togglable && !auto_evasion)
 		return
 	auto_evasion = !auto_evasion
-	owner.balloon_alert(owner, "Auto Evasion [auto_evasion ? "activated" : "deactivated"]")
+	owner.balloon_alert(owner, "auto evasion [auto_evasion ? "active" : "inactive"]")
 	action_icon_state = "evasion_[auto_evasion? "on" : "off"]"
 	update_button_icon()
 
@@ -205,7 +205,7 @@
 	if(evade_active)
 		evasion_stacks = 0
 		evasion_duration = min(evasion_duration + evasion_starting_duration, RUNNER_EVASION_MAX_DURATION)
-		owner.balloon_alert(owner, "Extended evasion: [evasion_duration]s.")
+		owner.balloon_alert(owner, "extended evasion: [evasion_duration]s")
 		return
 	evade_active = TRUE
 	if(evasion_passthrough && !has_passthrough)
@@ -215,7 +215,7 @@
 		RegisterSignal(xeno_owner, COMSIG_MOVABLE_MOVED, PROC_REF(on_passthrough_move))
 
 	evasion_duration = evasion_starting_duration
-	owner.balloon_alert(owner, "Begin evasion: [evasion_duration]s.")
+	owner.balloon_alert(owner, "begin evasion: [evasion_duration]s")
 	to_chat(owner, span_userdanger("We take evasive action, making us impossible to hit."))
 	START_PROCESSING(SSprocessing, src)
 	RegisterSignals(owner, list(COMSIG_LIVING_STATUS_STUN,
@@ -273,7 +273,7 @@
 		return
 	evasion_stacks = max(0, evasion_stacks - proj.damage) // We lose evasion stacks equal to the burn damage.
 	if(evasion_stacks)
-		owner.balloon_alert(owner, "Evasion reduced, damaged")
+		owner.balloon_alert(owner, "evasion reduced, damaged")
 		to_chat(owner, span_danger("The searing fire compromises our ability to dodge![RUNNER_EVASION_COOLDOWN_REFRESH_THRESHOLD - evasion_stacks > 0 ? " We must dodge [RUNNER_EVASION_COOLDOWN_REFRESH_THRESHOLD - evasion_stacks] more projectile damage before Evasion's cooldown refreshes." : ""]"))
 	else // If we have no stacks left, disable Evasion.
 		evasion_deactivate()
@@ -313,7 +313,7 @@
 		has_passthrough = FALSE
 		touched_humans.Cut()
 		UnregisterSignal(xeno_owner, COMSIG_MOVABLE_MOVED)
-	owner.balloon_alert(owner, "Evasion ended")
+	owner.balloon_alert(owner, "evasion ended")
 	owner.playsound_local(owner, 'sound/voice/hiss5.ogg', 50)
 	hud_set_evasion(evasion_duration)
 
@@ -413,20 +413,20 @@
 		return
 	if(!owner.Adjacent(A))
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot reach")
+			owner.balloon_alert(owner, "not adjacent!")
 		return FALSE
 	if(!ishuman(A))
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot snatch")
+			owner.balloon_alert(owner, "not a human!")
 		return FALSE
 	var/mob/living/carbon/human/target = A
 	if(target.stat == DEAD)
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot snatch")
+			owner.balloon_alert(owner, "[target.p_theyre()] dead!")
 		return FALSE
 	if(target.status_flags & GODMODE)
 		if(!silent)
-			owner.balloon_alert(owner, "Cannot snatch")
+			owner.balloon_alert(owner, "can't snatch from [target.p_them()]!")
 		return FALSE
 
 /datum/action/ability/activable/xeno/snatch/use_ability(atom/A)
@@ -441,7 +441,7 @@
 			if(stolen_item)
 				break
 	if(!stolen_item)
-		victim.balloon_alert(owner, "Snatch failed, no item")
+		victim.balloon_alert(owner, "no item!")
 		return fail_activate()
 	playsound(owner, 'sound/voice/alien/pounce2.ogg', 30)
 	victim.dropItemToGround(stolen_item, TRUE)
