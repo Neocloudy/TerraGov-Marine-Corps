@@ -134,7 +134,6 @@ GLOBAL_LIST_INIT(playable_icons, list(
 	"warlock",
 	"warrior",
 	"widow",
-	"wraith",
 	"xenoking",
 	"xenominion",
 	"xenoqueen",

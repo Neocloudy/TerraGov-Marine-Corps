@@ -1239,34 +1239,6 @@
 	keybind_signal = COMSIG_XENOABILITY_SPIDERLING_MARK
 	hotkey_keys = list("V")
 
-/datum/keybinding/xeno/rewind
-	name = "rewind"
-	full_name = "Wraith: Time Shift"
-	description = "Save the location and status of the target. When the time is up, the target location and status are restored"
-	keybind_signal = COMSIG_XENOABILITY_REWIND
-	hotkey_keys = list("C")
-
-/datum/keybinding/xeno/portal
-	name = "portal"
-	full_name = "Wraith: Portal"
-	description = "Place the first portal on your location. You can travel from portal one to portal two and vice versa."
-	keybind_signal =COMSIG_XENOABILITY_PORTAL
-	hotkey_keys = list("E")
-
-/datum/keybinding/xeno/portal_two
-	name = "portal_two"
-	full_name = "Wraith: Portal two"
-	description = "Place the second portal on your location. You can travel from portal one to portal two and vice versa."
-	keybind_signal =COMSIG_XENOABILITY_PORTAL_ALTERNATE
-	hotkey_keys = list("R")
-
-/datum/keybinding/xeno/timestop
-	name = "timestop"
-	full_name = "Wraith: Time stop"
-	description = "Freezes bullets in their course, and they will start to move again only after a certain time"
-	keybind_signal = COMSIG_XENOABILITY_TIMESTOP
-	hotkey_keys = list("V")
-
 /datum/keybinding/xeno/flay
 	name = "Flay"
 	full_name = "Puppeteer: Flay"

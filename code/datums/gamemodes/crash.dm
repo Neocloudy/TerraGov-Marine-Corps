@@ -25,7 +25,9 @@
 	tier_three_penalty = 1
 	tier_three_inclusion = TRUE
 	caste_swap_cooldown = 5 MINUTES
-	restricted_castes = list(/datum/xeno_caste/wraith, /datum/xeno_caste/hivemind)
+	restricted_castes = list(
+		/datum/xeno_caste/hivemind,
+	)
 
 	// Round end conditions
 	var/shuttle_landed = FALSE

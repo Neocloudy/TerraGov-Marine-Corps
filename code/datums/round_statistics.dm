@@ -116,7 +116,6 @@ GLOBAL_DATUM_INIT(round_statistics, /datum/round_statistics, new)
 	var/hivelord_healing_infusions = 0
 	var/weeds_planted = 0
 	var/weeds_destroyed = 0
-	var/wraith_phase_shifts = 0
 	var/xeno_acid_wells = 0
 	var/xeno_unarmed_attacks = 0
 	var/xeno_bump_attacks = 0

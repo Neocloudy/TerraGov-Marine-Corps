@@ -12,8 +12,8 @@
 	name = "Dash"
 	desc = "Move in a burst of speed. Double tap any movement direction to dash towards it."
 	action_type = ACTION_TOGGLE
-	action_icon = 'icons/Xeno/actions/wraith.dmi'
-	action_icon_state = "rewind"
+	action_icon = 'icons/Xeno/actions/king.dmi'
+	action_icon_state = "conqueror_dash"
 	ability_cost = 15
 	cooldown_duration = 4.5 SECONDS
 	use_state_flags = ABILITY_USE_FORTIFIED
