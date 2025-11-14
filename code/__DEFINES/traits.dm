@@ -104,7 +104,6 @@
 #define BULLET_ACT_TRAIT "bullet act" //Traits related to projectiles
 #define PORTAL_TRAIT "portal"
 #define OPTABLE_TRAIT "optable"
-#define TIMESHIFT_TRAIT "timeshift"
 #define BRAIN_TRAIT "brain"
 #define WIDOW_ABILITY_TRAIT "widow_ability_trait"
 #define BULL_ABILITY_TRAIT "bull_ability_trait"

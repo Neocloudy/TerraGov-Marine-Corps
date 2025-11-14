@@ -238,14 +238,6 @@
 	if(!ismob(loc))
 		return INITIALIZE_HINT_QDEL
 
-
-/obj/effect/overlay/temp/timestop_effect
-	icon = 'icons/effects/160x160.dmi'
-	icon_state = "time"
-	layer = FLY_LAYER
-	plane = GAME_PLANE
-	alpha = 70
-
 ///hologram alt appearance key
 #define HOLO_INVIS_ALT_APPEARANCE "holo_invis_alt_appearance"
 

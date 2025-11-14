@@ -367,13 +367,6 @@
 	pixel_y = source_mob.pixel_y
 	icon_state = gib_icon
 
-/obj/effect/overlay/temp/timestop_effect
-	icon = 'icons/effects/160x160.dmi'
-	icon_state = "time"
-	pixel_x = -60
-	pixel_y = -50
-	alpha = 70
-
 /obj/effect/overlay/eye
 	layer = ABOVE_MOB_LAYER
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
