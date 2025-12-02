@@ -403,7 +403,7 @@
 	autodoc_scan(occupant)
 	if(automatic_mode)
 		say("Automatic mode engaged, initialising procedures.")
-		autostart_timer_id = addtimer(CALLBACK(src, PROC_REF(auto_start)), 5 SECONDS)
+		autostart_timer_id = addtimer(CALLBACK(src, PROC_REF(auto_start)), 5 SECONDS, TIMER_UNIQUE|TIMER_STOPPABLE)
 
 /// Callback to start the surgery operation for automatic mode.
 /obj/machinery/autodoc/proc/auto_start()
@@ -502,14 +502,12 @@
 			var/datum/limb/head/operated_head = operated_limb
 			if(operated_head.disfigured || operated_head.face_surgery_stage > 0)
 				surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_FACIAL)
-		switch(operated_limb.limb_status)
-			if(LIMB_BROKEN)
-				surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_BROKEN)
-			if(LIMB_DESTROYED)
-				if(operated_limb.body_part != HEAD && !(operated_limb.parent.limb_status & LIMB_DESTROYED)) // We want to pick the missing limb that is most accurate: missing foot = foot, missing foot + leg = leg.
-					surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_MISSING)
-			if(LIMB_NECROTIZED)
-				surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_NECROTIZED)
+		if(operated_limb.limb_status & LIMB_BROKEN)
+			surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_BROKEN)
+		if(operated_limb.limb_status & LIMB_DESTROYED && operated_limb.body_part != HEAD && !(operated_limb.parent?.limb_status & LIMB_DESTROYED)) // We want to pick the missing limb that is most accurate: missing foot = foot, missing foot + leg = leg.
+			surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_MISSING)
+		if(operated_limb.limb_status & LIMB_NECROTIZED)
+			surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_NECROTIZED)
 		var/already_added_surgery = FALSE
 		if(length(operated_limb.implants))
 			for(var/obj/item/implant_in_question AS in operated_limb.implants)
@@ -1293,7 +1291,7 @@
 			needed = FALSE
 			for(var/i in connected.occupant.limbs)
 				var/datum/limb/L = i
-				if(L.limb_status & LIMB_DESTROYED && !(L.parent.limb_status & LIMB_DESTROYED) && L.body_part != HEAD)
+				if(L.limb_status & LIMB_DESTROYED && L.body_part != HEAD && !(L.parent?.limb_status & LIMB_DESTROYED))
 					N.fields["autodoc_manual"] += new /datum/autodoc_surgery(L, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_MISSING)
 					needed = TRUE
 			if(!needed)
@@ -1380,7 +1378,7 @@
 			connected.say("Automatic mode disengaged, awaiting manual inputs.")
 		if(connected.automatic_mode && !connected.autostart_timer_id)
 			connected.say("Automatic mode engaged, initialising procedures.")
-			connected.autostart_timer_id = addtimer(CALLBACK(connected, TYPE_PROC_REF(/obj/machinery/autodoc, auto_start)), 5 SECONDS)
+			connected.autostart_timer_id = addtimer(CALLBACK(connected, TYPE_PROC_REF(/obj/machinery/autodoc, auto_start)), 5 SECONDS, TIMER_UNIQUE|TIMER_STOPPABLE)
 
 	if(href_list["surgery"])
 		if(connected.occupant)
@@ -1433,3 +1431,7 @@
 	var/datum/data/record/medical_record = find_medical_record(occupant)
 	var/datum/historic_scan/scan = medical_record.fields["historic_scan"]
 	scan.ui_interact(usr)
+
+//Autodoc but faster
+/obj/machinery/autodoc/crash
+	surgery_time_multiplier = 0.5

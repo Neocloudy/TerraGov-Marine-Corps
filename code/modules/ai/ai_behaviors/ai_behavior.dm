@@ -58,6 +58,8 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 	var/weak_escort = FALSE
 	///List of abilities to consider doing every Process()
 	var/list/ability_list = list()
+	///Count of how many times we've failed to form a path to our goal node
+	var/fail_goal_path_count = 0
 
 /datum/ai_behavior/New(loc, mob/parent_to_assign, atom/escorted_atom)
 	..()
@@ -80,6 +82,12 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 	combat_target = null
 	interact_target = null
 	return ..()
+
+///Whether this ai behavior should start
+/datum/ai_behavior/proc/should_start_ai()
+	if(mob_parent.stat == DEAD)
+		return FALSE
+	return TRUE
 
 ///Register ai behaviours
 /datum/ai_behavior/proc/start_ai()
@@ -176,11 +184,12 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 		mob_parent.a_intent = INTENT_HARM
 	return TRUE
 
-///Try to find a node to go to. If ignore_current_node is true, we will just find the closest current_node, and not the current_node best adjacent node
+///Try to find a node to go to
 /datum/ai_behavior/proc/look_for_next_node(blacklist_node = current_node, should_reset_goal_nodes = FALSE)
 	if(should_reset_goal_nodes)
 		set_current_node(null)
-	if(blacklist_node || QDELETED(current_node) || !length(current_node.adjacent_nodes)) //We don't have a current node, let's find the closest in our LOS
+	//We don't have a current node, or we specifically want to avoid one, let's find the closest in our LOS
+	if(blacklist_node || QDELETED(current_node) || !length(current_node.adjacent_nodes))
 		var/new_node = find_closest_node(mob_parent, blacklist_node)
 		if(!new_node)
 			return
@@ -355,6 +364,10 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 	else
 		goal_nodes = list()
 		set_current_node(null)
+		fail_goal_path_count ++
+		if(fail_goal_path_count >= AI_MAX_GOAL_PATH_FAILS) //Failure usually means a mapping issue, or the mob/goal is outside of the normal game area
+			message_admins("[mob_parent] at [ADMIN_VERBOSEJMP(mob_parent)] failed to path to [goal_node] at [ADMIN_VERBOSEJMP(goal_node)].")
+			do_unset_target(goal_node)
 	look_for_next_node(previous_current_node)
 
 ///Signal handler when we reached our current tile goal
@@ -416,6 +429,7 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 		return
 	if(new_goal_node.faction && new_goal_node.faction != mob_parent.faction)
 		return
+	fail_goal_path_count = 0
 	if(goal_node)
 		do_unset_target(goal_node)
 	goal_node = new_goal_node
@@ -475,9 +489,6 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 		return
 	if(should_hold())
 		return
-	//This allows minions to be buckled to their atom_to_escort without disrupting the movement of atom_to_escort
-	if(current_action == ESCORTING_ATOM && (get_dist(mob_parent, atom_to_walk_to) <= 0)) //todo: Entirely remove this shitcode snowflake check for one specific interaction that doesn't specifically relate to ai_behavior
-		return
 	mob_parent.next_move_slowdown = 0
 	var/list/dir_options = find_next_dirs()
 	if(!length(dir_options))
@@ -497,9 +508,12 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 	var/dir_to_target = angle2dir(Get_Angle(get_turf(mob_parent), get_turf(atom_to_walk_to)))
 	var/list/dir_options = list()
 
-	if((dist_to_target >= min_range) && (dist_to_target <= max_range)) //in optimal range
+	var/in_optimal = (dist_to_target >= min_range) && (dist_to_target <= max_range)
+	if(in_optimal || (current_action == MOVING_TO_SAFETY && (dist_to_target >= lower_engage_dist) && (dist_to_target <= upper_engage_dist)))
+	//in optimal range or the specific scenario of running away from something we can still hurt
 		if((SEND_SIGNAL(mob_parent, COMSIG_STATE_MAINTAINED_DISTANCE) & COMSIG_MAINTAIN_POSITION))
 			return
+	if(in_optimal)
 		if(!get_dir(mob_parent, atom_to_walk_to)) //We're right on top, move out of it
 			return CARDINAL_ALL_DIRS
 		if(prob(atom_to_walk_to == escorted_atom ? 80 : 50)) //If we're holding around an escort target, we don't move too much
@@ -540,7 +554,7 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 ///Finds the most suitable thing to escort
 /datum/ai_behavior/proc/get_atom_to_escort()
 	var/list/goal_list = list()
-	if(GLOB.goal_nodes[mob_parent.faction])
+	if(GLOB.goal_nodes[mob_parent.faction] && (fail_goal_path_count < AI_MAX_GOAL_PATH_FAILS))
 		goal_list[GLOB.goal_nodes[mob_parent.faction]] = AI_ESCORT_RATING_FACTION_GOAL
 	var/mob/living/escorted_mob = escorted_atom
 	if(ismob(escorted_mob) && !QDELETED(escorted_mob) && (escorted_mob.stat != DEAD) && (escorted_mob.z == mob_parent.z) && (get_dist(mob_parent, escorted_mob) <= (AI_ESCORTING_BREAK_DISTANCE)))
@@ -558,6 +572,8 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 		if(QDELETED(candidate))
 			continue
 		if(candidate.z != mob_parent.z)
+			continue
+		if(candidate == mob_parent)
 			continue
 		return candidate
 
