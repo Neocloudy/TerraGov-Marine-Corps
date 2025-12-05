@@ -7,7 +7,6 @@
 /obj/structure/bed/chair/e_chair/Initialize(mapload)
 	. = ..()
 	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir)
-	adjustBruteLoss
 
 
 /obj/structure/bed/chair/e_chair/rotate()
