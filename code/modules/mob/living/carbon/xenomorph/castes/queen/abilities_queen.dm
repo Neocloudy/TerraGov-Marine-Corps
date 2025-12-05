@@ -494,10 +494,10 @@
 /mob/living/carbon/xenomorph/proc/salve_healing()
 	var/amount = 50
 	if(recovery_aura)
-		amount += recovery_aura * maxHealth * 0.01
-	var/remainder = max(0, amount - getBruteLoss())
-	adjustBruteLoss(-amount)
-	adjustFireLoss(-remainder, updating_health = TRUE)
+		amount += recovery_aura * max_health * 0.01
+	var/remainder = max(0, amount - get_brute_loss())
+	adjust_brute_loss(-amount)
+	adjust_fire_loss(-remainder, updating_health = TRUE)
 	adjust_sunder(-amount/10)
 
 // ***************************************

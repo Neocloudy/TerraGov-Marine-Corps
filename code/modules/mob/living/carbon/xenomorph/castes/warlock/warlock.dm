@@ -6,7 +6,7 @@
 	icon_state = "Warlock Walking"
 	bubble_icon = "alienroyal"
 	health = 320
-	maxHealth = 320
+	max_health = 320
 	plasma_stored = 1400
 	pixel_x = -16
 	drag_delay = 3

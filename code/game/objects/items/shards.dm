@@ -115,7 +115,7 @@
 	target.Paralyze(6 SECONDS)
 
 	if(affecting.take_damage_limb(5))
-		UPDATEHEALTH(target)
+		UPDATE_HEALTH_NEXT_TICK(target)
 		target.UpdateDamageIcon()
 
 // Shrapnel

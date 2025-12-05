@@ -19,7 +19,7 @@
 /datum/mutation_upgrade/shell/panic_gas/on_mutation_enabled()
 	RegisterSignal(xenomorph_owner, COMSIG_LIVING_UPDATE_HEALTH, PROC_REF(on_health_update))
 	RegisterSignal(xenomorph_owner, COMSIG_LIVING_STATUS_STAGGER, PROC_REF(on_staggered))
-	can_be_activated = xenomorph_owner.health >= xenomorph_owner.maxHealth
+	can_be_activated = xenomorph_owner.health >= xenomorph_owner.max_health
 	return ..()
 
 /datum/mutation_upgrade/shell/panic_gas/on_mutation_disabled()
@@ -30,8 +30,8 @@
 /// If it isn't ready to activate and they have full health, make it ready to activate.
 /datum/mutation_upgrade/shell/panic_gas/proc/on_health_update(datum/source, amount, list/amount_mod)
 	SIGNAL_HANDLER
-	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.maxHealth : (xenomorph_owner.maxHealth - xenomorph_owner.getFireLoss() - xenomorph_owner.getBruteLoss())
-	if(can_be_activated || health < xenomorph_owner.maxHealth)
+	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.max_health : (xenomorph_owner.max_health - xenomorph_owner.get_fire_loss() - xenomorph_owner.get_brute_loss())
+	if(can_be_activated || health < xenomorph_owner.max_health)
 		return
 	can_be_activated = TRUE
 

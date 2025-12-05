@@ -72,12 +72,12 @@
 /datum/status_effect/mindmeld/proc/toggle_buff(toggle)
 	if(!toggle)
 		link_target.adjust_mob_accuracy(-accuracy_mod)
-		link_target.maxHealth -= health_mod
+		link_target.max_health -= health_mod
 		link_target.remove_movespeed_modifier(MOVESPEED_ID_MINDMELD)
 		toggle_particles(FALSE)
 		return
 	link_target.adjust_mob_accuracy(accuracy_mod)
-	link_target.maxHealth += health_mod
+	link_target.max_health += health_mod
 	link_target.add_movespeed_modifier(MOVESPEED_ID_MINDMELD, TRUE, 0, NONE, FALSE, speed_mod)
 	toggle_particles(TRUE)
 
@@ -126,10 +126,10 @@
 				limb_to_fix.add_limb_flags(LIMB_REPAIRED)
 				break
 
-	owner.adjustCloneLoss(-3)
-	owner.adjustOxyLoss(-5)
+	owner.adjust_clone_loss(-3)
+	owner.adjust_oxy_loss(-5)
 	owner.heal_overall_damage(5, 5)
-	owner.adjustToxLoss(-3)
+	owner.adjust_tox_loss(-3)
 
 /atom/movable/screen/alert/status_effect/reknit_form
 	name = "Reknit form"

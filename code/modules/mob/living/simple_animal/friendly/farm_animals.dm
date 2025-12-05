@@ -18,7 +18,7 @@
 	attacktext = "kicks"
 	attack_sound = 'sound/weapons/punch1.ogg'
 	health = 40
-	maxHealth = 40
+	max_health = 40
 	melee_damage = 1
 	wall_smash = FALSE
 	stop_automated_movement_when_pulled = TRUE
@@ -68,7 +68,7 @@
 	attacktext = "kicks"
 	attack_sound = 'sound/weapons/punch1.ogg'
 	health = 50
-	maxHealth = 50
+	max_health = 50
 
 /mob/living/simple_animal/cow/Initialize(mapload)
 	. = ..()
@@ -121,7 +121,7 @@
 	response_harm = "kicks"
 	attacktext = "kicks"
 	health = 3
-	maxHealth = 3
+	max_health = 3
 	var/amount_grown = 0
 	allow_pass_flags = PASS_MOB
 	pass_flags = PASS_LOW_STRUCTURE|PASS_GRILLE|PASS_MOB
@@ -171,7 +171,7 @@
 	response_harm = "kicks"
 	attacktext = "kicks"
 	health = 15
-	maxHealth = 15
+	max_health = 15
 	var/eggsleft = 0
 	var/eggsFertile = TRUE
 	var/body_color

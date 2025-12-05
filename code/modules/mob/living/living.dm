@@ -80,9 +80,9 @@
 	if(world.time < last_staminaloss_dmg + 3 SECONDS)
 		return
 	if(staminaloss > 0)
-		adjustStaminaLoss(-maxHealth * 0.2 * stamina_regen_multiplier, TRUE, FALSE)
+		adjust_stamina_loss(-max_health * 0.2 * stamina_regen_multiplier, TRUE, FALSE)
 	else if(staminaloss > -max_stamina_buffer)
-		adjustStaminaLoss(-max_stamina * 0.08 * stamina_regen_multiplier, TRUE, FALSE)
+		adjust_stamina_loss(-max_stamina * 0.08 * stamina_regen_multiplier, TRUE, FALSE)
 
 
 /mob/living/proc/handle_regular_hud_updates()
@@ -93,10 +93,10 @@
 /mob/living/proc/updatehealth()
 	SEND_SIGNAL(src, COMSIG_LIVING_UPDATE_HEALTH)
 	if(status_flags & GODMODE)
-		health = maxHealth
+		health = max_health
 		stat = CONSCIOUS
 		return FALSE
-	health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
+	health = max_health - get_oxy_loss() - get_tox_loss() - get_fire_loss() - get_brute_loss() - get_clone_loss()
 	update_stat()
 	return TRUE
 
@@ -717,7 +717,7 @@ below 100 is not dizzy
 			else
 				holding = "They are holding \a [r_hand]"
 		holding += "."
-	return "You can also see [src] on the photo[health < (maxHealth * 0.75) ? ", looking a bit hurt" : ""][holding ? ". [holding]" : "."]"
+	return "You can also see [src] on the photo[health < (max_health * 0.75) ? ", looking a bit hurt" : ""][holding ? ". [holding]" : "."]"
 
 
 /mob/living/proc/set_pull_offsets(mob/living/pulled_mob)
@@ -1184,7 +1184,7 @@ below 100 is not dizzy
 
 /mob/living/vv_edit_var(var_name, var_value)
 	switch(var_name)
-		if (NAMEOF(src, maxHealth))
+		if (NAMEOF(src, max_health))
 			if (!isnum(var_value) || var_value <= 0)
 				return FALSE
 		if(NAMEOF(src, health)) //this doesn't work. gotta use procs instead.
@@ -1219,7 +1219,7 @@ below 100 is not dizzy
 	. = ..()
 
 	switch(var_name)
-		if(NAMEOF(src, maxHealth))
+		if(NAMEOF(src, max_health))
 			updatehealth()
 
 /mob/living/vv_get_header()
@@ -1228,12 +1228,12 @@ below 100 is not dizzy
 	. += {"
 		<br><font size='1'>[VV_HREF_TARGETREF(refid, VV_HK_GIVE_DIRECT_CONTROL, "[ckey || "no ckey"]")] / [VV_HREF_TARGETREF_1V(refid, VV_HK_BASIC_EDIT, "[real_name || "no real name"]", NAMEOF(src, real_name))]</font>
 		<br><font size='1'>
-			BRUTE:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=brute' id='brute'>[getBruteLoss()]</a>
-			FIRE:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=fire' id='fire'>[getFireLoss()]</a>
-			TOXIN:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=toxin' id='toxin'>[getToxLoss()]</a>
-			OXY:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=oxygen' id='oxygen'>[getOxyLoss()]</a>
-			CLONE:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=clone' id='clone'>[getCloneLoss()]</a>
-			STAMINA:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=stamina' id='stamina'>[getStaminaLoss()]</a>
+			BRUTE:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=brute' id='brute'>[get_brute_loss()]</a>
+			FIRE:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=fire' id='fire'>[get_fire_loss()]</a>
+			TOXIN:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=toxin' id='toxin'>[get_tox_loss()]</a>
+			OXY:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=oxygen' id='oxygen'>[get_oxy_loss()]</a>
+			CLONE:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=clone' id='clone'>[get_clone_loss()]</a>
+			STAMINA:<font size='1'><a href='byond://?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=stamina' id='stamina'>[get_stamina_loss()]</a>
 		</font>
 	"}
 

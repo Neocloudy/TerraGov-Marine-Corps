@@ -96,7 +96,7 @@
 		if(stat == DEAD)
 			bucket = "critical"
 		else
-			bucket = get_bucket(XENO_HUD_ICON_BUCKETS, maxHealth, health, get_crit_threshold(), list("full", "critical"))
+			bucket = get_bucket(XENO_HUD_ICON_BUCKETS, max_health, health, get_crit_threshold(), list("full", "critical"))
 		hud_used.healths.icon_state = "health[bucket]"
 
 	var/image/holder = hud_list[HEALTH_HUD_XENO]
@@ -107,7 +107,7 @@
 		holder.icon_state = "health0"
 		return
 
-	var/amount = health > 0 ? round(health * 100 / maxHealth, 10) : CEILING(health, 10)
+	var/amount = health > 0 ? round(health * 100 / max_health, 10) : CEILING(health, 10)
 	if(!amount && health < 0)
 		amount = -1 //don't want the 'zero health' icon when we are crit
 	holder.icon = 'icons/mob/hud/xeno_health.dmi'
@@ -121,7 +121,7 @@
 		return
 
 	holder.icon = 'icons/mob/hud/human_health.dmi'
-	var/percentage = round(health * 100 / maxHealth)
+	var/percentage = round(health * 100 / max_health)
 	switch(percentage)
 		if(100 to INFINITY)
 			holder.icon_state = "health100"
@@ -258,7 +258,7 @@
 		simple_status_hud.icon_state = ""
 		if(stat != DEAD)
 			status_hud.icon_state = "synth"
-			switch(round(health * 100 / maxHealth)) // special health HUD icons for damaged synthetics
+			switch(round(health * 100 / max_health)) // special health HUD icons for damaged synthetics
 				if(-29 to 4) // close to overheating: should appear when health is less than 5
 					status_hud.icon_state = "synthsoftcrit"
 				if(-INFINITY to -30) // dying
@@ -404,7 +404,7 @@
 		holder.icon_state = "health-100"
 		return TRUE
 
-	var/perceived_health = health / maxHealth * 100
+	var/perceived_health = health / max_health * 100
 	if(!(species.species_flags & NO_PAIN))
 		perceived_health -= PAIN_RATIO_PAIN_HUD * traumatic_shock
 	if(!(species.species_flags & NO_STAMINA) && staminaloss > 0)

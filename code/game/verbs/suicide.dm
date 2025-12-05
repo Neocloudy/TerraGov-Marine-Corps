@@ -54,21 +54,21 @@
 
 				//Do 175 damage divided by the number of damage types applied.
 				if(damagetype & BRUTELOSS)
-					adjustBruteLoss(30/damage_mod)	//hack to prevent gibbing
-					adjustOxyLoss(145/damage_mod)
+					adjust_brute_loss(30/damage_mod)	//hack to prevent gibbing
+					adjust_oxy_loss(145/damage_mod)
 
 				if(damagetype & FIRELOSS)
-					adjustFireLoss(175/damage_mod)
+					adjust_fire_loss(175/damage_mod)
 
 				if(damagetype & TOXLOSS)
-					adjustToxLoss(175/damage_mod)
+					adjust_tox_loss(175/damage_mod)
 
 				if(damagetype & OXYLOSS)
-					adjustOxyLoss(175/damage_mod)
+					adjust_oxy_loss(175/damage_mod)
 
 				//If something went wrong, just do normal oxyloss
 				if(!(damagetype|BRUTELOSS) && !(damagetype|FIRELOSS) && !(damagetype|TOXLOSS) && !(damagetype|OXYLOSS))
-					adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+					adjust_oxy_loss(max(175 - get_tox_loss() - get_fire_loss() - get_brute_loss() - get_oxy_loss(), 0))
 
 				updatehealth()
 				return
@@ -78,7 +78,7 @@
 							span_danger("[src] is jamming [p_their()] thumbs into [p_their()] eye sockets! It looks like [p_theyre()] trying to commit suicide."), \
 							span_danger("[src] is twisting [p_their()] own neck! It looks like [p_theyre()] trying to commit suicide."), \
 							span_danger("[src] is holding [p_their()] breath! It looks like [p_theyre()] trying to commit suicide.")))
-		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+		adjust_oxy_loss(max(175 - get_tox_loss() - get_fire_loss() - get_brute_loss() - get_oxy_loss(), 0))
 		updatehealth()
 
 /mob/living/brain/verb/suicide()

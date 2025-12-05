@@ -356,7 +356,7 @@
 
 	var/plasma_cost = min(ability_cost, xeno_owner.plasma_stored)
 	if(uses_health_as_necessary && ability_cost > plasma_cost)
-		xeno_owner.adjustBruteLoss(min((xeno_owner.health - xeno_owner.get_death_threshold() - 1), (ability_cost - plasma_cost))) // Non-lethal. Worst case, one health point from death.
+		xeno_owner.adjust_brute_loss(min((xeno_owner.health - xeno_owner.get_death_threshold() - 1), (ability_cost - plasma_cost))) // Non-lethal. Worst case, one health point from death.
 	xeno_owner.updatehealth() // To get them back up if they happen to activate the ability while in critical.
 	succeed_activate(plasma_cost)
 	add_cooldown()
@@ -402,11 +402,11 @@
 		to_chat(xeno_owner, span_userdanger("The last of the plasma drains from our body... and so does our life..."))
 		xeno_owner.updatehealth() // Die.
 		return
-	var/total_damage = xeno_owner.getFireLoss() + xeno_owner.getBruteLoss()
-	var/burn_percentile_damage = xeno_owner.getFireLoss() / total_damage
-	var/brute_percentile_damage = xeno_owner.getBruteLoss() / total_damage
-	xeno_owner.setBruteLoss((xeno_owner.xeno_caste.max_health - xeno_owner.get_crit_threshold() - 1) * brute_percentile_damage)
-	xeno_owner.setFireLoss((xeno_owner.xeno_caste.max_health - xeno_owner.get_crit_threshold() - 1) * burn_percentile_damage)
+	var/total_damage = xeno_owner.get_fire_loss() + xeno_owner.get_brute_loss()
+	var/burn_percentile_damage = xeno_owner.get_fire_loss() / total_damage
+	var/brute_percentile_damage = xeno_owner.get_brute_loss() / total_damage
+	xeno_owner.set_brute_loss((xeno_owner.xeno_caste.max_health - xeno_owner.get_crit_threshold() - 1) * brute_percentile_damage)
+	xeno_owner.set_fire_loss((xeno_owner.xeno_caste.max_health - xeno_owner.get_crit_threshold() - 1) * burn_percentile_damage)
 	to_chat(xeno_owner, span_userdanger("The last of the plasma drains from our body... We can no longer endure beyond our normal limits!"))
 
 ///Warns us when our health is critically low and tells us exactly how much more punishment we can take
@@ -472,14 +472,14 @@
 	if(!.)
 		return FALSE
 
-	if(xeno_owner.health > xeno_owner.maxHealth * minimum_health_rage_threshold) //Need to be at 50% of max hp or lower to rage
+	if(xeno_owner.health > xeno_owner.max_health * minimum_health_rage_threshold) //Need to be at 50% of max hp or lower to rage
 		if(!silent)
-			to_chat(xeno_owner, span_xenodanger("Our health isn't low enough to rage! We must take [xeno_owner.health - (xeno_owner.maxHealth * RAVAGER_RAGE_MIN_HEALTH_THRESHOLD)] more damage!"))
+			to_chat(xeno_owner, span_xenodanger("Our health isn't low enough to rage! We must take [xeno_owner.health - (xeno_owner.max_health * RAVAGER_RAGE_MIN_HEALTH_THRESHOLD)] more damage!"))
 		return FALSE
 
 
 /datum/action/ability/xeno_action/rage/action_activate()
-	rage_power = min(0.5, (1 - ((xeno_owner.health - (xeno_owner.maxHealth * rage_power_calculation_bonus)) / xeno_owner.maxHealth)) * RAVAGER_RAGE_POWER_MULTIPLIER) // Calculate the power of our rage; scales with difference between current and max HP.
+	rage_power = min(0.5, (1 - ((xeno_owner.health - (xeno_owner.max_health * rage_power_calculation_bonus)) / xeno_owner.max_health)) * RAVAGER_RAGE_POWER_MULTIPLIER) // Calculate the power of our rage; scales with difference between current and max HP.
 	var/rage_power_radius = CEILING(rage_power * 7, 1) //Define radius of the SFX
 
 	xeno_owner.visible_message(span_danger("\The [xeno_owner] becomes frenzied, bellowing with a shuddering roar!"), \
@@ -567,19 +567,19 @@
 	SIGNAL_HANDLER
 	if(rage_power >= RAVAGER_RAGE_SUPER_RAGE_THRESHOLD)
 		var/mob/living/xeno_owner = owner
-		var/brute_damage = xeno_owner.getBruteLoss()
-		var/burn_damage = xeno_owner.getFireLoss()
+		var/brute_damage = xeno_owner.get_brute_loss()
+		var/burn_damage = xeno_owner.get_fire_loss()
 		if(!brute_damage && !burn_damage) //If we have no healable damage, don't bother proceeding
 			return
 		var/health_recovery = rage_power * damage //Amount of health we leech per slash
 		var/health_modifier
 		if(brute_damage) //First heal Brute damage, then heal Burn damage with remainder
 			health_modifier = min(brute_damage, health_recovery)*-1 //Get the lower of our Brute Loss or the health we're leeching
-			xeno_owner.adjustBruteLoss(health_modifier)
+			xeno_owner.adjust_brute_loss(health_modifier)
 			health_recovery += health_modifier //Decrement the amount healed from our total healing pool
 		if(burn_damage)
 			health_modifier = min(burn_damage, health_recovery)*-1
-			xeno_owner.adjustFireLoss(health_modifier)
+			xeno_owner.adjust_fire_loss(health_modifier)
 
 	if(extends_via_normal_rage || rage_power >= RAVAGER_RAGE_SUPER_RAGE_THRESHOLD) //If we're super pissed it's time to get crazy
 		var/datum/action/ability/xeno_action/endure/endure_ability = xeno_owner.actions_by_path[/datum/action/ability/xeno_action/endure]
@@ -688,8 +688,8 @@
 		return
 	if(timeleft(timer_ref) > 0)
 		return
-	xeno_owner.adjustBruteLoss(-xeno_owner.bruteloss * 0.125)
-	xeno_owner.adjustFireLoss(-xeno_owner.fireloss * 0.125)
+	xeno_owner.adjust_brute_loss(-xeno_owner.bruteloss * 0.125)
+	xeno_owner.adjust_fire_loss(-xeno_owner.fireloss * 0.125)
 	particle_holder = new(xeno_owner, /particles/xeno_slash/vampirism)
 	particle_holder.pixel_y = 18
 	particle_holder.pixel_x = 18

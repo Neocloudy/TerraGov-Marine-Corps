@@ -307,7 +307,7 @@
 			if(prob(10))
 				L.emote(pick("twitch","giggle"))
 			if(prob(30))
-				L.adjustToxLoss(0.5)
+				L.adjust_tox_loss(0.5)
 		if(120 to 199)
 			L.set_timed_status_effect(4 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
 			L.hallucination = max(L.hallucination, 60)
@@ -317,7 +317,7 @@
 			if(prob(10))
 				L.emote(pick("twitch","giggle"))
 			if(prob(30))
-				L.adjustToxLoss(1)
+				L.adjust_tox_loss(1)
 			if(prob(5))
 				if(ishuman(L))
 					var/mob/living/carbon/human/H = L
@@ -326,7 +326,7 @@
 						E.take_damage(2)
 		if(200 to INFINITY)
 			L.set_timed_status_effect(5 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
-			L.adjustToxLoss(1)
+			L.adjust_tox_loss(1)
 			L.hallucination = max(L.hallucination, 60)
 			L.jitter(4)
 			L.dizzy(4)
@@ -850,7 +850,7 @@
 			L.Sleeping(6 SECONDS)
 		if(201 to INFINITY)
 			L.Sleeping(6 SECONDS)
-			L.adjustToxLoss(2)
+			L.adjust_tox_loss(2)
 	return ..()
 
 /datum/reagent/consumable/ethanol/gargle_blaster
@@ -881,7 +881,7 @@
 			L.set_drugginess(50)
 			L.AdjustConfused(4 SECONDS)
 			L.adjust_timed_status_effect(2 SECONDS, /datum/status_effect/speech/slurring/drunk)
-			L.adjustToxLoss(2)
+			L.adjust_tox_loss(2)
 			L.jitter(5)
 			if(prob(10))
 				L.vomit()
@@ -911,7 +911,7 @@
 			L.set_drugginess(30)
 		if(201 to INFINITY)
 			L.set_drugginess(30)
-			L.adjustToxLoss(2)
+			L.adjust_tox_loss(2)
 	return ..()
 
 /datum/reagent/consumable/ethanol/hippies_delight
@@ -949,7 +949,7 @@
 			L.set_drugginess(75)
 			if(prob(40))
 				L.emote(pick("twitch","giggle"))
-			L.adjustToxLoss(0.6)
+			L.adjust_tox_loss(0.6)
 	return ..()
 
 /datum/reagent/consumable/ethanol/eggnog

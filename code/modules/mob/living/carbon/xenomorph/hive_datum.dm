@@ -166,7 +166,7 @@
 			continue // Skipping minions
 		var/datum/xeno_caste/caste = xeno.xeno_caste
 		var/plasma_multi = caste.plasma_regen_limit == 0 ? 1 : caste.plasma_regen_limit // Division by 0 bad.
-		var/health = xeno.health > 0 ? xeno.health / xeno.maxHealth : -xeno.health / xeno.get_death_threshold()
+		var/health = xeno.health > 0 ? xeno.health / xeno.max_health : -xeno.health / xeno.get_death_threshold()
 		.["xeno_info"] += list(list(
 			"ref" = REF(xeno),
 			"name" = xeno.name,
@@ -646,7 +646,7 @@
 		to_chat(devolver, span_xenonotice("Cannot deevolve [target] here."))
 		return
 
-	if((target.health < target.maxHealth) || (target.plasma_stored < (target.xeno_caste.plasma_max * target.xeno_caste.plasma_regen_limit)))
+	if((target.health < target.max_health) || (target.plasma_stored < (target.xeno_caste.plasma_max * target.xeno_caste.plasma_regen_limit)))
 		to_chat(devolver, span_xenonotice("Cannot deevolve, [target] is too weak."))
 		return
 
@@ -672,7 +672,7 @@
 	if(!isturf(target.loc))
 		return
 
-	if((target.health < target.maxHealth) || (target.plasma_stored < (target.xeno_caste.plasma_max * target.xeno_caste.plasma_regen_limit)))
+	if((target.health < target.max_health) || (target.plasma_stored < (target.xeno_caste.plasma_max * target.xeno_caste.plasma_regen_limit)))
 		return
 
 	target.balloon_alert(target, "forced deevolution!")

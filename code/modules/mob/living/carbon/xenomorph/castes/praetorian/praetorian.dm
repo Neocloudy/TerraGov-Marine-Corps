@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/praetorian.dmi'
 	icon_state = "Praetorian Walking"
 	health = 210
-	maxHealth = 210
+	max_health = 210
 	plasma_stored = 200
 	pixel_x = -16
 	mob_size = MOB_SIZE_BIG

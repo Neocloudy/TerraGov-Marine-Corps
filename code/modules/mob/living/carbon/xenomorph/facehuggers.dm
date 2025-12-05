@@ -579,7 +579,7 @@ GLOBAL_LIST_EMPTY(alive_hugger_list)
 		var/hugsound = user.gender == FEMALE ? SFX_FEMALE_HUGGED : SFX_MALE_HUGGED
 		playsound(loc, hugsound, 25, 0)
 	if(!sterile && !issynth(user))
-		var/stamina_dmg = user.maxHealth + user.max_stamina
+		var/stamina_dmg = user.max_health + user.max_stamina
 		user.apply_damage(stamina_dmg, STAMINA) // complete winds the target
 		user.Unconscious(2 SECONDS)
 	attached = TRUE
@@ -811,7 +811,7 @@ GLOBAL_LIST_EMPTY(alive_hugger_list)
 		target.adjust_stagger(3 SECONDS)
 		target.add_slowdown(15)
 		target.apply_damage(100, STAMINA, BODY_ZONE_HEAD, BIO, updating_health = TRUE) //This should prevent sprinting
-		target.ExtinguishMob()
+		target.extinguish_mob()
 
 	kill_hugger(0.5 SECONDS)
 

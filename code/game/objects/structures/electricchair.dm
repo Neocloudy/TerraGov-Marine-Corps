@@ -7,6 +7,7 @@
 /obj/structure/bed/chair/e_chair/Initialize(mapload)
 	. = ..()
 	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir)
+	adjustBruteLoss
 
 
 /obj/structure/bed/chair/e_chair/rotate()
@@ -37,9 +38,9 @@
 	s.start()
 	for(var/m in buckled_mobs)
 		var/mob/living/buckled_mob = m
-		buckled_mob.adjustFireLoss(85)
+		buckled_mob.adjust_fire_loss(85)
 		to_chat(buckled_mob, span_danger("You feel a deep shock course through your body!"))
 		sleep(0.1 SECONDS)
-		buckled_mob.adjustFireLoss(85)
+		buckled_mob.adjust_fire_loss(85)
 		buckled_mob.Stun(20 MINUTES)
 	visible_message(span_danger("The electric chair went off!"), span_danger("You hear a deep sharp shock!"))

@@ -15,7 +15,7 @@
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
-	maxHealth = 60
+	max_health = 60
 	health = 60
 
 	obj_damage = 60
@@ -48,4 +48,4 @@
 	melee_damage = 35
 	armour_penetration = 20
 	health = 120
-	maxHealth = 120
+	max_health = 120

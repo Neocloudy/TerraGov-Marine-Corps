@@ -156,7 +156,7 @@
 	visible_message(span_danger("[attack_message]"),
 		span_userdanger("[attack_message_local]"), null, COMBAT_MESSAGE_RANGE)
 
-	UPDATEHEALTH(src)
+	UPDATE_HEALTH_NEXT_TICK(src)
 
 	record_melee_damage(user, power)
 	log_combat(user, src, "attacked", attacking_item, "(INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(attacking_item.damtype)]) (RAW DMG: [power])")
@@ -382,7 +382,7 @@
 	visible_message(span_danger("[attack_message]"),
 		span_userdanger("[attack_message_local]"), null, COMBAT_MESSAGE_RANGE)
 
-	UPDATEHEALTH(src)
+	UPDATE_HEALTH_NEXT_TICK(src)
 
 	record_melee_damage(user, power)
 	log_combat(user, src, "attacked", I, "(INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(I.damtype)]) (RAW DMG: [power])")

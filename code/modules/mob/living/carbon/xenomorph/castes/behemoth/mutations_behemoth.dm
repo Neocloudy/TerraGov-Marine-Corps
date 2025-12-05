@@ -20,7 +20,7 @@
 
 /datum/mutation_upgrade/shell/rocky_layers/on_mutation_enabled()
 	RegisterSignal(xenomorph_owner, COMSIG_LIVING_UPDATE_HEALTH, PROC_REF(on_update_health))
-	if(xenomorph_owner.health <= (xenomorph_owner.maxHealth * max_health_percentage_threshold))
+	if(xenomorph_owner.health <= (xenomorph_owner.max_health * max_health_percentage_threshold))
 		toggle()
 	return ..()
 
@@ -51,10 +51,10 @@
 /// If their health is negative, activate it if possible. If it is full, let them activate it next time.
 /datum/mutation_upgrade/shell/rocky_layers/proc/on_update_health(datum/source)
 	SIGNAL_HANDLER
-	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.maxHealth : (xenomorph_owner.maxHealth - xenomorph_owner.getFireLoss() - xenomorph_owner.getBruteLoss())
+	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.max_health : (xenomorph_owner.max_health - xenomorph_owner.get_fire_loss() - xenomorph_owner.get_brute_loss())
 	if(health <= xenomorph_owner.get_death_threshold())
 		return
-	var/meets_threshold = (xenomorph_owner.health <= (xenomorph_owner.maxHealth * max_health_percentage_threshold))
+	var/meets_threshold = (xenomorph_owner.health <= (xenomorph_owner.max_health * max_health_percentage_threshold))
 	if((meets_threshold && !attached_armor) || (!meets_threshold && attached_armor))
 		toggle()
 

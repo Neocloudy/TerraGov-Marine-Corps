@@ -108,7 +108,7 @@
 				user.UpdateDamageIcon()
 		else
 			user.take_limb_damage(0, force)
-			UPDATEHEALTH(user)
+			UPDATE_HEALTH_NEXT_TICK(user)
 		return 1
 	return 0
 

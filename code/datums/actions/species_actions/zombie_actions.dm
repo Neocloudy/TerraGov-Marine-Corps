@@ -221,7 +221,7 @@
 	if(!iscarbon(target))
 		return FALSE
 	var/mob/living/living_owner = owner
-	if(living_owner.health > (living_owner.maxHealth * 0.3))
+	if(living_owner.health > (living_owner.max_health * 0.3))
 		return FALSE
 	var/mob/living/carbon/carbon_target = target
 	if(carbon_target.faction == owner.faction)

@@ -3,7 +3,7 @@
 //Updates the mob's health from limbs and mob damage variables
 /mob/living/carbon/human/updatehealth()
 	if(status_flags & GODMODE)
-		health = maxHealth
+		health = max_health
 		set_stat(CONSCIOUS)
 		return
 	var/total_burn = 0
@@ -12,18 +12,18 @@
 		total_brute	+= O.brute_dam
 		total_burn	+= O.burn_dam
 
-	var/oxy_l = getOxyLoss()
-	var/tox_l = ((species.species_flags & NO_POISON) ? 0 : getToxLoss())
-	var/clone_l = getCloneLoss()
+	var/oxy_l = get_oxy_loss()
+	var/tox_l = ((species.species_flags & NO_POISON) ? 0 : get_tox_loss())
+	var/clone_l = get_clone_loss()
 
-	health = maxHealth - oxy_l - tox_l - clone_l - total_burn - total_brute
+	health = max_health - oxy_l - tox_l - clone_l - total_burn - total_brute
 
 	update_stat()
 	med_pain_set_perceived_health()
 	med_hud_set_health()
 	med_hud_set_status()
 
-	var/health_deficiency = max(1 - (health / maxHealth) * 100, staminaloss)
+	var/health_deficiency = max(1 - (health / max_health) * 100, staminaloss)
 
 	if(health_deficiency >= 50)
 		add_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN, TRUE, 0, NONE, TRUE, health_deficiency / 50)
@@ -31,7 +31,7 @@
 		remove_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN)
 
 
-/mob/living/carbon/human/adjustBrainLoss(amount, silent = FALSE)
+/mob/living/carbon/human/adjust_brain_loss(amount, silent = FALSE)
 
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
@@ -47,7 +47,7 @@
 	else
 		brainloss = 0
 
-/mob/living/carbon/human/setBrainLoss(amount)
+/mob/living/carbon/human/set_brain_loss(amount)
 
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
@@ -62,7 +62,7 @@
 	else
 		brainloss = 0
 
-/mob/living/carbon/human/getBrainLoss()
+/mob/living/carbon/human/get_brain_loss()
 
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
@@ -78,14 +78,14 @@
 	return brainloss
 
 //These procs fetch a cumulative total damage from all limbs
-/mob/living/carbon/human/getBruteLoss(organic_only=FALSE)
+/mob/living/carbon/human/get_brute_loss(organic_only=FALSE)
 	var/amount = 0
 	for(var/datum/limb/O in limbs)
 		if(!(organic_only && O.limb_status & LIMB_ROBOT))
 			amount += O.brute_dam
 	return amount
 
-/mob/living/carbon/human/getFireLoss(organic_only=FALSE)
+/mob/living/carbon/human/get_fire_loss(organic_only=FALSE)
 	var/amount = 0
 	for(var/datum/limb/O in limbs)
 		if(!(organic_only && O.limb_status & LIMB_ROBOT))
@@ -93,7 +93,7 @@
 	return amount
 
 
-/mob/living/carbon/human/adjustBruteLoss(amount, updating_health = FALSE)
+/mob/living/carbon/human/adjust_brute_loss(amount, updating_health = FALSE)
 	var/list/amount_mod = list()
 	SEND_SIGNAL(src, COMSIG_HUMAN_BRUTE_DAMAGE, amount, amount_mod)
 	for(var/i in amount_mod)
@@ -107,7 +107,7 @@
 	else
 		heal_overall_damage(-amount, 0, updating_health = updating_health)
 
-/mob/living/carbon/human/adjustFireLoss(amount, updating_health = FALSE)
+/mob/living/carbon/human/adjust_fire_loss(amount, updating_health = FALSE)
 	var/list/amount_mod = list()
 	SEND_SIGNAL(src, COMSIG_HUMAN_BURN_DAMAGE, amount, amount_mod)
 	for(var/i in amount_mod)
@@ -122,7 +122,7 @@
 		heal_overall_damage(0, -amount, updating_health = updating_health)
 
 
-/mob/living/carbon/human/proc/adjustBruteLossByPart(amount, organ_name, obj/damage_source = null)
+/mob/living/carbon/human/proc/adjust_brute_loss_by_part(amount, organ_name, obj/damage_source = null)
 	if(species?.brute_mod && amount > 0)
 		amount = amount*species.brute_mod
 
@@ -137,7 +137,7 @@
 			break
 
 
-/mob/living/carbon/human/proc/adjustFireLossByPart(amount, organ_name, obj/damage_source = null)
+/mob/living/carbon/human/proc/adjust_fire_loss_by_part(amount, organ_name, obj/damage_source = null)
 	if(species?.burn_mod && amount > 0)
 		amount = amount*species.burn_mod
 
@@ -152,18 +152,18 @@
 			break
 
 
-/mob/living/carbon/human/getCloneLoss()
+/mob/living/carbon/human/get_clone_loss()
 	if(species.species_flags & (IS_SYNTHETIC|NO_SCAN))
 		cloneloss = 0
 	return ..()
 
-/mob/living/carbon/human/setCloneLoss(amount)
+/mob/living/carbon/human/set_clone_loss(amount)
 	if(species.species_flags & (IS_SYNTHETIC|NO_SCAN))
 		cloneloss = 0
 	else
 		..()
 
-/mob/living/carbon/human/adjustCloneLoss(amount)
+/mob/living/carbon/human/adjust_clone_loss(amount)
 	..()
 
 	if(species.species_flags & (IS_SYNTHETIC|NO_SCAN))
@@ -171,48 +171,48 @@
 		return
 
 
-/mob/living/carbon/human/adjustOxyLoss(amount, forced = FALSE)
+/mob/living/carbon/human/adjust_oxy_loss(amount, forced = FALSE)
 	if(species.species_flags & NO_BREATHE && !forced)
 		oxyloss = 0
 		return
 	return ..()
 
-/mob/living/carbon/human/setOxyLoss(amount, forced = FALSE)
+/mob/living/carbon/human/set_oxy_loss(amount, forced = FALSE)
 	if(species.species_flags & NO_BREATHE && !forced)
 		oxyloss = 0
 		return
 	return ..()
 
-/mob/living/carbon/human/getToxLoss()
+/mob/living/carbon/human/get_tox_loss()
 	if(species.species_flags & NO_POISON)
 		toxloss = 0
 	return ..()
 
-/mob/living/carbon/human/adjustToxLoss(amount)
+/mob/living/carbon/human/adjust_tox_loss(amount)
 	if(species.species_flags & NO_POISON)
 		toxloss = 0
 	else
 		..()
 
-/mob/living/carbon/human/setToxLoss(amount)
+/mob/living/carbon/human/set_tox_loss(amount)
 	if(species.species_flags & NO_POISON)
 		toxloss = 0
 	else
 		..()
 
-/mob/living/carbon/human/getStaminaLoss()
+/mob/living/carbon/human/get_stamina_loss()
 	if(species.species_flags & NO_STAMINA)
 		staminaloss = 0
 		return staminaloss
 	return ..()
 
-/mob/living/carbon/human/adjustStaminaLoss(amount)
+/mob/living/carbon/human/adjust_stamina_loss(amount)
 	if(species.species_flags & NO_STAMINA)
 		staminaloss = 0
 		return
 	return ..()
 
-/mob/living/carbon/human/setStaminaLoss(amount)
+/mob/living/carbon/human/set_stamina_loss(amount)
 	if(species.species_flags & NO_STAMINA)
 		staminaloss = 0
 		return

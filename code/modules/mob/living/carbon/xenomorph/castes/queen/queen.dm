@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/queen.dmi'
 	icon_state = "Queen Walking"
 	health = 300
-	maxHealth = 300
+	max_health = 300
 	plasma_stored = 300
 	pixel_x = -16
 	mob_size = MOB_SIZE_BIG

@@ -22,9 +22,9 @@ Contains most of the procs that are called when a xeno is attacked by something
 /mob/living/carbon/xenomorph/smoke_contact(obj/effect/particle_effect/smoke/S)
 	var/protection = max(1 - get_permeability_protection() * S.bio_protection) //0.2 by default
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_EXTINGUISH))
-		ExtinguishMob()
+		extinguish_mob()
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_BLISTERING))
-		adjustFireLoss(12 * (protection + 0.6))
+		adjust_fire_loss(12 * (protection + 0.6))
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_PLASMALOSS) && !CHECK_BITFIELD(xeno_caste.caste_flags, CASTE_PLASMADRAIN_IMMUNE))
 		use_plasma(0.2 * xeno_caste.plasma_max * xeno_caste.plasma_regen_limit)
 		apply_status_effect(/datum/status_effect/noplasmaregen, 5 SECONDS)

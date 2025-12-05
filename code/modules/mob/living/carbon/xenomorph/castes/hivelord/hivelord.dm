@@ -6,7 +6,7 @@
 	icon_state = "Hivelord Walking"
 	bubble_icon = "alienroyal"
 	health = 250
-	maxHealth = 250
+	max_health = 250
 	plasma_stored = 200
 	pixel_x = -16
 	mob_size = MOB_SIZE_BIG

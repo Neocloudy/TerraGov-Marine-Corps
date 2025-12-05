@@ -92,27 +92,27 @@
 	return FALSE
 
 
-/mob/living/silicon/adjustToxLoss(amount)
+/mob/living/silicon/adjust_tox_loss(amount)
 	return FALSE
 
 
-/mob/living/silicon/setToxLoss(amount)
+/mob/living/silicon/set_tox_loss(amount)
 	return FALSE
 
 
-/mob/living/silicon/adjustCloneLoss(amount)
+/mob/living/silicon/adjust_clone_loss(amount)
 	return FALSE
 
 
-/mob/living/silicon/setCloneLoss(amount)
+/mob/living/silicon/set_clone_loss(amount)
 	return FALSE
 
 
-/mob/living/silicon/adjustBrainLoss(amount)
+/mob/living/silicon/adjust_brain_loss(amount)
 	return FALSE
 
 
-/mob/living/silicon/setBrainLoss(amount)
+/mob/living/silicon/set_brain_loss(amount)
 	return FALSE
 
 
@@ -163,19 +163,19 @@
 		return
 	switch(severity)
 		if(EXPLODE_DEVASTATE)
-			adjustBruteLoss(100)
-			adjustFireLoss(100)
+			adjust_brute_loss(100)
+			adjust_fire_loss(100)
 			if(!anchored)
 				gib()
 		if(EXPLODE_HEAVY)
-			adjustBruteLoss(60)
-			adjustFireLoss(60)
+			adjust_brute_loss(60)
+			adjust_fire_loss(60)
 		if(EXPLODE_LIGHT)
-			adjustBruteLoss(30)
+			adjust_brute_loss(30)
 		if(EXPLODE_WEAK)
-			adjustBruteLoss(15)
+			adjust_brute_loss(15)
 
-	UPDATEHEALTH(src)
+	UPDATE_HEALTH_NEXT_TICK(src)
 
 
 /mob/living/silicon/update_transform()

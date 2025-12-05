@@ -63,7 +63,7 @@
 
 
 		//Fire and Brute damage overlay
-		var/hurtdamage = getBruteLoss() + getFireLoss() + damageoverlaytemp
+		var/hurtdamage = get_brute_loss() + get_fire_loss() + damageoverlaytemp
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
 		if(hurtdamage)
 			var/severity = 0
@@ -117,7 +117,7 @@
 		hud_used.healths.icon_state = "health6"
 		return
 
-	var/perceived_health = health / maxHealth * 100
+	var/perceived_health = health / max_health * 100
 	if(!(species.species_flags & NO_PAIN))
 		perceived_health -= traumatic_shock
 	if(!(species.species_flags & NO_STAMINA) && staminaloss > 0)

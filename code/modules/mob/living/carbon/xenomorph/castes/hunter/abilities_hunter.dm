@@ -533,7 +533,7 @@
 	if(target.stat == DEAD)
 		return "deceased"
 
-	var/percentage = round(target.health * 100 / target.maxHealth)
+	var/percentage = round(target.health * 100 / target.max_health)
 	switch(percentage)
 		if(100 to INFINITY)
 			return "in perfect health"

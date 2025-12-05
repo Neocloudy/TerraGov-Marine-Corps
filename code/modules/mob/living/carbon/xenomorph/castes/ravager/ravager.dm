@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/ravager.dmi'
 	icon_state = "Ravager Walking"
 	health = 250
-	maxHealth = 250
+	max_health = 250
 	plasma_stored = 50
 	mob_size = MOB_SIZE_BIG
 	drag_delay = 6 //pulling a big dead xeno is hard

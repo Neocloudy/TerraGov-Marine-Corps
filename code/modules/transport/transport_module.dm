@@ -402,7 +402,7 @@
 					qdel(victim_machine)
 
 			for(var/mob/living/victim_living in dest_turf.contents)
-				var/damage_multiplier = victim_living.maxHealth * 0.01
+				var/damage_multiplier = victim_living.max_health * 0.01
 				var/extra_ouch = FALSE // if emagged you're gonna have a really bad time
 				if(speed_limiter == 0.5) // slow trams don't cause extra damage
 					for(var/obj/structure/tram/spoiler/my_spoiler in transport_contents)

@@ -15,7 +15,7 @@
 
 /datum/reagent/toxin/on_mob_life(mob/living/L, metabolism)
 	if(toxpwr)
-		L.adjustToxLoss(toxpwr*0.5*effect_str)
+		L.adjust_tox_loss(toxpwr*0.5*effect_str)
 	return ..()
 
 ///For medicines that generate toxin reagent when metabolized
@@ -36,7 +36,7 @@
 	taste_description = "alchemy"
 
 /datum/reagent/toxin/sdtoxin/on_mob_life(mob/living/L, metabolism)
-	L.adjustOxyLoss(effect_str)
+	L.adjust_oxy_loss(effect_str)
 	return ..()
 
 
@@ -81,7 +81,7 @@
 /datum/reagent/toxin/lexorin/on_mob_life(mob/living/L, metabolism)
 	if(prob(33))
 		L.take_limb_damage(0.5*effect_str, 0)
-	L.adjustOxyLoss(3)
+	L.adjust_oxy_loss(3)
 	if(prob(20))
 		L.emote("gasp")
 	return ..()
@@ -100,7 +100,7 @@
 	custom_metabolism = REAGENTS_METABOLISM * 2
 
 /datum/reagent/toxin/cyanide/on_mob_life(mob/living/L, metabolism)
-	L.adjustOxyLoss(2*effect_str)
+	L.adjust_oxy_loss(2*effect_str)
 	if(current_cycle > 10)
 		L.Sleeping(4 SECONDS)
 	return ..()
@@ -134,7 +134,7 @@
 	return ..()
 
 /datum/reagent/toxin/huskpowder/on_mob_life(mob/living/L, metabolism)
-	L.adjustOxyLoss(0.25*effect_str)
+	L.adjust_oxy_loss(0.25*effect_str)
 	L.Paralyze(20 SECONDS)
 	return ..()
 
@@ -156,14 +156,14 @@
 	return ..()
 
 /datum/reagent/toxin/mindbreaker/overdose_process(mob/living/L, metabolism)
-	L.adjustToxLoss(1)
+	L.adjust_tox_loss(1)
 	L.jitter(5)
 	if(prob(10) && !L.stat)
 		L.Unconscious(10 SECONDS)
 
 /datum/reagent/toxin/mindbreaker/overdose_crit_process(mob/living/L, metabolism)
-	L.adjustToxLoss(1)
-	L.adjustBrainLoss(1, TRUE)
+	L.adjust_tox_loss(1)
+	L.adjust_brain_loss(1, TRUE)
 	L.jitter(5)
 	if(prob(10) && !L.stat)
 		L.Unconscious(10 SECONDS)
@@ -265,7 +265,7 @@
 			L.Sleeping(10 SECONDS)
 		if(61 to INFINITY)
 			L.adjustDrowsyness(2)
-			L.adjustToxLoss((current_cycle/4 - 25)*effect_str)
+			L.adjust_tox_loss((current_cycle/4 - 25)*effect_str)
 	return ..()
 
 /datum/reagent/toxin/chloralhydrate/overdose_process(mob/living/L, metabolism)
@@ -289,7 +289,7 @@
 		var/mob/living/carbon/C = L
 		if(C.losebreath > 10)
 			C.set_Losebreath(10)
-	L.adjustOxyLoss(2)
+	L.adjust_oxy_loss(2)
 	switch(current_cycle)
 		if(7 to 15)
 			L.Paralyze(10 SECONDS)
@@ -310,7 +310,7 @@
 			var/mob/living/carbon/C = L
 			if(C.losebreath > 10)
 				C.set_Losebreath(10)
-		L.adjustOxyLoss(2)
+		L.adjust_oxy_loss(2)
 	switch(current_cycle)
 		if(7 to 15)
 			L.Paralyze(10 SECONDS)
@@ -338,7 +338,7 @@
 	taste_description = "plastic"
 
 /datum/reagent/toxin/plasticide/on_mob_life(mob/living/L, metabolism)
-	L.adjustToxLoss(0.2)
+	L.adjust_tox_loss(0.2)
 	return ..()
 
 /datum/reagent/toxin/acid
@@ -474,13 +474,13 @@
 			L.jitter(8) //Shows that things are *really* bad
 
 	//Apply stamina damage, then apply any 'excess' stamina damage beyond our maximum as tox and oxy damage
-	var/stamina_loss_limit = L.maxHealth * 2
-	var/applied_damage = clamp(power, 0, (stamina_loss_limit - L.getStaminaLoss()))
-	L.adjustStaminaLoss(applied_damage) //If we're under our stamina_loss limit, apply the difference between our limit and current stamina damage or power, whichever's less
+	var/stamina_loss_limit = L.max_health * 2
+	var/applied_damage = clamp(power, 0, (stamina_loss_limit - L.get_stamina_loss()))
+	L.adjust_stamina_loss(applied_damage) //If we're under our stamina_loss limit, apply the difference between our limit and current stamina damage or power, whichever's less
 	var/damage_overflow = power - applied_damage
-	if(damage_overflow > 0) //If we exceed maxHealth * 2 stamina damage, apply any excess as toxloss and oxyloss
-		L.adjustToxLoss(damage_overflow * 0.5)
-		L.adjustOxyLoss(damage_overflow * 0.5)
+	if(damage_overflow > 0) //If we exceed max_health * 2 stamina damage, apply any excess as toxloss and oxyloss
+		L.adjust_tox_loss(damage_overflow * 0.5)
+		L.adjust_oxy_loss(damage_overflow * 0.5)
 		L.Losebreath(2) //So the oxy loss actually means something.
 
 	L.set_timed_status_effect(2 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
@@ -544,7 +544,7 @@
 	RegisterSignal(L, COMSIG_HUMAN_DAMAGE_TAKEN, PROC_REF(transvitox_human_damage_taken))
 
 /datum/reagent/toxin/xeno_transvitox/on_mob_life(mob/living/L, metabolism)
-	var/fire_loss = L.getFireLoss(TRUE)
+	var/fire_loss = L.get_fire_loss(TRUE)
 	if(!fire_loss) //If we have no burn damage, cancel out
 		return ..()
 
@@ -557,7 +557,7 @@
 		if(is_type_in_typecache(current_reagent, GLOB.defiler_toxins_typecache_list)) //For each xeno toxin reagent, double the strength multiplier
 			tox_cap_multiplier *= 2 //Each other Defiler toxin doubles the multiplier
 
-	var/tox_loss = L.getToxLoss()
+	var/tox_loss = L.get_tox_loss()
 	if(tox_loss > DEFILER_TRANSVITOX_CAP) //If toxin levels are already at their cap, cancel out
 		return ..()
 
@@ -567,7 +567,7 @@
 		dam = fire_loss
 
 	L.heal_limb_damage(burn = dam, updating_health = TRUE) //Heal damage equal to toxin damage dealt; heal before applying toxin damage so we don't flash kill the target
-	L.adjustToxLoss(dam * (1 + 0.1 * tox_cap_multiplier)) //Apply toxin damage. Deal extra toxin damage equal to 10% * the tox cap multiplier
+	L.adjust_tox_loss(dam * (1 + 0.1 * tox_cap_multiplier)) //Apply toxin damage. Deal extra toxin damage equal to 10% * the tox cap multiplier
 
 	return ..()
 
@@ -580,11 +580,11 @@
 		if(is_type_in_typecache(current_reagent, GLOB.defiler_toxins_typecache_list)) //For each xeno toxin reagent, double the strength multiplier
 			tox_cap_multiplier *= 2 //Each other Defiler toxin doubles the multiplier
 
-	var/tox_loss = L.getToxLoss()
+	var/tox_loss = L.get_tox_loss()
 	if(tox_loss > DEFILER_TRANSVITOX_CAP) //If toxin levels are already at their cap, cancel out
 		return
 
-	L.setToxLoss(clamp(tox_loss + min(L.getBruteLoss(TRUE) * 0.1 * tox_cap_multiplier, damage * 0.1 * tox_cap_multiplier), tox_loss, DEFILER_TRANSVITOX_CAP)) //Deal bonus tox damage equal to a % of the lesser of the damage taken or the target's brute damage; capped at DEFILER_TRANSVITOX_CAP.
+	L.set_tox_loss(clamp(tox_loss + min(L.get_brute_loss(TRUE) * 0.1 * tox_cap_multiplier, damage * 0.1 * tox_cap_multiplier), tox_loss, DEFILER_TRANSVITOX_CAP)) //Deal bonus tox damage equal to a % of the lesser of the damage taken or the target's brute damage; capped at DEFILER_TRANSVITOX_CAP.
 
 /datum/reagent/toxin/xeno_sanguinal //deals brute damage and causes persistant bleeding. Causes additional damage for each other xeno chem in the system
 	name = "Sanguinal"
@@ -597,19 +597,19 @@
 
 /datum/reagent/toxin/xeno_sanguinal/on_mob_life(mob/living/L, metabolism)
 	if(L.reagents.get_reagent_amount(/datum/reagent/toxin/xeno_hemodile))
-		L.adjustStaminaLoss(DEFILER_SANGUINAL_DAMAGE)
+		L.adjust_stamina_loss(DEFILER_SANGUINAL_DAMAGE)
 
 	if(L.reagents.get_reagent_amount(/datum/reagent/toxin/xeno_neurotoxin))
-		L.adjustToxLoss(DEFILER_SANGUINAL_DAMAGE)
+		L.adjust_tox_loss(DEFILER_SANGUINAL_DAMAGE)
 
 	if(L.reagents.get_reagent_amount(/datum/reagent/toxin/xeno_transvitox))
-		L.adjustFireLoss(DEFILER_SANGUINAL_DAMAGE)
+		L.adjust_fire_loss(DEFILER_SANGUINAL_DAMAGE)
 
 	if(L.has_status_effect(STATUS_EFFECT_INTOXICATED))
 		var/datum/status_effect/stacking/intoxicated/debuff = L.has_status_effect(STATUS_EFFECT_INTOXICATED)
 		if(debuff.stacks > 0)
 			debuff.stacks = debuff.stacks + SENTINEL_INTOXICATED_SANGUINAL_INCREASE
-			L.adjustFireLoss(DEFILER_SANGUINAL_DAMAGE)
+			L.adjust_fire_loss(DEFILER_SANGUINAL_DAMAGE)
 
 	L.apply_damage(DEFILER_SANGUINAL_DAMAGE, BRUTE, sharp = TRUE)
 
@@ -631,8 +631,8 @@
 	purge_rate = 5
 
 /datum/reagent/toxin/xeno_ozelomelyn/on_mob_life(mob/living/L, metabolism)
-	if(L.getToxLoss() < 40) // if our toxloss is below 40, do 0.75 tox damage.
-		L.adjustToxLoss(0.75)
+	if(L.get_tox_loss() < 40) // if our toxloss is below 40, do 0.75 tox damage.
+		L.adjust_tox_loss(0.75)
 		if(prob(15))
 			to_chat(L, span_warning("Your veins feel like water and you can feel a growing itchy feeling in them!") )
 		return ..()
@@ -664,14 +664,14 @@
 /datum/reagent/zombium/overdose_process(mob/living/L, metabolism)
 	if(prob(5))
 		L.emote("gasp")
-	L.adjustOxyLoss(1.5)
-	L.adjustToxLoss(1.5)
+	L.adjust_oxy_loss(1.5)
+	L.adjust_tox_loss(1.5)
 
 /datum/reagent/zombium/overdose_crit_process(mob/living/L, metabolism)
 	if(prob(50))
 		L.emote("gasp")
-	L.adjustOxyLoss(5)
-	L.adjustToxLoss(5)
+	L.adjust_oxy_loss(5)
+	L.adjust_tox_loss(5)
 
 ///Signal handler preparing the source to become a zombie
 /datum/reagent/zombium/proc/zombify(mob/living/carbon/human/H)
@@ -714,7 +714,7 @@
 			L.jitter(8)
 
 	if(current_cycle > 21)
-		L.adjustStaminaLoss(effect_str)
+		L.adjust_stamina_loss(effect_str)
 		if(iscarbon(L) && prob(min(current_cycle - 10,30)))
 			var/mob/living/carbon/C = L
 			C.emote("me", 1, "coughs up blood!")
@@ -725,7 +725,7 @@
 		if(L.eye_blurry < 30)
 			L.adjust_blurriness(1.3)
 	else
-		L.adjustStaminaLoss(0.5*effect_str)
+		L.adjust_stamina_loss(0.5*effect_str)
 		if(prob(20))
 			L.emote("gasp")
 			L.Losebreath(3)

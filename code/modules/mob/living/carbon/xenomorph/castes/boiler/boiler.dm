@@ -6,7 +6,7 @@
 	icon_state = "Boiler Walking"
 	bubble_icon = "alienroyal"
 	health = 200
-	maxHealth = 200
+	max_health = 200
 	plasma_stored = 450
 	pixel_x = -16
 	mob_size = MOB_SIZE_BIG

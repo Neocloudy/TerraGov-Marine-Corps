@@ -6,7 +6,7 @@
 	icon_state = "Behemoth Walking"
 	bubble_icon = "alienleft"
 	health = 750
-	maxHealth = 750
+	max_health = 750
 	plasma_stored = 200
 	tier = XENO_TIER_THREE
 	upgrade = XENO_UPGRADE_NORMAL

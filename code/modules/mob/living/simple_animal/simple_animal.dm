@@ -2,7 +2,7 @@
 	name = "animal"
 	icon = 'icons/mob/animal.dmi'
 	health = 20
-	maxHealth = 20
+	max_health = 20
 	status_flags = CANPUSH
 	gender = PLURAL
 	buckle_flags = NONE
@@ -74,7 +74,7 @@
 
 /mob/living/simple_animal/updatehealth()
 	. = ..()
-	health = clamp(health, 0, maxHealth)
+	health = clamp(health, 0, max_health)
 
 /mob/living/simple_animal/update_sight()
 	lighting_color_cutoffs = list(lighting_cutoff_red, lighting_cutoff_green, lighting_cutoff_blue)
@@ -189,7 +189,7 @@
 			span_userdanger("[user] [response_harm] [src]!"))
 			playsound(loc, attacked_sound, 25, 1, -1)
 			attack_threshold_check(harm_intent_damage)
-			UPDATEHEALTH(src)
+			UPDATE_HEALTH_NEXT_TICK(src)
 			log_combat(user, src, "attacked")
 			return TRUE
 
@@ -215,7 +215,7 @@
 
 /mob/living/simple_animal/get_status_tab_items()
 	. = ..()
-	. += "Health: [round((health / maxHealth) * 100)]%"
+	. += "Health: [round((health / max_health) * 100)]%"
 
 
 /mob/living/simple_animal/ex_act(severity)
@@ -226,13 +226,13 @@
 			gib()
 			return
 		if(EXPLODE_HEAVY)
-			adjustBruteLoss(60)
+			adjust_brute_loss(60)
 		if(EXPLODE_LIGHT)
-			adjustBruteLoss(30)
+			adjust_brute_loss(30)
 		if(EXPLODE_WEAK)
-			adjustBruteLoss(15)
+			adjust_brute_loss(15)
 
-	UPDATEHEALTH(src)
+	UPDATE_HEALTH_NEXT_TICK(src)
 
 
 /mob/living/simple_animal/get_idcard(hand_first)
@@ -257,7 +257,7 @@
 		return FALSE
 	else
 		apply_damage(damage, damagetype, blocked = armorcheck)
-		UPDATEHEALTH(src)
+		UPDATE_HEALTH_NEXT_TICK(src)
 		return TRUE
 
 
@@ -362,7 +362,7 @@
 /mob/living/simple_animal/proc/adjustHealth(amount, updating_health = TRUE, forced = FALSE)
 	if(!forced && (status_flags & GODMODE))
 		return FALSE
-	bruteloss = round(clamp(bruteloss + amount, 0, maxHealth), 0.1)
+	bruteloss = round(clamp(bruteloss + amount, 0, max_health), 0.1)
 	if(updating_health)
 		updatehealth()
 	return amount

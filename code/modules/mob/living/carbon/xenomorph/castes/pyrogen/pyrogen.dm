@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/pyrogen.dmi'
 	icon_state = "pyrogen Walking"
 	health = 325
-	maxHealth = 325
+	max_health = 325
 	plasma_stored = 300
 	mob_size = MOB_SIZE_XENO
 	drag_delay = 3

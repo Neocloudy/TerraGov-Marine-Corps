@@ -21,7 +21,7 @@
 
 /mob/living/carbon/proc/handle_healths_hud_updates()
 	if(hud_used?.healths)
-		switch(round(health * 100 / maxHealth))
+		switch(round(health * 100 / max_health))
 			if(100 to INFINITY)
 				hud_used.healths.icon_state = "health0"
 			if(75 to 99)
@@ -45,8 +45,8 @@
 			return
 		if(throwing && !isxeno(thrower)) // same here, albeit for throwing
 			return
-		if(!adjustOxyLoss(HUMAN_CRITDRAG_OXYLOSS)) // take oxy damage per tile moved
-			INVOKE_ASYNC(src, PROC_REF(adjustBruteLoss), HUMAN_CRITDRAG_OXYLOSS) // if we can't take oxy damage (for some reason), take it as brute instead
+		if(!adjust_oxy_loss(HUMAN_CRITDRAG_OXYLOSS)) // take oxy damage per tile moved
+			INVOKE_ASYNC(src, PROC_REF(adjust_brute_loss), HUMAN_CRITDRAG_OXYLOSS) // if we can't take oxy damage (for some reason), take it as brute instead
 		updatehealth() // force a health update so we can't get dragged any further than we should be
 
 /mob/living/carbon/update_stat()
@@ -73,7 +73,7 @@
 		set_stat(UNCONSCIOUS)
 		on_crit()
 
-	else if(HAS_TRAIT(src, TRAIT_KNOCKEDOUT) || getOxyLoss() > CARBON_KO_OXYLOSS)
+	else if(HAS_TRAIT(src, TRAIT_KNOCKEDOUT) || get_oxy_loss() > CARBON_KO_OXYLOSS)
 		if(stat == UNCONSCIOUS)
 			return
 		set_stat(UNCONSCIOUS)
@@ -90,7 +90,7 @@
 	if(damage_dealt < 1)
 		death()
 		return
-	adjustOxyLoss(damage_dealt)
+	adjust_oxy_loss(damage_dealt)
 	death()
 
 /mob/living/carbon/handle_status_effects()
@@ -161,19 +161,19 @@
 			blur_eyes(4)
 
 		if(drunkenness >= 81)
-			adjustToxLoss(0.2)
+			adjust_tox_loss(0.2)
 			if(prob(10) && !stat)
 				to_chat(src, span_warning("Maybe you should lie down for a bit..."))
 				adjustDrowsyness(5)
 
 		if(drunkenness >= 91)
-			adjustBrainLoss(0.2, TRUE)
+			adjust_brain_loss(0.2, TRUE)
 			if(prob(15 && !stat))
 				to_chat(src, span_warning("Just a quick nap..."))
 				Sleeping(80 SECONDS)
 
 		if(drunkenness >=101) //Let's be honest, you should be dead by now
-			adjustToxLoss(4)
+			adjust_tox_loss(4)
 
 	switch(drunkenness) //painkilling effects
 		if(6 to 41)

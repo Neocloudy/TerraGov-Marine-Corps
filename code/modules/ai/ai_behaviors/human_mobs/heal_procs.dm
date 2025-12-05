@@ -10,11 +10,11 @@
 ///Cycles through and heals the normal damage types
 /datum/ai_behavior/human/proc/heal_damage(mob/living/carbon/human/patient)
 	var/list/dam_list = list(
-		BRUTE = patient.getBruteLoss(),
-		BURN = patient.getFireLoss(),
-		TOX = patient.getToxLoss(),
-		OXY = patient.getOxyLoss(),
-		CLONE = patient.getCloneLoss(),
+		BRUTE = patient.get_brute_loss(),
+		BURN = patient.get_fire_loss(),
+		TOX = patient.get_tox_loss(),
+		OXY = patient.get_oxy_loss(),
+		CLONE = patient.get_clone_loss(),
 		PAIN = patient.getShock_Stage() * 3, //pain is pretty important, but has low numbers and takes time to change
 	)
 
@@ -165,7 +165,7 @@
 		return FALSE
 	if(!defib.ready)
 		defib.attack_self(mob_parent)
-	if(!HAS_TRAIT(patient, TRAIT_IMMEDIATE_DEFIB) && (patient.health + patient.getOxyLoss() + (2 * DEFIBRILLATOR_HEALING_TIMES_SKILL(mob_parent.skills.getRating(SKILL_MEDICAL), DEFIBRILLATOR_BASE_HEALING_VALUE)) <= patient.get_death_threshold()))
+	if(!HAS_TRAIT(patient, TRAIT_IMMEDIATE_DEFIB) && (patient.health + patient.get_oxy_loss() + (2 * DEFIBRILLATOR_HEALING_TIMES_SKILL(mob_parent.skills.getRating(SKILL_MEDICAL), DEFIBRILLATOR_BASE_HEALING_VALUE)) <= patient.get_death_threshold()))
 		heal_loop(patient) //we only loop once because you generally can't rekit
 
 	return do_defib(patient, defib)

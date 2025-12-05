@@ -53,7 +53,7 @@
 	taste_description = "berries"
 
 /datum/reagent/consumable/poisonberryjuice/on_mob_life(mob/living/L, metabolism)
-	L.adjustToxLoss(1)
+	L.adjust_tox_loss(1)
 	return ..()
 
 /datum/reagent/consumable/watermelonjuice
@@ -734,23 +734,23 @@
 /datum/reagent/consumable/atomiccoffee/on_mob_delete(mob/living/L, metabolism)
 	L.remove_movespeed_modifier(type)
 	var/amount = (current_cycle * 0.5) // 15/cup
-	L.adjustStaminaLoss(amount)
+	L.adjust_stamina_loss(amount)
 
 /datum/reagent/consumable/atomiccoffee/on_mob_life(mob/living/L, metabolism)
 	switch(current_cycle)
 		if(1 to 10)
-			L.adjustStaminaLoss(-effect_str)
+			L.adjust_stamina_loss(-effect_str)
 		if(11 to 30)
-			L.adjustStaminaLoss(-0.5*effect_str)
+			L.adjust_stamina_loss(-0.5*effect_str)
 		if(11 to 60)
-			L.adjustStaminaLoss(-0.25*effect_str)
+			L.adjust_stamina_loss(-0.25*effect_str)
 			L.jitter(1)
 		if(61 to 150)
-			L.adjustStaminaLoss(0.25*effect_str)
+			L.adjust_stamina_loss(0.25*effect_str)
 			L.apply_damage(5, TOX)
 			L.jitter(2)
 		if(151 to INFINITY)
-			L.adjustStaminaLoss(2.5*effect_str)
+			L.adjust_stamina_loss(2.5*effect_str)
 			L.apply_damage(10, TOX) //You're having a bad day.
 			L.jitter(5)
 	return ..()

@@ -205,7 +205,7 @@
 		return
 	if((current_action == MOVING_TO_ATOM) && (atom_to_walk_to == combat_target))
 		return //we generally want to keep fighting
-	if((human_ai_behavior_flags & HUMAN_AI_SELF_HEAL) && !next_target && (mob_parent.health <= minimum_health * 2 * mob_parent.maxHealth) && check_hazards())
+	if((human_ai_behavior_flags & HUMAN_AI_SELF_HEAL) && !next_target && (mob_parent.health <= minimum_health * 2 * mob_parent.max_health) && check_hazards())
 		INVOKE_ASYNC(src, PROC_REF(try_heal))
 
 /datum/ai_behavior/human/set_goal_node(datum/source, obj/effect/ai_node/new_goal_node)
@@ -309,7 +309,7 @@
 	if((human_ai_state_flags & HUMAN_AI_BUSY_ACTION))
 		return
 
-	if(mob_parent.health - damage > minimum_health * mob_parent.maxHealth)
+	if(mob_parent.health - damage > minimum_health * mob_parent.max_health)
 		return
 	if(mob_parent.incapacitated() || mob_parent.lying_angle)
 		return

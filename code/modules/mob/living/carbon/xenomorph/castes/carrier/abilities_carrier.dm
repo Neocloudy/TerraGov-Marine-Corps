@@ -217,7 +217,7 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 	to_chat(xeno_owner, span_xenowarning("We spawn a facehugger via the miracle of asexual internal reproduction, adding it to our stores. Now sheltering: [xeno_owner.huggers] / [xeno_owner.xeno_caste.huggers_max]."))
 	playsound(xeno_owner, 'sound/voice/alien/drool2.ogg', 50, 0, 1)
 	if(health_cost)
-		xeno_owner.adjustBruteLoss(health_cost, TRUE)
+		xeno_owner.adjust_brute_loss(health_cost, TRUE)
 	succeed_activate()
 	add_cooldown()
 	if(owner.client)
@@ -258,7 +258,7 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 	. = ..()
 	if(!.)
 		return FALSE
-	if(xeno_owner.health > (xeno_owner.maxHealth * 0.56))
+	if(xeno_owner.health > (xeno_owner.max_health * 0.56))
 		if(!silent)
 			to_chat(xeno_owner, span_xenowarning("We are not injured enough to panic yet!"))
 		return FALSE
@@ -443,7 +443,7 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 
 	var/obj/item/alien_embryo/young = locate() in victim
 	var/debuff = young.stage + 1
-	var/stamina_dmg = (victim.maxHealth + victim.max_stamina) * (debuff + xeno_owner.xeno_caste.aura_strength) * 0.1
+	var/stamina_dmg = (victim.max_health + victim.max_stamina) * (debuff + xeno_owner.xeno_caste.aura_strength) * 0.1
 
 	xeno_owner.emote("roar5")
 	victim.emote("scream")

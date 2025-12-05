@@ -20,7 +20,7 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 	var/icon_sit = "parrot_sit"
 	density = FALSE
 	health = 80
-	maxHealth = 80
+	max_health = 80
 	allow_pass_flags = PASS_MOB
 	pass_flags = PASS_LOW_STRUCTURE|PASS_MOB
 

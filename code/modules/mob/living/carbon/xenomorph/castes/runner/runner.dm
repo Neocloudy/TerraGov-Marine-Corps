@@ -6,7 +6,7 @@
 	icon_state = "Runner Walking"
 	bubble_icon = "alienleft"
 	health = 100
-	maxHealth = 100
+	max_health = 100
 	plasma_stored = 50
 	pass_flags = PASS_LOW_STRUCTURE
 	tier = XENO_TIER_ONE

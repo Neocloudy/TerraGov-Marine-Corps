@@ -236,27 +236,27 @@
 	//At this point, the defibrillator is ready to work
 	//this trait allows some species to be healed to one hit from death, so the defibrillator can't fail from too much damage
 	if(HAS_TRAIT(patient, TRAIT_IMMEDIATE_DEFIB))
-		patient.setOxyLoss(0)
+		patient.set_oxy_loss(0)
 		patient.updatehealth()
 
 		var/heal_target = patient.get_crit_threshold() - patient.health + 1
-		var/all_loss = patient.getBruteLoss() + patient.getFireLoss() + patient.getToxLoss()
+		var/all_loss = patient.get_brute_loss() + patient.get_fire_loss() + patient.get_tox_loss()
 		if(all_loss && (heal_target > 0))
-			var/brute_ratio = patient.getBruteLoss() / all_loss
-			var/burn_ratio = patient.getFireLoss() / all_loss
-			var/tox_ratio = patient.getToxLoss() / all_loss
+			var/brute_ratio = patient.get_brute_loss() / all_loss
+			var/burn_ratio = patient.get_fire_loss() / all_loss
+			var/tox_ratio = patient.get_tox_loss() / all_loss
 			if(tox_ratio)
-				patient.adjustToxLoss(-(tox_ratio * heal_target))
+				patient.adjust_tox_loss(-(tox_ratio * heal_target))
 			patient.heal_overall_damage(brute_ratio*heal_target, burn_ratio*heal_target, TRUE) // explicitly also heals robot parts
 
 		if(HAS_TRAIT_FROM(patient, TRAIT_IMMEDIATE_DEFIB, SUPERSOLDIER_TRAIT))
 			heart.take_damage(15) // estimated to be 1/2 of the health of the heart so 2 zaps kill you
 
 	else if(!issynth(patient)) // TODO make me a trait :)
-		patient.adjustBruteLoss(-defib_heal_amt)
-		patient.adjustFireLoss(-defib_heal_amt)
-		patient.adjustToxLoss(-defib_heal_amt)
-		patient.setOxyLoss(0)
+		patient.adjust_brute_loss(-defib_heal_amt)
+		patient.adjust_fire_loss(-defib_heal_amt)
+		patient.adjust_tox_loss(-defib_heal_amt)
+		patient.set_oxy_loss(0)
 
 	patient.updatehealth() // update health because it won't always update for the dead
 

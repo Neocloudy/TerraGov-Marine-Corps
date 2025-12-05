@@ -14,7 +14,7 @@
 	density = FALSE
 	a_intent = INTENT_HELP
 	health = 1000
-	maxHealth = 1000
+	max_health = 1000
 	plasma_stored = 5
 	tier = XENO_TIER_ZERO
 	upgrade = XENO_UPGRADE_BASETYPE
@@ -54,14 +54,14 @@
 
 /mob/living/carbon/xenomorph/hivemind/updatehealth()
 	if(on_fire)
-		ExtinguishMob()
-	health = maxHealth - getFireLoss() - getBruteLoss() //Xenos can only take brute and fire damage.
+		extinguish_mob()
+	health = max_health - get_fire_loss() - get_brute_loss() //Xenos can only take brute and fire damage.
 	if(health <= 0 && !(status_flags & INCORPOREAL))
-		setBruteLoss(0)
-		setFireLoss(-minimum_health)
+		set_brute_loss(0)
+		set_fire_loss(-minimum_health)
 		change_form()
 		remove_status_effect(/datum/status_effect/spacefreeze)
-	health = maxHealth - getFireLoss() - getBruteLoss()
+	health = max_health - get_fire_loss() - get_brute_loss()
 	med_hud_set_health()
 	if(TIMER_COOLDOWN_RUNNING(src, COOLDOWN_HIVEMIND_MANIFESTATION))
 		return
@@ -75,13 +75,13 @@
 		return
 	// If manifested and off weeds, lets deal some damage.
 	if(!(status_flags & INCORPOREAL) && !loc_weeds_type)
-		adjustBruteLoss(20 * XENO_RESTING_HEAL, TRUE)
+		adjust_brute_loss(20 * XENO_RESTING_HEAL, TRUE)
 		return
 	// If not manifested
-	if(health < minimum_health + maxHealth)
-		setBruteLoss(0)
-		setFireLoss(-minimum_health)
-	if(health >= maxHealth) //can't regenerate.
+	if(health < minimum_health + max_health)
+		set_brute_loss(0)
+		set_fire_loss(-minimum_health)
+	if(health >= max_health) //can't regenerate.
 		updatehealth() //Update health-related stats, like health itself (using brute and fireloss), health HUD and status.
 		return
 	heal_wounds(XENO_RESTING_HEAL)
@@ -107,7 +107,7 @@
 	return
 
 /mob/living/carbon/xenomorph/hivemind/change_form()
-	if(status_flags & INCORPOREAL && health != maxHealth)
+	if(status_flags & INCORPOREAL && health != max_health)
 		to_chat(src, span_xenowarning("You do not have the strength to manifest yet!"))
 		return
 	if(TIMER_COOLDOWN_RUNNING(src, COOLDOWN_HIVEMIND_MANIFESTATION))

@@ -20341,7 +20341,7 @@
 "oeC" = (
 /mob/living/simple_animal/crab{
 	health = 500;
-	maxHealth = 500;
+	max_health = 500;
 	name = "Bubbles";
 	resize = 2
 	},

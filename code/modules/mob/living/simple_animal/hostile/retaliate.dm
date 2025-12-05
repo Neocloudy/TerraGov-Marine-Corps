@@ -36,7 +36,7 @@
 	return FALSE
 
 
-/mob/living/simple_animal/hostile/retaliate/adjustBruteLoss(damage, updating_health = FALSE)
+/mob/living/simple_animal/hostile/retaliate/adjust_brute_loss(damage, updating_health = FALSE)
 	. = ..()
 	if(stat < UNCONSCIOUS)
 		Retaliate()

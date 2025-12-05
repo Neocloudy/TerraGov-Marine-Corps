@@ -73,7 +73,7 @@
 	icon_living = "floppa"
 	icon_dead = "floppa_dead"
 	health = 200
-	maxHealth = 200
+	max_health = 200
 
 
 /mob/living/simple_animal/cat/martin
@@ -86,7 +86,7 @@
 	gender = MALE
 	emote_see = list("shakes its head.", "shivers.", "points at the supply console.", "looks at the abyss that is the ASRS Elevator.", "counts the requisition points.", "looks at the supply drop.", "stares at the marines inside requisition", "wants to order some pizza")
 	health = 200
-	maxHealth = 200
+	max_health = 200
 
 
 /mob/living/simple_animal/cat/martin/martina

@@ -44,11 +44,11 @@
 #define TAG_MARK(X) "<b>(<A href='byond://?src=[REF(src)];[HrefToken(forceGlobal = TRUE)];mark_datum=[REF(X)]'>MARK</a>)</b>"
 #define TAG_SIMPLE_HEALTH(X) "<font color='#ff0000'><b>Health: [X.health]</b></font>"
 #define TAG_CARBON_HEALTH(X) "<font color='#ff0000'><b>Health: [X.health]</b></font> (\
-					<font color='#ff3333'>[X.getBruteLoss()]</font> \
-					<font color='#ff9933'>[X.getFireLoss()]</font> \
-					<font color='#00cc66'>[X.getToxLoss()]</font> \
-					<font color='#00cccc'>[X.getOxyLoss()]</font>\
-					[X.getCloneLoss() ? " <font color='#1c3ac4'>[X.getCloneLoss()]</font>" : ""])"
+					<font color='#ff3333'>[X.get_brute_loss()]</font> \
+					<font color='#ff9933'>[X.get_fire_loss()]</font> \
+					<font color='#00cc66'>[X.get_tox_loss()]</font> \
+					<font color='#0081cc'>[X.get_oxy_loss()]</font>\
+					[X.get_clone_loss() ? " <font color='#1cc4a8'>[X.get_clone_loss()]</font>" : ""])"
 
 ADMIN_VERB(display_tags, R_DEBUG, "View Tags", "View all tagged datums", ADMIN_CATEGORY_DEBUG)
 	var/datum/admins/holdersrc = user.holder

@@ -35,7 +35,7 @@
 	icon_living = "ranger"
 	icon_dead = "ranger_dead"
 	health = 300
-	maxHealth = 300 //Foreshadowing the health of other K9
+	max_health = 300 //Foreshadowing the health of other K9
 
 
 /mob/living/simple_animal/corgi/bullterrier

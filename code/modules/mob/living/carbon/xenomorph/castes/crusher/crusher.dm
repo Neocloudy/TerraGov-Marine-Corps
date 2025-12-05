@@ -6,7 +6,7 @@
 	icon_state = "Crusher Walking"
 	bubble_icon = "alienleft"
 	health = 300
-	maxHealth = 300
+	max_health = 300
 	plasma_stored = 200
 	tier = XENO_TIER_THREE
 	upgrade = XENO_UPGRADE_NORMAL

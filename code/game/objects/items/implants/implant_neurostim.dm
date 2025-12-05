@@ -50,7 +50,7 @@
 	implant_owner.Paralyze(20 SECONDS)
 	implant_owner.apply_damage(100, STAMINA, part)
 	implant_owner.apply_damage(5, BURN, part)
-	UPDATEHEALTH(implant_owner)
+	UPDATE_HEALTH_NEXT_TICK(implant_owner)
 
 /obj/item/implant/neurostim/implant(mob/living/carbon/human/target, mob/living/user)
 	var/p = stripped_input(user, "Choose activation phrase:")

@@ -10,7 +10,7 @@
 	emote_see = list("runs in a circle.", "shakes.")
 	speak_chance = 1
 	turns_per_move = 5
-	maxHealth = 5
+	max_health = 5
 	health = 5
 	response_help = "pets"
 	response_disarm = "gently pushes aside"

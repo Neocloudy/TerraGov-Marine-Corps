@@ -109,7 +109,7 @@
 	user.visible_message(span_danger("[user] gives [grabbed_mob] a swirlie!"), span_notice("You give [grabbed_mob] a swirlie!"), "You hear a toilet flushing.")
 	log_combat(user, grabbed_mob, "given a swirlie")
 	if(!grabbed_mob.internal)
-		grabbed_mob.adjustOxyLoss(5)
+		grabbed_mob.adjust_oxy_loss(5)
 	swirlie = null
 
 /obj/structure/toilet/alternate
@@ -252,7 +252,7 @@
 
 	if(isliving(O))
 		var/mob/living/L = O
-		L.ExtinguishMob()
+		L.extinguish_mob()
 		L.fire_stacks = -20 //Douse ourselves with water to avoid fire more easily
 		to_chat(L, span_warning("You've been drenched in water!"))
 		L.wash()

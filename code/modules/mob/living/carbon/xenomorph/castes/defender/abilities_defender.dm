@@ -435,7 +435,7 @@
 					continue
 				nearby_human.adjust_fire_stacks(xeno_owner.fire_stacks)
 				nearby_human.IgniteMob()
-			xeno_owner.ExtinguishMob()
+			xeno_owner.extinguish_mob()
 	if(ally_unsunder_multiplier)
 		var/mob/living/carbon/xenomorph/ideal_xenomorph_target
 		for(var/mob/living/carbon/xenomorph/nearby_xenomorph in orange(1, xeno_owner))

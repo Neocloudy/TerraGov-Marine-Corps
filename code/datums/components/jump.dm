@@ -103,7 +103,7 @@
 			return FALSE
 		if(living_jumper.incapacitated())
 			return FALSE
-		if(stamina_cost && (living_jumper.getStaminaLoss() > -stamina_cost))
+		if(stamina_cost && (living_jumper.get_stamina_loss() > -stamina_cost))
 			if(isrobot(living_jumper) || issynth(living_jumper))
 				to_chat(living_jumper, span_warning("Your leg servos do not allow you to jump!"))
 				return FALSE
@@ -122,7 +122,7 @@
 	do_jump(jumper)
 	if(isliving(jumper))
 		var/mob/living/living_jumper = jumper
-		living_jumper.adjustStaminaLoss(stamina_cost)
+		living_jumper.adjust_stamina_loss(stamina_cost)
 	//Forces all who ride to jump alongside the jumper.
 	for(var/mob/buckled_mob AS in jumper.buckled_mobs)
 		do_jump(buckled_mob)

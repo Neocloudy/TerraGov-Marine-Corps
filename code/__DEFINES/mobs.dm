@@ -382,7 +382,7 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 //How long it takes for a human to become undefibbable
 #define TIME_BEFORE_DNR 150 //In life ticks, multiply by 2 to have seconds
 
-///Default living `maxHealth`
+/// Default living `max_health`
 #define LIVING_DEFAULT_MAX_HEALTH 100
 
 //species_flags
@@ -922,7 +922,8 @@ GLOBAL_LIST_INIT(human_body_parts, list(BODY_ZONE_HEAD,
 #define STAMINA_STATE_IDLE 0
 #define STAMINA_STATE_ACTIVE 1
 
-#define UPDATEHEALTH(MOB) (addtimer(CALLBACK(MOB, TYPE_PROC_REF(/mob/living, updatehealth)), 1, TIMER_UNIQUE))
+/// Updates a mob's health after one tick
+#define UPDATE_HEALTH_NEXT_TICK(MOB) (INVOKE_NEXT_TICK(MOB, TYPE_PROC_REF(/mob/living, updatehealth)))
 
 #define GRAB_PIXEL_SHIFT_PASSIVE 6
 #define GRAB_PIXEL_SHIFT_AGGRESSIVE 12

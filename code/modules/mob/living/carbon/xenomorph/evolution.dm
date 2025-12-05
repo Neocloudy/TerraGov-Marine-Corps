@@ -182,7 +182,7 @@
 
 	new_xeno.sunder = sunder
 
-	if(new_xeno.health - getBruteLoss(src) - getFireLoss(src) > 0) //Cmon, don't kill the new one! Shouldnt be possible though
+	if(new_xeno.health - get_brute_loss(src) - get_fire_loss(src) > 0) //Cmon, don't kill the new one! Shouldnt be possible though
 		new_xeno.bruteloss = bruteloss //Transfers the damage over.
 		new_xeno.fireloss = fireloss //Transfers the damage over.
 		new_xeno.updatehealth()
@@ -257,7 +257,7 @@
 		to_chat(src, span_xenouserdanger("We are already the apex of form and function. Let's go forth and spread the hive!"))
 		return FALSE
 
-	if(health < maxHealth)
+	if(health < max_health)
 		balloon_alert(src, "not at full health!")
 		return FALSE
 

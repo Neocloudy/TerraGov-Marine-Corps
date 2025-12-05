@@ -194,13 +194,13 @@
 				to_chat(crushed_victim, span_userdanger("The tremors from [chassis] landing sends you flying!"))
 				var/fly_away_direction = get_dir(chassis, crushed_victim)
 				crushed_victim.throw_at(get_edge_target_turf(crushed_victim, fly_away_direction), 4, 3)
-				crushed_victim.adjustBruteLoss(15)
+				crushed_victim.adjust_brute_loss(15)
 				continue
 			to_chat(crushed_victim, span_userdanger("[chassis] crashes down on you from above!"))
 			if(crushed_victim.stat != CONSCIOUS)
 				crushed_victim.gib(FALSE, FALSE, FALSE)
 				continue
-			crushed_victim.adjustBruteLoss(80)
+			crushed_victim.adjust_brute_loss(80)
 
 /**
  * ## abort_skyfall

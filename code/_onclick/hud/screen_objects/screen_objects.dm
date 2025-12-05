@@ -513,21 +513,21 @@
 	if(mymob_human.stat == DEAD)
 		icon_state = "stamloss200"
 		return
-	var/relative_stamloss = mymob_human.getStaminaLoss()
+	var/relative_stamloss = mymob_human.get_stamina_loss()
 	if(relative_stamloss < 0 && mymob_human.max_stamina)
 		relative_stamloss = round(((relative_stamloss * 14) / mymob_human.max_stamina), 1)
 	else
-		relative_stamloss = round(((relative_stamloss * 7) / (mymob_human.maxHealth * 2)), 1)
+		relative_stamloss = round(((relative_stamloss * 7) / (mymob_human.max_health * 2)), 1)
 	icon_state = "stamloss[relative_stamloss]"
 
 /atom/movable/screen/stamina_hud/Click(location, control, params)
 	if(!isliving(usr))
 		return
 	var/mob/living/living_user = usr
-	if(living_user.getStaminaLoss() < 0 && living_user.max_stamina)
-		living_user.balloon_alert(living_user, "stamina buffer:[(-living_user.getStaminaLoss() * 100 / living_user.max_stamina)]%")
+	if(living_user.get_stamina_loss() < 0 && living_user.max_stamina)
+		living_user.balloon_alert(living_user, "stamina buffer:[(-living_user.get_stamina_loss() * 100 / living_user.max_stamina)]%")
 		return
-	living_user.balloon_alert(living_user, "you have [living_user.getStaminaLoss()] stamina loss")
+	living_user.balloon_alert(living_user, "you have [living_user.get_stamina_loss()] stamina loss")
 
 
 /atom/movable/screen/component_button

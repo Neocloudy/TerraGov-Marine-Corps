@@ -119,7 +119,7 @@
 /// Checks if Carrier Panic can be activated and not resting. If so, activate it.
 /datum/mutation_upgrade/shell/recurring_panic/proc/on_update_health()
 	SIGNAL_HANDLER
-	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.maxHealth : (xenomorph_owner.maxHealth - xenomorph_owner.getFireLoss() - xenomorph_owner.getBruteLoss())
+	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.max_health : (xenomorph_owner.max_health - xenomorph_owner.get_fire_loss() - xenomorph_owner.get_brute_loss())
 	if(health <= xenomorph_owner.get_death_threshold())
 		return
 	var/datum/action/ability/xeno_action/carrier_panic/panic_ability = xenomorph_owner.actions_by_path[/datum/action/ability/xeno_action/carrier_panic]

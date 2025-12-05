@@ -157,7 +157,7 @@
 	else //Upgrade process finished or impossible
 		. += "Upgrade Progress: (FINISHED)"
 
-	. += "Health: [health]/[maxHealth][overheal ? " + [overheal]": ""]" //Changes with balance scalar, can't just use the caste
+	. += "Health: [health]/[max_health][overheal ? " + [overheal]": ""]" //Changes with balance scalar, can't just use the caste
 
 	if(xeno_caste.plasma_max > 0)
 		. += "Plasma: [plasma_stored]/[xeno_caste.plasma_max]"
@@ -443,7 +443,7 @@
 	return FALSE // not normal density flag
 
 /mob/living/carbon/acid_spray_act(mob/living/carbon/xenomorph/X, skip_cooldown)
-	ExtinguishMob()
+	extinguish_mob()
 	if(isnestedhost(src))
 		return
 
@@ -468,7 +468,7 @@
 	Paralyze(2 SECONDS)
 
 /mob/living/carbon/xenomorph/acid_spray_act(mob/living/carbon/xenomorph/X, skip_cooldown)
-	ExtinguishMob()
+	extinguish_mob()
 
 /obj/fire/flamer/acid_spray_act(mob/living/carbon/xenomorph/X, skip_cooldown)
 	qdel(src)

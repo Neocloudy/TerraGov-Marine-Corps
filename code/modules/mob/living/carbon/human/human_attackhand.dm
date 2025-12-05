@@ -23,7 +23,7 @@
 				if(fire_stacks <= 0)
 					human_user.visible_message(span_danger("[human_user] has successfully extinguished the fire on [src]!"), \
 						span_notice("You extinguished the fire on [src]."), null, 5)
-					ExtinguishMob()
+					extinguish_mob()
 				return TRUE
 
 			var/datum/status_effect/stacking/melting_fire/burning = has_status_effect(STATUS_EFFECT_MELTING_FIRE)
@@ -71,8 +71,8 @@
 				return TRUE
 
 			if(health > get_death_threshold() && health < get_crit_threshold())
-				var/suff = min(getOxyLoss(), 5) //Pre-merge level, less healing, more prevention of dieing.
-				adjustOxyLoss(-suff)
+				var/suff = min(get_oxy_loss(), 5) //Pre-merge level, less healing, more prevention of dieing.
+				adjust_oxy_loss(-suff)
 				updatehealth()
 				visible_message(span_warning("[human_user] performs CPR on [src]!"),
 					span_boldnotice("You feel a breath of fresh air enter your lungs. It feels good."),

@@ -110,8 +110,8 @@
 	return ..()
 
 /datum/status_effect/incapacitating/unconscious/tick(delta_time)
-	if(owner.getStaminaLoss())
-		owner.adjustStaminaLoss(-0.3) //reduce stamina loss by 0.3 per tick, 6 per 2 seconds
+	if(owner.get_stamina_loss())
+		owner.adjust_stamina_loss(-0.3) //reduce stamina loss by 0.3 per tick, 6 per 2 seconds
 
 //SLEEPING
 /datum/status_effect/incapacitating/sleeping
@@ -144,9 +144,9 @@
 	return ..()
 
 /datum/status_effect/incapacitating/sleeping/tick(delta_time)
-	if(!owner.maxHealth)
+	if(!owner.max_health)
 		return
-	var/health_ratio = owner.health / owner.maxHealth
+	var/health_ratio = owner.health / owner.max_health
 	var/healing = BASE_HEAL_RATE //set for a base of 0.25 healed per 2-second interval asleep in a bed with covers.
 	if((locate(/obj/structure/bed) in owner.loc))
 		healing += (2 * BASE_HEAL_RATE)
@@ -157,11 +157,11 @@
 		if((locate(/obj/item/toy/plush) in owner.loc)) // plushie bonus in bed with a blanket
 			healing += 0.75 * BASE_HEAL_RATE // plushie bonus in bed with a blanket
 	if(health_ratio > -0.5)
-		owner.adjustBruteLoss(healing)
-		owner.adjustFireLoss(healing)
-		owner.adjustToxLoss(healing * 0.5, TRUE, TRUE)
-		owner.adjustStaminaLoss(healing * 100)
-		owner.adjustCloneLoss(healing * health_ratio * 0.8)
+		owner.adjust_brute_loss(healing)
+		owner.adjust_fire_loss(healing)
+		owner.adjust_tox_loss(healing * 0.5, TRUE, TRUE)
+		owner.adjust_stamina_loss(healing * 100)
+		owner.adjust_clone_loss(healing * health_ratio * 0.8)
 	if(human_owner?.drunkenness)
 		human_owner.drunkenness *= 0.997 //reduce drunkenness by 0.3% per tick, 6% per 2 seconds
 	if(prob(20))
@@ -196,10 +196,10 @@
 
 /datum/status_effect/incapacitating/repair_mode/tick(delta_time)
 	var/sound_to_play
-	if(owner.getBruteLoss())
+	if(owner.get_brute_loss())
 		owner.heal_limb_damage(healing_per_tick, 0, TRUE, TRUE)
 		sound_to_play = 'sound/effects/robotrepair.ogg'
-	else if(owner.getFireLoss())
+	else if(owner.get_fire_loss())
 		owner.heal_limb_damage(0, healing_per_tick, TRUE, TRUE)
 		sound_to_play = 'sound/effects/robotrepair2.ogg'
 	if(!sound_to_play || last_sound)
@@ -431,7 +431,7 @@
 	to_chat(new_owner, span_danger("The cold vacuum instantly freezes you, maybe this was a bad idea?"))
 
 /datum/status_effect/spacefreeze/tick(delta_time)
-	owner.adjustFireLoss(40)
+	owner.adjust_fire_loss(40)
 
 /datum/status_effect/spacefreeze/light
 	id = "spacefreeze_light"
@@ -440,7 +440,7 @@
 	owner.fire_stacks = max(owner.fire_stacks - 6, 0)
 	if(owner.stat == DEAD)
 		return
-	owner.adjustFireLoss(10)
+	owner.adjust_fire_loss(10)
 
 ///irradiated mob
 /datum/status_effect/incapacitating/irradiated
@@ -468,10 +468,10 @@
 	var/mob/living/living_owner = owner
 	//Roulette of bad things
 	if(prob(15))
-		living_owner.adjustCloneLoss(2)
+		living_owner.adjust_clone_loss(2)
 		to_chat(living_owner, span_warning("You feel like you're burning from the inside!"))
 	else
-		living_owner.adjustToxLoss(3)
+		living_owner.adjust_tox_loss(3)
 	if(prob(15))
 		living_owner.adjust_Losebreath(5)
 	if(prob(15))
@@ -546,7 +546,7 @@
 	if(HAS_TRAIT(debuff_owner, TRAIT_INTOXICATION_RESISTANT) || (debuff_owner.get_soft_armor(BIO) > 65))
 		stack_decay = 2
 	var/debuff_damage = SENTINEL_INTOXICATED_BASE_DAMAGE + round(stacks / 10)
-	debuff_owner.adjustFireLoss(debuff_damage)
+	debuff_owner.adjust_fire_loss(debuff_damage)
 	playsound(debuff_owner.loc, "sound/bullets/acid_impact1.ogg", 4)
 	particle_holder.particles.spawning = 1 + round(stacks / 2)
 	if(stacks >= 20)
@@ -751,7 +751,7 @@
 /datum/status_effect/draining_dread/tick(delta_time)
 	. = ..()
 	owner.do_jitter_animation(250)
-	owner.adjustStaminaLoss(stamina_damage)
+	owner.adjust_stamina_loss(stamina_damage)
 
 // ***************************************
 // *********** Melting
@@ -893,7 +893,7 @@
 
 	playsound(debuff_owner.loc, "sound/bullets/acid_impact1.ogg", 4)
 
-	debuff_owner.adjustFireLoss(stacks * MICROWAVE_STATUS_DAMAGE_MULT * (debuff_owner.mob_size > MOB_SIZE_HUMAN ? 1 : 0.5)) //this shreds humans otherwise
+	debuff_owner.adjust_fire_loss(stacks * MICROWAVE_STATUS_DAMAGE_MULT * (debuff_owner.mob_size > MOB_SIZE_HUMAN ? 1 : 0.5)) //this shreds humans otherwise
 
 /atom/movable/screen/alert/status_effect/microwave
 	name = "Microwave"

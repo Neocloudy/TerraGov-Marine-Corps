@@ -6,7 +6,7 @@
 	icon_state = "Shrike Walking"
 	bubble_icon = "alienroyal"
 	health = 240
-	maxHealth = 240
+	max_health = 240
 	plasma_stored = 300
 	pixel_x = -16
 	drag_delay = 3 //pulling a medium dead xeno is hard

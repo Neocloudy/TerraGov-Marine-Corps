@@ -125,11 +125,11 @@ multi_tile
 			SEND_SIGNAL(future_pancake, COMSIG_LIVING_DOORCRUSHED, src)
 			if(ishuman(future_pancake))
 				future_pancake.emote("scream")
-				future_pancake.adjustBruteLoss(DOOR_CRUSH_DAMAGE * 2)
+				future_pancake.adjust_brute_loss(DOOR_CRUSH_DAMAGE * 2)
 				future_pancake.Paralyze(2 SECONDS)
 
 			else //for simple_animals & borgs
-				future_pancake.adjustBruteLoss(DOOR_CRUSH_DAMAGE * 2)
+				future_pancake.adjust_brute_loss(DOOR_CRUSH_DAMAGE * 2)
 				var/turf/location = get_turf(src)
 				//add_blood doesn't work for borgs/xenos, but add_blood_floor does.
 				future_pancake.add_splatter_floor(location)

@@ -171,7 +171,7 @@
 			charges_used++
 
 	if(stepper.on_fire && (charges_used < charges))
-		stepper.ExtinguishMob()
+		stepper.extinguish_mob()
 		charges_used++
 
 	if(!isxeno(stepper))
