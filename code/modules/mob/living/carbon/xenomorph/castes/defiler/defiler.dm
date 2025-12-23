@@ -6,7 +6,7 @@
 	icon_state = "Defiler Walking"
 	bubble_icon = "alienroyal"
 	health = 225
-	maxHealth = 225
+	max_health = 225
 	plasma_stored = 400
 	pixel_x = -16
 	tier = XENO_TIER_THREE

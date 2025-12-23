@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/puppeteer.dmi'
 	icon_state = "Puppeteer Running"
 	health = 250
-	maxHealth = 250
+	max_health = 250
 	plasma_stored = 350
 	pixel_x = -16
 	tier = XENO_TIER_TWO

@@ -291,7 +291,7 @@
 		else
 			user.visible_message(span_danger("[user] has attacked [user.p_them()]self with the bottle of [name]!"))
 
-	UPDATEHEALTH(target)
+	UPDATE_HEALTH_NEXT_TICK(target)
 
 	//Attack logs
 	log_combat(user, target, "smashed", src)

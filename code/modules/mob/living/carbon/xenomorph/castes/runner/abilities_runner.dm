@@ -241,7 +241,7 @@
 /datum/action/ability/xeno_action/evasion/ai_should_use(atom/target)
 	if(iscarbon(target))
 		return FALSE
-	var/hp_left_percent = xeno_owner.health / xeno_owner.maxHealth // minimum_health or retreating ai datum instead maybe?
+	var/hp_left_percent = xeno_owner.health / xeno_owner.max_health // minimum_health or retreating ai datum instead maybe?
 	return (hp_left_percent < 0.5)
 
 /datum/action/ability/xeno_action/evasion/process()

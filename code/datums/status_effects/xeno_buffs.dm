@@ -124,10 +124,10 @@
 	if(stacks < max_stacks && COOLDOWN_FINISHED(src, attunement_increase))
 		add_stacks(1)
 
-	var/remaining_health = link_target.maxHealth - (link_target.getBruteLoss() + link_target.getFireLoss())
-	if(stacks < 1 || !was_within_range || remaining_health >= link_target.maxHealth)
+	var/remaining_health = link_target.max_health - (link_target.get_brute_loss() + link_target.get_fire_loss())
+	if(stacks < 1 || !was_within_range || remaining_health >= link_target.max_health)
 		return
-	var/heal_amount = link_target.maxHealth * (DRONE_ESSENCE_LINK_REGEN * stacks)
+	var/heal_amount = link_target.max_health * (DRONE_ESSENCE_LINK_REGEN * stacks)
 	var/ability_cost = heal_amount * 2
 	if(link_owner.plasma_stored < ability_cost)
 		if(!COOLDOWN_FINISHED(src, plasma_warning))
@@ -179,7 +179,7 @@
 		heal_target = link_target
 
 	new /obj/effect/temp_visual/healing(get_turf(heal_target))
-	var/heal_amount = clamp(abs(amount) * (DRONE_ESSENCE_LINK_SHARED_HEAL * stacks), 0, heal_target.maxHealth)
+	var/heal_amount = clamp(abs(amount) * (DRONE_ESSENCE_LINK_SHARED_HEAL * stacks), 0, heal_target.max_health)
 	var/leftover_healing = heal_amount
 	HEAL_XENO_DAMAGE(heal_target, leftover_healing, TRUE)
 	var/sunder_change = heal_target.adjust_sunder(-heal_amount / 10)
@@ -274,7 +274,7 @@
 
 /datum/status_effect/salve_regen/tick(delta_time)
 	new /obj/effect/temp_visual/healing(get_turf(buff_owner))
-	var/heal_amount = buff_owner.maxHealth * 0.01
+	var/heal_amount = buff_owner.max_health * 0.01
 	var/leftover_healing = heal_amount
 	HEAL_XENO_DAMAGE(buff_owner, leftover_healing, TRUE)
 	var/sunder_change = buff_owner.adjust_sunder(-1)
@@ -478,7 +478,7 @@
 	SIGNAL_HANDLER
 	CALC_DAMAGE_REDUCTION(amount, amount_mod)
 	var/mob/living/carbon/xenomorph/owner_xeno = owner
-	owner_xeno.adjustFireLoss(amount)
+	owner_xeno.adjust_fire_loss(amount)
 	if(owner.health <= minimum_health)
 		owner.remove_status_effect(STATUS_EFFECT_XENO_PSYCHIC_LINK)
 
@@ -487,7 +487,7 @@
 	SIGNAL_HANDLER
 	CALC_DAMAGE_REDUCTION(amount, amount_mod)
 	var/mob/living/carbon/xenomorph/owner_xeno = owner
-	owner_xeno.adjustBruteLoss(amount)
+	owner_xeno.adjust_brute_loss(amount)
 	if(owner.health <= minimum_health)
 		owner.remove_status_effect(STATUS_EFFECT_XENO_PSYCHIC_LINK)
 
@@ -619,7 +619,7 @@
 		to_chat(X, span_notice("Our feast has come to an end..."))
 		X.remove_status_effect(STATUS_EFFECT_XENO_FEAST)
 		return
-	var/heal_amount = X.maxHealth * 0.08
+	var/heal_amount = X.max_health * 0.08
 	HEAL_XENO_DAMAGE(X, heal_amount, FALSE)
 	X.adjustOverheal(heal_amount / 2)
 	X.use_plasma(plasma_drain)
@@ -737,7 +737,7 @@
 
 	new /obj/effect/temp_visual/healing(get_turf(patient)) //Cool SFX
 
-	var/total_heal_amount = 6 + (patient.maxHealth * 0.03) * seconds_per_tick * XENO_PER_SECOND_LIFE_MOD //Base amount 6 HP plus 3% of max
+	var/total_heal_amount = 6 + (patient.max_health * 0.03) * seconds_per_tick * XENO_PER_SECOND_LIFE_MOD //Base amount 6 HP plus 3% of max
 	if(patient.recovery_aura)
 		total_heal_amount *= (1 + patient.recovery_aura * 0.05) //Recovery aura multiplier; 5% bonus per full level
 

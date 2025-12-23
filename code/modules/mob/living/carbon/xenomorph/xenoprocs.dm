@@ -157,7 +157,7 @@
 	else //Upgrade process finished or impossible
 		. += "Upgrade Progress: (FINISHED)"
 
-	. += "Health: [health]/[maxHealth][overheal ? " + [overheal]": ""]" //Changes with balance scalar, can't just use the caste
+	. += "Health: [health]/[max_health][overheal ? " + [overheal]": ""]" //Changes with balance scalar, can't just use the caste
 
 	if(xeno_caste.plasma_max > 0)
 		. += "Plasma: [plasma_stored]/[xeno_caste.plasma_max]"

@@ -8,7 +8,7 @@
 
 	/* Health and life related vars */
 	/// Maximum health that should be possible.
-	var/maxHealth = LIVING_DEFAULT_MAX_HEALTH
+	var/max_health = LIVING_DEFAULT_MAX_HEALTH
 	/// Mob's current health
 	var/health = LIVING_DEFAULT_MAX_HEALTH
 	/// Health at which a mob dies

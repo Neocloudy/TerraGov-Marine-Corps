@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/puppet.dmi'
 	icon_state = "Puppet Running"
 	health = 250
-	maxHealth = 250
+	max_health = 250
 	plasma_stored = 0
 	pixel_x = 0
 	tier = XENO_TIER_MINION
@@ -40,9 +40,9 @@
 	if(!master)
 		return
 	if(get_dist(src, master) > PUPPET_WITHER_RANGE)
-		adjustBruteLoss(15)
+		adjust_brute_loss(15)
 	else
-		adjustBruteLoss(-5)
+		adjust_brute_loss(-5)
 
 /mob/living/carbon/xenomorph/puppet/med_hud_set_status()
 	. = ..()

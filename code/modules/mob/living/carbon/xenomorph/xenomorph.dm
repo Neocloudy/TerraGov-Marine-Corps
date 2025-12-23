@@ -101,11 +101,11 @@
 		CRASH("error with caste datum")
 	xeno_caste = X
 	xeno_caste.on_caste_applied(src)
-	maxHealth = xeno_caste.max_health * GLOB.xeno_stat_multiplicator_buff
+	max_health = xeno_caste.max_health * GLOB.xeno_stat_multiplicator_buff
 	if(restore_health_and_plasma)
 		// xenos that manage plasma through special means shouldn't gain it for free on aging
 		set_plasma(max(plasma_stored, xeno_caste.plasma_max * xeno_caste.plasma_regen_limit))
-		health = maxHealth
+		health = max_health
 	setXenoCasteSpeed(xeno_caste.speed)
 
 	//detaching and attaching preserves any tempory armor modifiers on the xeno
@@ -118,19 +118,19 @@
 	var/needed_healing = 0
 
 	if(health < 0) //In crit. Death threshold below 0 doesn't change with stat buff, so we can just apply damage equal to the max health change
-		needed_healing = maxHealth - new_max_health //Positive means our max health is going down, so heal to keep parity
+		needed_healing = max_health - new_max_health //Positive means our max health is going down, so heal to keep parity
 	else
-		var/current_health_percent = health / maxHealth //We want to keep this fixed so that applying the scalar doesn't heal or harm, relatively.
+		var/current_health_percent = health / max_health //We want to keep this fixed so that applying the scalar doesn't heal or harm, relatively.
 		var/new_health = current_health_percent * new_max_health //What we're aiming for
 		var/new_total_damage = new_max_health - new_health
-		var/current_total_damage = maxHealth - health
+		var/current_total_damage = max_health - health
 		needed_healing = current_total_damage - new_total_damage
 
-	var/brute_healing = min(getBruteLoss(), needed_healing)
-	adjustBruteLoss(-brute_healing)
-	adjustFireLoss(-(needed_healing - brute_healing))
+	var/brute_healing = min(get_brute_loss(), needed_healing)
+	adjust_brute_loss(-brute_healing)
+	adjust_fire_loss(-(needed_healing - brute_healing))
 
-	maxHealth = new_max_health
+	max_health = new_max_health
 	updatehealth()
 
 /mob/living/carbon/xenomorph/proc/generate_nicknumber()
@@ -252,7 +252,7 @@
 	else if(stat == UNCONSCIOUS)
 		. += "It quivers a bit, but barely moves."
 	else
-		var/percent = (health / maxHealth * 100)
+		var/percent = (health / max_health * 100)
 		switch(percent)
 			if(95 to 101)
 				. += "It looks quite healthy."

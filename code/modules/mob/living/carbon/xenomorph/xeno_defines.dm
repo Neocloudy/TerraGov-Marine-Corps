@@ -273,7 +273,7 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	attack_sound = SFX_ALIEN_CLAW_FLESH
 	wall_smash = FALSE
 	health = 5
-	maxHealth = 5
+	max_health = 5
 	rotate_on_lying = FALSE
 	move_force = MOVE_FORCE_VERY_STRONG
 	move_resist = MOVE_FORCE_VERY_STRONG
@@ -460,7 +460,7 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	if(!victim.has_status_effect(STATUS_EFFECT_LIFEDRAIN))
 		return
 	var/mob/living/carbon/xenomorph/xeno = attacker
-	var/healamount = xeno.maxHealth * 0.06 //% of the xenos max health
+	var/healamount = xeno.max_health * 0.06 //% of the xenos max health
 	HEAL_XENO_DAMAGE(xeno, healamount, FALSE)
 
 /// Sets the xenomorph's selected reagent & sends a signal indicating that it happened.

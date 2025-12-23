@@ -334,7 +334,7 @@ GLOBAL_LIST_INIT(xeno_resin_costs, list(
 			return fail_activate()
 		build_resin(get_turf(A))
 	if(heal_percentage)
-		var/health_healed = xeno_owner.maxHealth * heal_percentage
+		var/health_healed = xeno_owner.max_health * heal_percentage
 		HEAL_XENO_DAMAGE(xeno_owner, health_healed, FALSE)
 /datum/action/ability/activable/xeno/secrete_resin/proc/get_wait()
 	. = base_wait
@@ -346,7 +346,7 @@ GLOBAL_LIST_INIT(xeno_resin_costs, list(
 		if(/obj/alien/resin/sticky)
 			build_resin_modifier = 0.5
 
-	return (base_wait + scaling_wait - max(0, (scaling_wait * xeno_owner.health / xeno_owner.maxHealth))) * build_resin_modifier
+	return (base_wait + scaling_wait - max(0, (scaling_wait * xeno_owner.health / xeno_owner.max_health))) * build_resin_modifier
 
 ///Sets the resin type to produce
 /datum/action/ability/activable/xeno/secrete_resin/proc/set_resin_type(new_resin, silent = FALSE)
@@ -1222,7 +1222,7 @@ GLOBAL_LIST_INIT(xeno_resin_costs, list(
 	span_xenodanger("We suddenly feel \the [victim]'s life force streaming into us!"))
 
 	victim.do_jitter_animation(2)
-	victim.adjustCloneLoss(20)
+	victim.adjust_clone_loss(20)
 
 	ADD_TRAIT(victim, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
 	if(HAS_TRAIT(victim, TRAIT_UNDEFIBBABLE))

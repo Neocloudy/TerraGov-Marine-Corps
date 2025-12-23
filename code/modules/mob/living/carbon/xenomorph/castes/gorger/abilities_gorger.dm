@@ -128,7 +128,7 @@
 /datum/action/ability/activable/xeno/drain/use_ability(mob/living/carbon/human/target_human)
 	if(target_human.stat == DEAD)
 		var/overheal_gain = 0
-		while((xeno_owner.health < xeno_owner.maxHealth || xeno_owner.overheal < xeno_owner.xeno_caste.overheal_max) && do_after(xeno_owner, 2 SECONDS, NONE, target_human, BUSY_ICON_HOSTILE))
+		while((xeno_owner.health < xeno_owner.max_health || xeno_owner.overheal < xeno_owner.xeno_caste.overheal_max) && do_after(xeno_owner, 2 SECONDS, NONE, target_human, BUSY_ICON_HOSTILE))
 			var/list/healing_results = xeno_owner.heal_wounds(dead_multiplier)
 			overheal_gain = healing_results[1]
 			xeno_owner.adjustOverheal(overheal_gain)
@@ -225,7 +225,7 @@
 
 /datum/action/ability/activable/xeno/transfusion/use_ability(atom/target)
 	var/mob/living/carbon/xenomorph/target_xeno = target
-	var/heal_amount = target_xeno.maxHealth * heal_percentage
+	var/heal_amount = target_xeno.max_health * heal_percentage
 	HEAL_XENO_DAMAGE(target_xeno, heal_amount, FALSE)
 	if(owner.client)
 		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[owner.ckey]
@@ -245,7 +245,7 @@
 	if(target_xeno.get_xeno_hivenumber() != owner.get_xeno_hivenumber())
 		return FALSE
 	// no overhealing
-	if(target_xeno.health > target_xeno.maxHealth * (1 - heal_percentage))
+	if(target_xeno.health > target_xeno.max_health * (1 - heal_percentage))
 		return FALSE
 	return can_use_ability(target, TRUE)
 
@@ -292,7 +292,7 @@
 		var/distance = get_dist(M, xeno_owner)
 		if(xeno_owner.issamexenohive(M))  //Xenos in range will be healed and overhealed, including you.
 			var/mob/living/carbon/xenomorph/target_xeno = M
-			var/heal_amount = M.maxHealth * GORGER_OPPOSE_HEAL
+			var/heal_amount = M.max_health * GORGER_OPPOSE_HEAL
 			HEAL_XENO_DAMAGE(target_xeno, heal_amount, FALSE)
 			target_xeno.adjustOverheal(heal_amount)
 			new /obj/effect/temp_visual/healing(get_turf(target_xeno))
@@ -368,7 +368,7 @@
 		if(!silent)
 			to_chat(owner, span_notice("We can only link to familiar biological lifeforms."))
 		return FALSE
-	if(xeno_owner.health <= xeno_owner.maxHealth * GORGER_PSYCHIC_LINK_MIN_HEALTH)
+	if(xeno_owner.health <= xeno_owner.max_health * GORGER_PSYCHIC_LINK_MIN_HEALTH)
 		if(!silent)
 			to_chat(owner, span_notice("You are too hurt to link."))
 		return FALSE
@@ -400,7 +400,7 @@
 	if(HAS_TRAIT(owner, TRAIT_PSY_LINKED) || HAS_TRAIT(target, TRAIT_PSY_LINKED))
 		return fail_activate()
 
-	psychic_link_status_effect = xeno_owner.apply_status_effect(STATUS_EFFECT_XENO_PSYCHIC_LINK, -1, target, GORGER_PSYCHIC_LINK_RANGE, GORGER_PSYCHIC_LINK_REDIRECT, xeno_owner.maxHealth * GORGER_PSYCHIC_LINK_MIN_HEALTH, TRUE)
+	psychic_link_status_effect = xeno_owner.apply_status_effect(STATUS_EFFECT_XENO_PSYCHIC_LINK, -1, target, GORGER_PSYCHIC_LINK_RANGE, GORGER_PSYCHIC_LINK_REDIRECT, xeno_owner.max_health * GORGER_PSYCHIC_LINK_MIN_HEALTH, TRUE)
 	RegisterSignal(psychic_link_status_effect, COMSIG_XENO_PSYCHIC_LINK_REMOVED, PROC_REF(status_removed))
 	if(!attached_armor)
 		attached_armor = getArmor(armor_amount, armor_amount, armor_amount, armor_amount, armor_amount, armor_amount, armor_amount, armor_amount)
@@ -477,13 +477,13 @@
 
 /datum/action/ability/activable/xeno/carnage/use_ability(atom/A)
 	. = ..()
-	xeno_owner.apply_status_effect(STATUS_EFFECT_XENO_CARNAGE, 10 SECONDS, xeno_owner.xeno_caste.carnage_plasma_gain, xeno_owner.maxHealth * GORGER_CARNAGE_HEAL, GORGER_CARNAGE_MOVEMENT)
+	xeno_owner.apply_status_effect(STATUS_EFFECT_XENO_CARNAGE, 10 SECONDS, xeno_owner.xeno_caste.carnage_plasma_gain, xeno_owner.max_health * GORGER_CARNAGE_HEAL, GORGER_CARNAGE_MOVEMENT)
 	add_cooldown()
 
 /datum/action/ability/activable/xeno/carnage/ai_should_use(atom/target)
 	if(!iscarbon(target))
 		return FALSE
-	if(xeno_owner.plasma_stored > xeno_owner.xeno_caste.plasma_max * 0.8 && xeno_owner.health > xeno_owner.maxHealth * 0.9)
+	if(xeno_owner.plasma_stored > xeno_owner.xeno_caste.plasma_max * 0.8 && xeno_owner.health > xeno_owner.max_health * 0.9)
 		return FALSE
 	// nothing gained by slashing allies
 	if(target.get_xeno_hivenumber() == xeno_owner.get_xeno_hivenumber())
@@ -534,9 +534,9 @@
 /datum/action/ability/activable/xeno/feast/ai_should_use(atom/target)
 	// cancel the buff when at full health to conserve plasma, otherwise don't cancel
 	if(xeno_owner.has_status_effect(STATUS_EFFECT_XENO_FEAST))
-		return xeno_owner.health == xeno_owner.maxHealth
+		return xeno_owner.health == xeno_owner.max_health
 	// small damage has more efficient alternatives to be healed with
-	if(xeno_owner.health > xeno_owner.maxHealth * 0.7)
+	if(xeno_owner.health > xeno_owner.max_health * 0.7)
 		return FALSE
 	// should use the ability when there is enough resource for the buff to tick a moderate amount of times
 	if(xeno_owner.plasma_stored / xeno_owner.xeno_caste.feast_plasma_drain < 7)

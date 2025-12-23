@@ -6,7 +6,7 @@
 	icon_state = "Spitter Walking"
 	bubble_icon = "alienroyal"
 	health = 180
-	maxHealth = 180
+	max_health = 180
 	plasma_stored = 150
 	pixel_x = -16
 	tier = XENO_TIER_TWO

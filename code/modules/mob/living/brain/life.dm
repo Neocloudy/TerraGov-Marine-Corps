@@ -32,11 +32,11 @@
 
 	if(exposed_temperature > bodytemperature)
 		var/discomfort = min( abs(exposed_temperature - bodytemperature)/100, 1.0)
-		adjustFireLoss(20.0*discomfort)
+		adjust_fire_loss(20.0*discomfort)
 
 	else
 		var/discomfort = min( abs(exposed_temperature - bodytemperature)/100, 1.0)
-		adjustFireLoss(5.0*discomfort)
+		adjust_fire_loss(5.0*discomfort)
 
 
 

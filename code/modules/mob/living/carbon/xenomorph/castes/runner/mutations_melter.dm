@@ -19,7 +19,7 @@
 /datum/mutation_upgrade/shell/acid_release/on_mutation_enabled()
 	RegisterSignals(xenomorph_owner, list(COMSIG_XENOMORPH_BRUTE_DAMAGE, COMSIG_XENOMORPH_BURN_DAMAGE), PROC_REF(on_damage))
 	RegisterSignal(xenomorph_owner, COMSIG_MOB_STAT_CHANGED, PROC_REF(on_stat_changed))
-	if(xenomorph_owner.health >= xenomorph_owner.maxHealth)
+	if(xenomorph_owner.health >= xenomorph_owner.max_health)
 		can_be_activated = TRUE
 	return ..()
 
@@ -31,7 +31,7 @@
 /// If it isn't ready to activate and they have full health, make it ready to activate.
 /datum/mutation_upgrade/shell/acid_release/proc/on_damage(datum/source, amount, list/amount_mod)
 	SIGNAL_HANDLER
-	if(!can_be_activated && xenomorph_owner.health >= xenomorph_owner.maxHealth)
+	if(!can_be_activated && xenomorph_owner.health >= xenomorph_owner.max_health)
 		can_be_activated = TRUE
 
 /// Cover the area around them with stunning acid upon entering critical if it is ready to activate.

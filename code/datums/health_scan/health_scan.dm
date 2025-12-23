@@ -188,14 +188,14 @@
 		"patient" = patient.name,
 		"dead" = (patient.stat == DEAD || HAS_TRAIT(patient, TRAIT_FAKEDEATH)),
 		"health" = patient.health,
-		"max_health" = patient.maxHealth,
+		"max_health" = patient.max_health,
 		"crit_threshold" = patient.get_crit_threshold(),
 		"dead_threshold" = patient.get_death_threshold(),
-		"total_brute" = round(patient.getBruteLoss()),
-		"total_burn" = round(patient.getFireLoss()),
-		"total_tox" = round(patient.getToxLoss()),
-		"total_oxy" = round(patient.getOxyLoss()),
-		"total_clone" = round(patient.getCloneLoss()),
+		"total_brute" = round(patient.get_brute_loss()),
+		"total_burn" = round(patient.get_fire_loss()),
+		"total_tox" = round(patient.get_tox_loss()),
+		"total_oxy" = round(patient.get_oxy_loss()),
+		"total_clone" = round(patient.get_clone_loss()),
 
 		"blood_type" = patient.blood_type,
 		"blood_amount" = patient.blood_volume,
@@ -363,7 +363,7 @@
 			if(DEFIB_FAIL_BAD_ORGANS)
 				reason = "repair heart surgically"
 			if(DEFIB_FAIL_TOO_MUCH_DAMAGE)
-				reason = "repair damage above [patient.get_death_threshold() / patient.maxHealth * 100 - (organic_patient ? (DEFIBRILLATOR_HEALING_TIMES_SKILL(user.skills.getRating(SKILL_MEDICAL), DEFIBRILLATOR_BASE_HEALING_VALUE)) : 0)]%"
+				reason = "repair damage above [patient.get_death_threshold() / patient.max_health * 100 - (organic_patient ? (DEFIBRILLATOR_HEALING_TIMES_SKILL(user.skills.getRating(SKILL_MEDICAL), DEFIBRILLATOR_BASE_HEALING_VALUE)) : 0)]%"
 			// DEFIB_POSSIBLE intentionally leaves reason null
 		data["revivable_status"] = status
 		data["revivable_reason"] = reason

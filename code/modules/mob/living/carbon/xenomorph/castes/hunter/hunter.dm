@@ -6,7 +6,7 @@
 	icon_state = "Hunter Running"
 	bubble_icon = "alien"
 	health = 150
-	maxHealth = 150
+	max_health = 150
 	plasma_stored = 50
 	tier = XENO_TIER_TWO
 	upgrade = XENO_UPGRADE_NORMAL

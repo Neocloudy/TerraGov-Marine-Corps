@@ -11,7 +11,7 @@
 	icon = 'icons/Xeno/Effects.dmi'
 	icon_state = "Spiderling Running"
 	health = 250
-	maxHealth = 250
+	max_health = 250
 	plasma_stored = 200
 	tier = XENO_TIER_MINION
 	upgrade = XENO_UPGRADE_BASETYPE

@@ -29,6 +29,6 @@
 	if(status_flags & GODMODE)
 		return
 
-	health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
+	health = 100 - get_oxy_loss() - get_tox_loss() - get_fire_loss() - get_brute_loss()
 
 	update_stat()

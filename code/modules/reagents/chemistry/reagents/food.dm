@@ -416,9 +416,9 @@
 	reagent_ui_priority = REAGENT_UI_TOXINS
 
 /datum/reagent/consumable/larvajelly/on_mob_life(mob/living/L, metabolism)
-	L.adjustBruteLoss(-0.5*effect_str)
-	L.adjustFireLoss(effect_str)
-	L.adjustToxLoss(effect_str)
+	L.adjust_brute_loss(-0.5*effect_str)
+	L.adjust_fire_loss(effect_str)
+	L.adjust_tox_loss(effect_str)
 	return ..()
 
 /datum/reagent/consumable/larvajellyprepared
@@ -431,7 +431,7 @@
 	reagent_ui_priority = REAGENT_UI_TOXINS
 
 /datum/reagent/consumable/larvajellyprepared/on_mob_life(mob/living/L, metabolism)
-	L.adjustBruteLoss(-0.5*effect_str)
+	L.adjust_brute_loss(-0.5*effect_str)
 	return ..()
 
 /datum/reagent/consumable/caramel

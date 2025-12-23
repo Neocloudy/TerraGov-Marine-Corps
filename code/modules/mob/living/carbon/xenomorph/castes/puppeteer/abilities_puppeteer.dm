@@ -405,7 +405,7 @@
 			continue
 		balloon_alert(victim, "tangled!")
 		visible_message(span_danger("[src] tangles [victim]!"))
-		victim.adjustBruteLoss(10)
+		victim.adjust_brute_loss(10)
 		victim.Paralyze(2 SECONDS)
 	addtimer(CALLBACK(src, PROC_REF(retract)), 0.3 SECONDS)
 

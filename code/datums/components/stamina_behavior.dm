@@ -48,7 +48,7 @@
 	var/mob/living/stamina_holder = parent
 	if(oldloc == stamina_holder.loc)
 		return
-	stamina_holder.adjustStaminaLoss(1 * drain_modifier * stim_drain_modifier)
+	stamina_holder.adjust_stamina_loss(1 * drain_modifier * stim_drain_modifier)
 	if(stamina_holder.staminaloss >= 0)
 		stamina_holder.toggle_move_intent(MOVE_INTENT_WALK)
 

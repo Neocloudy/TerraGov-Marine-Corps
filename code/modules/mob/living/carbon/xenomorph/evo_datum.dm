@@ -68,7 +68,7 @@
 	data["can_evolve"] = \
 		!xeno.is_ventcrawling && \
 		!xeno.incapacitated(TRUE) && \
-		xeno.health >= xeno.maxHealth && \
+		xeno.health >= xeno.max_health && \
 		xeno.plasma_stored >= (xeno.xeno_caste.plasma_max * xeno.xeno_caste.plasma_regen_limit)
 
 	data["evolution"] = list(

@@ -44,7 +44,7 @@
 	if(health < 0)
 		handle_critical_health_updates(seconds_per_tick)
 		return
-	if((health >= maxHealth) || on_fire) //can't regenerate.
+	if((health >= max_health) || on_fire) //can't regenerate.
 		return
 	var/turf/T = loc
 	if(!istype(T))
@@ -85,12 +85,12 @@
 	if(loc_weeds_type)
 		heal_wounds(XENO_RESTING_HEAL, FALSE, seconds_per_tick) // healing in critical while on weeds ignores scaling
 	else if(!endure) //If we're not Enduring we bleed out
-		adjustBruteLoss(XENO_CRIT_DAMAGE * seconds_per_tick * XENO_PER_SECOND_LIFE_MOD)
+		adjust_brute_loss(XENO_CRIT_DAMAGE * seconds_per_tick * XENO_PER_SECOND_LIFE_MOD)
 
 /mob/living/carbon/xenomorph/proc/heal_wounds(multiplier = XENO_RESTING_HEAL, scaling = FALSE, seconds_per_tick = 2)
-	var/amount = 1 + (maxHealth * 0.0375) // 1 damage + 3.75% max health, with scaling power.
+	var/amount = 1 + (max_health * 0.0375) // 1 damage + 3.75% max health, with scaling power.
 	if(recovery_aura)
-		amount += recovery_aura * maxHealth * 0.01 // +1% max health per recovery level, up to +5%
+		amount += recovery_aura * max_health * 0.01 // +1% max health per recovery level, up to +5%
 	if(scaling)
 		SEND_SIGNAL(src, COMSIG_XENOMORPH_PRE_HEALTH_REGEN_SCALING)
 		var/time_modifier = seconds_per_tick * XENO_PER_SECOND_LIFE_MOD

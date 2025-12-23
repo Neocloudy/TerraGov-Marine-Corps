@@ -252,7 +252,7 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 		if(xeno_owner.health_threshold_crit > xeno_owner.health - health_to_lose) // Hugbox to stop them from suiciding into critical.
 			owner.balloon_alert(owner, "Not enough health!")
 			return fail_activate()
-		xeno_owner.adjustBruteLoss(health_to_lose, TRUE)
+		xeno_owner.adjust_brute_loss(health_to_lose, TRUE)
 		current_grenades++
 	var/obj/item/explosive/grenade/globadier/nade = new xeno_owner.selected_grenade(owner.loc, owner)
 	if(xeno_owner == target && bonus_self_detonation_time)
@@ -449,7 +449,7 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 		nerd.apply_status_effect(STATUS_EFFECT_MELTING, 2)
 		nerd.apply_status_effect(STATUS_EFFECT_LIFEDRAIN, 1 SECONDS)
 	for(var/mob/living/carbon/xenomorph/xeno AS in cheap_get_xenos_near(src,1))
-		var/healamount = (25 + (xeno.recovery_aura * xeno.maxHealth * 0.03))
+		var/healamount = (25 + (xeno.recovery_aura * xeno.max_health * 0.03))
 		HEAL_XENO_DAMAGE(xeno, healamount, FALSE)
 		new /obj/effect/temp_visual/telekinesis(get_turf(xeno))
 		if(owner.client)
@@ -635,7 +635,7 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	newshell.def_zone = xeno_owner.get_limbzone_target()
 
 	newshell.fire_at(target, xeno_owner, xeno_owner, newshell.ammo.max_range)
-	xeno_owner.adjustBruteLoss(xeno_owner.health * GLOBADIER_XADAR_PERCENT_HEALTH_PLAS_COST, TRUE)
+	xeno_owner.adjust_brute_loss(xeno_owner.health * GLOBADIER_XADAR_PERCENT_HEALTH_PLAS_COST, TRUE)
 	succeed_activate(xeno_owner.plasma_stored * GLOBADIER_XADAR_PERCENT_HEALTH_PLAS_COST)
 	add_cooldown()
 	GLOB.round_statistics.globadier_XADAR_fired++

@@ -68,7 +68,7 @@
 
 /datum/mutation_upgrade/shell/borrowed_time/on_mutation_enabled()
 	RegisterSignal(xenomorph_owner, COMSIG_LIVING_UPDATE_HEALTH, PROC_REF(on_health_update))
-	if(!critical_threshold_boosted && xenomorph_owner.health >= xenomorph_owner.maxHealth)
+	if(!critical_threshold_boosted && xenomorph_owner.health >= xenomorph_owner.max_health)
 		toggle(TRUE)
 	return ..()
 
@@ -93,11 +93,11 @@
 /// If their health is negative, activate it if possible. If it is full, let them activate it next time.
 /datum/mutation_upgrade/shell/borrowed_time/proc/on_health_update(datum/source)
 	SIGNAL_HANDLER
-	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.maxHealth : (xenomorph_owner.maxHealth - xenomorph_owner.getFireLoss() - xenomorph_owner.getBruteLoss())
+	var/health = (xenomorph_owner.status_flags & GODMODE) ? xenomorph_owner.max_health : (xenomorph_owner.max_health - xenomorph_owner.get_fire_loss() - xenomorph_owner.get_brute_loss())
 	if(health <= xenomorph_owner.get_death_threshold())
 		return // They're dead (and possibly gibbed) immediately after the signal is processed.
 	if(!critical_threshold_boosted)
-		if(health >= xenomorph_owner.maxHealth)
+		if(health >= xenomorph_owner.max_health)
 			toggle()
 		return
 	if(critical_threshold_timer || health > xenomorph_owner.get_crit_threshold() + critical_threshold_amount)

@@ -135,12 +135,12 @@ GLOBAL_LIST_INIT(pod_styles, list(\
 				sleep(0.1 SECONDS)
 
 		if(effectGib)
-			L.adjustBruteLoss(5000)
+			L.adjust_brute_loss(5000)
 			L.gib()
 			continue
 
-		L.adjustBruteLoss(damage)
-		UPDATEHEALTH(L)
+		L.adjust_brute_loss(damage)
+		UPDATE_HEALTH_NEXT_TICK(L)
 
 	var/explosion_sum = B[1] + B[2] + B[3] + B[4]
 	if(explosion_sum != 0)

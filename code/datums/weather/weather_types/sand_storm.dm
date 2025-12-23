@@ -29,10 +29,10 @@
 		return
 	to_chat(L, span_danger("You are battered by the coarse sand!"))
 	if(!ishuman(L))
-		L.adjustBruteLoss(6)
+		L.adjust_brute_loss(6)
 		return
 
-	L.adjustBruteLoss(2)
+	L.adjust_brute_loss(2)
 	L.Stagger(2 SECONDS)
 
 

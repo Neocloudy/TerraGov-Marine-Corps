@@ -53,7 +53,7 @@
 	var/secondary_unarmed_type = /datum/unarmed_attack/bite
 
 	//----Health/Stamina + Modifiers
-	///new maxHealth [/mob/living/carbon/human/var/maxHealth] of the human mob once species is applied
+	///new max_health [/mob/living/carbon/human/var/max_health] of the human mob once species is applied
 	var/total_health = 100
 	///Brute damage modifier
 	var/brute_mod = null
@@ -255,7 +255,7 @@
 			H.dropItemToGround(thing)
 	for(var/newtrait in inherent_traits)
 		ADD_TRAIT(H, newtrait, SPECIES_TRAIT)
-	H.maxHealth += total_health - (old_species ? old_species.total_health : initial(H.maxHealth))
+	H.max_health += total_health - (old_species ? old_species.total_health : initial(H.max_health))
 
 ///special things to change after we're no longer that species
 /datum/species/proc/post_species_loss(mob/living/carbon/human/H)
@@ -560,15 +560,15 @@
 					if(prob(60))
 						victim.emote("pain")
 		if(TOX)
-			victim.adjustToxLoss(damage)
+			victim.adjust_tox_loss(damage)
 		if(OXY)
-			victim.adjustOxyLoss(damage)
+			victim.adjust_oxy_loss(damage)
 		if(CLONE)
-			victim.adjustCloneLoss(damage)
+			victim.adjust_clone_loss(damage)
 		if(STAMINA)
 			if(species_flags & NO_STAMINA)
 				return
-			victim.adjustStaminaLoss(damage)
+			victim.adjust_stamina_loss(damage)
 
 	// Will set our damageoverlay icon to the next level, which will then be set back to the normal level the next mob.Life()
 	SEND_SIGNAL(victim, COMSIG_HUMAN_DAMAGE_TAKEN, damage, attacker) //add attacker arg everywhere needed

@@ -43,7 +43,7 @@
 	for(var/obj/item/explosive/grenade/option AS in mob_inventory.grenade_list)
 		if(isgun(option.loc))
 			continue
-		if(istype(option, /obj/item/explosive/grenade/smokebomb) && !option.dangerous && (mob_parent.health <= minimum_health * 2 * mob_parent.maxHealth))
+		if(istype(option, /obj/item/explosive/grenade/smokebomb) && !option.dangerous && (mob_parent.health <= minimum_health * 2 * mob_parent.max_health))
 			return
 		nade_options += option
 

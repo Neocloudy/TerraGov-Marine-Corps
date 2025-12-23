@@ -270,12 +270,12 @@
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_EXTINGUISH))
 		ExtinguishMob()
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_BLISTERING))
-		adjustFireLoss(15 * bio_protection)
+		adjust_fire_loss(15 * bio_protection)
 		to_chat(src, span_danger("It feels as if you've been dumped into an open fire!"))
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_XENO_ACID))
 		if(prob(25 * acid_protection))
 			to_chat(src, span_danger("Your skin feels like it is melting away!"))
-		adjustFireLoss(max(S.strength * rand(20, 23) * acid_protection - acid_hard_protection, 0))
+		adjust_fire_loss(max(S.strength * rand(20, 23) * acid_protection - acid_hard_protection, 0))
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_XENO_TOXIC))
 		if(HAS_TRAIT(src, TRAIT_INTOXICATION_IMMUNE))
 			return
@@ -283,7 +283,7 @@
 			var/datum/status_effect/stacking/intoxicated/debuff = has_status_effect(STATUS_EFFECT_INTOXICATED)
 			debuff.add_stacks(SENTINEL_TOXIC_GRENADE_STACKS_PER)
 		apply_status_effect(STATUS_EFFECT_INTOXICATED, SENTINEL_TOXIC_GRENADE_STACKS_PER)
-		adjustFireLoss(SENTINEL_TOXIC_GRENADE_GAS_DAMAGE * bio_protection)
+		adjust_fire_loss(SENTINEL_TOXIC_GRENADE_GAS_DAMAGE * bio_protection)
 	if(CHECK_BITFIELD(S.smoke_traits, SMOKE_CHEM))
 		S.reagents?.reaction(src, TOUCH, S.fraction)
 	return bio_protection
@@ -309,8 +309,8 @@
 	geiger_counter.severity = sound_level ? sound_level : clamp(round(rad_strength * 0.15, 1), 1, 4)
 	geiger_counter.start(src)
 
-	adjustCloneLoss(rad_strength)
-	adjustStaminaLoss(rad_strength * 7)
+	adjust_clone_loss(rad_strength)
+	adjust_stamina_loss(rad_strength * 7)
 	adjust_stagger(rad_strength SECONDS * 0.5)
 	add_slowdown(rad_strength * 0.5)
 	blur_eyes(rad_strength) //adds a visual indicator that you've just been irradiated

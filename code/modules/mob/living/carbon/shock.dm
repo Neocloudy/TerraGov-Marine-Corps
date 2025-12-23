@@ -4,7 +4,7 @@
 /mob/living/carbon/proc/adjustTraumatic_Shock(amount)
 	if(amount > 0 && (status_flags & GODMODE))
 		return FALSE
-	traumatic_shock = clamp(traumatic_shock+amount,-100,maxHealth*2)
+	traumatic_shock = clamp(traumatic_shock+amount,-100,max_health*2)
 
 /mob/living/carbon/proc/setTraumatic_Shock(amount)
 	if(traumatic_shock == amount)
@@ -18,7 +18,7 @@
 	if(amount > 0 && (status_flags & GODMODE))
 		return FALSE
 	. = shock_stage
-	setShock_Stage(clamp(shock_stage + (amount - shock_stage) * PAIN_REACTIVITY, 0, maxHealth * 2))
+	setShock_Stage(clamp(shock_stage + (amount - shock_stage) * PAIN_REACTIVITY, 0, max_health * 2))
 
 /mob/living/carbon/proc/setShock_Stage(amount)
 	if(HAS_TRAIT(src, TRAIT_PAIN_IMMUNE))
@@ -58,11 +58,11 @@
 		return
 
 	traumatic_shock = 			\
-	0.75	* getOxyLoss() + 		\
-	0.75	* getToxLoss() + 		\
-	1.20	* getFireLoss() + 		\
-	1		* getBruteLoss() + 		\
-	1		* getCloneLoss()
+	0.75	* get_oxy_loss() + 		\
+	0.75	* get_tox_loss() + 		\
+	1.20	* get_fire_loss() + 		\
+	1		* get_brute_loss() + 		\
+	1		* get_clone_loss()
 
 	traumatic_shock += reagent_shock_modifier
 

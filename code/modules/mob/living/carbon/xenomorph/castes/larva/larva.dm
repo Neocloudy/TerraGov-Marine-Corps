@@ -6,7 +6,7 @@
 
 	a_intent = INTENT_HELP //Forces help intent for all interactions.
 
-	maxHealth = 35
+	max_health = 35
 	health = 35
 	allow_pass_flags = PASS_MOB|PASS_XENO
 	pass_flags = PASS_LOW_STRUCTURE|PASS_MOB|PASS_XENO

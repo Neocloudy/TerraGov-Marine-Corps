@@ -123,11 +123,11 @@ Needed both for a purchase list and effected list (if one perk impacts multiple 
 
 /datum/perk/trait/hp_boost/apply_perk(mob/living/carbon/owner)
 	. = ..()
-	owner.maxHealth += health_mod
+	owner.max_health += health_mod
 
 /datum/perk/trait/hp_boost/remove_perk(mob/living/carbon/owner)
 	. = ..()
-	owner.maxHealth -= health_mod
+	owner.max_health -= health_mod
 
 /datum/perk/trait/hp_boost/unlock_bonus(mob/living/carbon/owner, datum/individual_stats/owner_stats)
 	if(owner_stats.faction == FACTION_TERRAGOV)

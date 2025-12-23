@@ -15,7 +15,7 @@
 	emote_taunt = list("gnashes")
 	taunt_chance = 30
 	speed = 0
-	maxHealth = 25
+	max_health = 25
 	health = 25
 
 	harm_intent_damage = 8
@@ -33,7 +33,7 @@
 	icon_living = "megacarp"
 	icon_dead = "megacarp_dead"
 	icon_gib = "megacarp_gib"
-	maxHealth = 20
+	max_health = 20
 	health = 20
 	pixel_x = -16
 	mob_size = MOB_SIZE_BIG
@@ -48,7 +48,7 @@
 	. = ..()
 	name = "[pick(SSstrings.get_list_from_file("names/megacarp_first"))] [pick(SSstrings.get_list_from_file("names/megacarp_last"))]"
 	melee_damage += rand(10, 20)
-	maxHealth += rand(30, 60)
+	max_health += rand(30, 60)
 	move_to_delay = rand(3, 7)
 
 

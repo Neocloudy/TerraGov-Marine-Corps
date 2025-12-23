@@ -149,8 +149,8 @@
 	if(prob(5))
 		visible_message("[src] beeps as it continues working.")
 
-	occupant.adjustToxLoss(-0.5) // Pretend that they're getting dylovene. We don't want to add reagents only for it to be filtered away.
-	occupant.adjustOxyLoss(-occupant.getOxyLoss()) // Pretend that they're getting Dexalin+. Ditto above.
+	occupant.adjust_tox_loss(-0.5) // Pretend that they're getting dylovene. We don't want to add reagents only for it to be filtered away.
+	occupant.adjust_oxy_loss(-occupant.get_oxy_loss()) // Pretend that they're getting Dexalin+. Ditto above.
 	if(filtering)
 		var/something_filtered = FALSE
 		for(var/datum/reagent/held_reagent in occupant.reagents.reagent_list)
@@ -177,7 +177,7 @@
 
 	var/should_update_health = FALSE
 	if(heal_brute)
-		if(occupant.getBruteLoss() > 0)
+		if(occupant.get_brute_loss() > 0)
 			occupant.heal_limb_damage(heal_brute, 0)
 			should_update_health = TRUE
 			if(prob(10))
@@ -187,7 +187,7 @@
 			heal_brute = 0
 			say("Trauma repair surgery complete.")
 	if(heal_burn)
-		if(occupant.getFireLoss() > 0)
+		if(occupant.get_fire_loss() > 0)
 			occupant.heal_limb_damage(0, heal_burn)
 			should_update_health = TRUE
 			if(prob(10))
@@ -197,8 +197,8 @@
 			heal_burn = 0
 			say("Skin grafts complete.")
 	if(heal_toxin)
-		if(occupant.getToxLoss() > 0)
-			occupant.adjustToxLoss(-heal_toxin)
+		if(occupant.get_tox_loss() > 0)
+			occupant.adjust_tox_loss(-heal_toxin)
 			should_update_health = TRUE
 			if(prob(10))
 				visible_message("[src] whirrs and gurgles as it kelates the occupant.")
@@ -527,11 +527,11 @@
 	if(operated_organ && (operated_human.disabilities & NEARSIGHTED || operated_human.disabilities & BLIND || operated_organ.damage > 0))
 		surgery_list += new /datum/autodoc_surgery(null, operated_organ, SURGERY_CATEGORY_ORGAN, SURGERY_PROCEDURE_ORGAN_EYES)
 
-	if(operated_human.getBruteLoss() > 0)
+	if(operated_human.get_brute_loss() > 0)
 		surgery_list += new /datum/autodoc_surgery(null, operated_organ, SURGERY_CATEGORY_EXTERNAL, SURGERY_PROCEDURE_EXTERNAL_BRUTE)
-	if(operated_human.getFireLoss() > 0)
+	if(operated_human.get_fire_loss() > 0)
 		surgery_list += new /datum/autodoc_surgery(null, operated_organ, SURGERY_CATEGORY_EXTERNAL, SURGERY_PROCEDURE_EXTERNAL_BURN)
-	if(operated_human.getToxLoss() > 0)
+	if(operated_human.get_tox_loss() > 0)
 		surgery_list += new /datum/autodoc_surgery(null, operated_organ, SURGERY_CATEGORY_EXTERNAL, SURGERY_PROCEDURE_EXTERNAL_TOXIN)
 	var/overdosing = FALSE
 	for(var/datum/reagent/held_reagent in operated_human.reagents.reagent_list)
@@ -1068,14 +1068,14 @@
 			operating = "Not in surgery"
 		if(1)
 			operating = "<font color='#b54646'><B>SURGERY IN PROGRESS: MANUAL EJECTION ONLY TO BE ATTEMPTED BY TRAINED OPERATORS!</B></FONT>"
-	var/health_ratio = connected.occupant.health * 100 / connected.occupant.maxHealth
+	var/health_ratio = connected.occupant.health * 100 / connected.occupant.max_health
 	dat += "[health_ratio > 50 ? "<font color='#487553'>" : "<font color='#b54646'>"]\tHealth %: [round(health_ratio)] ([t1])</FONT><BR>"
 	var/pulse = connected.occupant.handle_pulse()
 	dat += "[pulse == PULSE_NONE || pulse == PULSE_THREADY ? "<font color='#b54646'>" : "<font color='#487553'>"]\t-Pulse, bpm: [connected.occupant.get_pulse(GETPULSE_TOOL)]</FONT><BR>"
-	dat += "[connected.occupant.getBruteLoss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Brute Damage %: [connected.occupant.getBruteLoss()]</FONT><BR>"
-	dat += "[connected.occupant.getOxyLoss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Respiratory Damage %: [connected.occupant.getOxyLoss()]</FONT><BR>"
-	dat += "[connected.occupant.getToxLoss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Toxin Content %: [connected.occupant.getToxLoss()]</FONT><BR>"
-	dat += "[connected.occupant.getFireLoss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Burn Severity %: [connected.occupant.getFireLoss()]</FONT><BR>"
+	dat += "[connected.occupant.get_brute_loss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Brute Damage %: [connected.occupant.get_brute_loss()]</FONT><BR>"
+	dat += "[connected.occupant.get_oxy_loss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Respiratory Damage %: [connected.occupant.get_oxy_loss()]</FONT><BR>"
+	dat += "[connected.occupant.get_tox_loss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Toxin Content %: [connected.occupant.get_tox_loss()]</FONT><BR>"
+	dat += "[connected.occupant.get_fire_loss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"]\t-Burn Severity %: [connected.occupant.get_fire_loss()]</FONT><BR>"
 
 	dat += "<hr> Surgery Queue:<br>"
 

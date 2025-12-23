@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/gorger.dmi'
 	icon_state = "Gorger Walking"
 	health = 600
-	maxHealth = 600
+	max_health = 600
 	plasma_stored = 100
 	pixel_x = -16
 	tier = XENO_TIER_THREE

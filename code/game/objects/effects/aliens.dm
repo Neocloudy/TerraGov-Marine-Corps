@@ -231,7 +231,7 @@
 		limb.take_damage_limb(0, human_user.modify_by_armor(acid_damage * 0.25 * randfloat(0.75, 1.25), ACID, def_zone = limb.name))
 		limb_count++
 	human_user.UpdateDamageIcon()
-	UPDATEHEALTH(human_user)
+	UPDATE_HEALTH_NEXT_TICK(human_user)
 	qdel(src)
 
 /obj/effect/xenomorph/acid/weak

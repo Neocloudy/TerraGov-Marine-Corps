@@ -4,7 +4,7 @@
 	abstract_type = /datum/scanner_advice/damage
 
 /datum/scanner_advice/damage/brute/can_show(mob/living/carbon/human/patient, mob/user)
-	return (patient.getBruteLoss() > 5)
+	return (patient.get_brute_loss() > 5)
 
 /datum/scanner_advice/damage/brute/get_data(mob/living/carbon/human/patient, mob/user)
 	. = list()
@@ -15,7 +15,7 @@
 			ADVICE_ICON = FA_ICON_KIT_MEDICAL,
 			ADVICE_ICON_COLOR = "#5EBB9E",
 		))
-		if(patient.getBruteLoss() > 30 && !patient.reagents.has_reagent(/datum/reagent/medicalnanites) && !patient.reagents.has_reagent(/datum/reagent/medicine/bicaridine, 3))
+		if(patient.get_brute_loss() > 30 && !patient.reagents.has_reagent(/datum/reagent/medicalnanites) && !patient.reagents.has_reagent(/datum/reagent/medicine/bicaridine, 3))
 			. += list(list(
 				ADVICE_TEXT = "Administer a single dose of Bicaridine to reduce physical trauma.",
 				ADVICE_TOOLTIP = "Significant physical trauma detected. Bicaridine reduces brute damage.",
@@ -31,7 +31,7 @@
 		))
 
 /datum/scanner_advice/damage/burn/can_show(mob/living/carbon/human/patient, mob/user)
-	return (patient.getFireLoss() > 5)
+	return (patient.get_fire_loss() > 5)
 
 /datum/scanner_advice/damage/burn/get_data(mob/living/carbon/human/patient, mob/user)
 	. = list()
@@ -42,7 +42,7 @@
 			ADVICE_ICON = FA_ICON_KIT_MEDICAL,
 			ADVICE_ICON_COLOR = "#D38956",
 		))
-		if(patient.getFireLoss() > 30 && !patient.reagents.has_reagent(/datum/reagent/medicalnanites) && !patient.reagents.has_reagent(/datum/reagent/medicine/kelotane, 3))
+		if(patient.get_fire_loss() > 30 && !patient.reagents.has_reagent(/datum/reagent/medicalnanites) && !patient.reagents.has_reagent(/datum/reagent/medicine/kelotane, 3))
 			. += list(list(
 				ADVICE_TEXT = "Administer a single dose of Kelotane to reduce burns.",
 				ADVICE_TOOLTIP = "Significant tissue burns detected. Kelotane reduces burn damage.",
@@ -64,7 +64,7 @@
 			continue
 		if(istype(reagent, /datum/reagent/toxin) && !has_dylovene)
 			return TRUE
-	if(patient.getToxLoss() > 15 && !has_dylovene)
+	if(patient.get_tox_loss() > 15 && !has_dylovene)
 		return TRUE
 
 /datum/scanner_advice/damage/tox/get_data(mob/living/carbon/human/patient, mob/user)
@@ -76,7 +76,7 @@
 	)
 
 /datum/scanner_advice/damage/oxy/can_show(mob/living/carbon/human/patient, mob/user)
-	if(patient.getOxyLoss() > 25 && !patient.reagents.has_reagent(/datum/reagent/medicine/dexalinplus))
+	if(patient.get_oxy_loss() > 25 && !patient.reagents.has_reagent(/datum/reagent/medicine/dexalinplus))
 		return TRUE
 
 /datum/scanner_advice/damage/oxy/get_data(mob/living/carbon/human/patient, mob/user)
@@ -88,7 +88,7 @@
 	)
 
 /datum/scanner_advice/damage/clone/can_show(mob/living/carbon/human/patient, mob/user)
-	return (patient.getCloneLoss() > 5)
+	return (patient.get_clone_loss() > 5)
 
 /datum/scanner_advice/damage/clone/get_data(mob/living/carbon/human/patient, mob/user)
 	var/organic_patient = !(patient.species.species_flags & (IS_SYNTHETIC|ROBOTIC_LIMBS))

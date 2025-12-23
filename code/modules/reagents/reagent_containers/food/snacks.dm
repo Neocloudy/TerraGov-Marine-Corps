@@ -218,7 +218,7 @@
 		monuse.taste(reagents) // ratatouilles
 		if(prob(50))
 			balloon_alert_to_viewers("nibbles")
-		monuse.health = min(monuse.health + 1, monuse.maxHealth)
+		monuse.health = min(monuse.health + 1, monuse.max_health)
 
 //////////////////////////////////////////////////
 ////////////////////////////////////////////Snacks

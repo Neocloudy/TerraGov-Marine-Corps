@@ -80,10 +80,10 @@
 	var/datum/action/ability/xeno_action/enhancement/enhancement_action = xeno_owner.actions_by_path[/datum/action/ability/xeno_action/enhancement]
 	enhancement_action?.end_ability()
 	if(was_manually_disconnected && existing_link.stacks)
-		var/health_to_heal = linked_target.maxHealth * disconnection_heal_percentage * existing_link.stacks
+		var/health_to_heal = linked_target.max_health * disconnection_heal_percentage * existing_link.stacks
 		var/leftover_healing = health_to_heal
 		HEAL_XENO_DAMAGE(linked_target, leftover_healing, TRUE)
-		xeno_owner.adjustBruteLoss(health_to_heal - leftover_healing, TRUE)
+		xeno_owner.adjust_brute_loss(health_to_heal - leftover_healing, TRUE)
 	xeno_owner.remove_status_effect(STATUS_EFFECT_XENO_ESSENCE_LINK)
 	existing_link = null
 	linked_target = null
@@ -119,7 +119,7 @@
 	if(xeno_owner.do_actions)
 		return FALSE
 	var/mob/living/living_target = target
-	if((!bypass_cast_time_on_threshold || (living_target.health > (living_target.maxHealth * bonus_healing_threshold))))
+	if((!bypass_cast_time_on_threshold || (living_target.health > (living_target.max_health * bonus_healing_threshold))))
 		if(!do_after(xeno_owner, 1 SECONDS, NONE, target, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
 			return FALSE
 	xeno_owner.visible_message(span_xenowarning("\the [xeno_owner] vomits acid over [target], mending their wounds!"))
@@ -137,11 +137,11 @@
 	var/heal_multiplier = 1
 	if(essence_link_action.existing_link?.link_target == target)
 		target.apply_status_effect(STATUS_EFFECT_XENO_SALVE_REGEN)
-		if(essence_link_action.existing_link.stacks > 0 && (target.health <= (target.maxHealth * bonus_healing_threshold)))
+		if(essence_link_action.existing_link.stacks > 0 && (target.health <= (target.max_health * bonus_healing_threshold)))
 			heal_multiplier += bonus_healing_additive_multiplier
 	playsound(target, SFX_ALIEN_DROOL, 25)
 	new /obj/effect/temp_visual/telekinesis(get_turf(target))
-	var/heal_amount = (DRONE_BASE_SALVE_HEAL + target.recovery_aura * target.maxHealth * 0.01) * heal_multiplier
+	var/heal_amount = (DRONE_BASE_SALVE_HEAL + target.recovery_aura * target.max_health * 0.01) * heal_multiplier
 	var/leftover_healing = heal_amount
 	HEAL_XENO_DAMAGE(target, leftover_healing, FALSE)
 	var/sunder_change = target.adjust_sunder(-heal_amount / 10)

@@ -119,7 +119,7 @@
 		wound_overlay.icon_state = "none"
 		return
 	if(health > health_threshold_crit)
-		health_thresholds = CEILING((health * 4) / (maxHealth), 1) //From 1 to 4, in 25% chunks
+		health_thresholds = CEILING((health * 4) / (max_health), 1) //From 1 to 4, in 25% chunks
 		if(health_thresholds > 3)
 			wound_overlay.icon_state = "none"
 			return //Injuries appear at less than 75% health

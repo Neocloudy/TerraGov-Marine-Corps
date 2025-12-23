@@ -110,7 +110,7 @@
 	var/dam_amt = 2
 
 	if(istype(tool, /obj/item/tool/surgery/surgical_membrane))
-		target.adjustToxLoss(5)
+		target.adjust_tox_loss(5)
 
 	for(var/datum/internal_organ/I in affected.internal_organs)
 		if(I?.damage > 0)
@@ -163,7 +163,7 @@
 	span_warning("Your hand slips, gumming up the mechanisms inside of [target]'s [affected.display_name] with \the [tool]!"))
 	target.balloon_alert_to_viewers("Slipped!")
 
-	target.adjustToxLoss(5)
+	target.adjust_tox_loss(5)
 	affected.createwound(CUT, 5)
 
 	for(var/datum/internal_organ/I in affected.internal_organs)

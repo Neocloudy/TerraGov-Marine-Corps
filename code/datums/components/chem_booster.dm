@@ -198,13 +198,13 @@
 		return
 	update_resource(-resource_drain_amount)
 
-	wearer.adjustToxLoss(-tox_heal*boost_amount)
+	wearer.adjust_tox_loss(-tox_heal*boost_amount)
 	wearer.heal_overall_damage(4*boost_amount*brute_heal_amp, 4*boost_amount*burn_heal_amp)
 	vali_necro_timer = world.time - processing_start
 	if(vali_necro_timer > 20 SECONDS)
 		return
 	if(connected_weapon)
-		wearer.adjustStaminaLoss(-7*stamina_regen_amp*((20 - (vali_necro_timer)/10)/20)) //stamina gain scales inversely with passed time, up to 20 seconds
+		wearer.adjust_stamina_loss(-7*stamina_regen_amp*((20 - (vali_necro_timer)/10)/20)) //stamina gain scales inversely with passed time, up to 20 seconds
 	if(vali_necro_timer > 10 SECONDS)
 		to_chat(wearer, span_bold("WARNING: You have [(200 - (vali_necro_timer))/10] seconds before necrotic tissue forms on your limbs."))
 	if(vali_necro_timer > 15 SECONDS)

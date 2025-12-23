@@ -14,7 +14,7 @@
 			visible_message(span_danger("[S] [S.attacktext] [src]!"), null, null, 5)
 			var/damage = S.melee_damage
 			apply_damage(damage, BRUTE, blocked = MELEE, attacker = M)
-			UPDATEHEALTH(src)
+			UPDATE_HEALTH_NEXT_TICK(src)
 			log_combat(S, src, "attacked")
 
 

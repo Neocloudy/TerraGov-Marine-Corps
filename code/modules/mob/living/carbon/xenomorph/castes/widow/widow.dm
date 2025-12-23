@@ -6,7 +6,7 @@
 	icon_state = "Widow Walking"
 	bubble_icon = "alienroyal"
 	health = 200
-	maxHealth = 200
+	max_health = 200
 	plasma_stored = 150
 	tier = XENO_TIER_THREE
 	upgrade = XENO_UPGRADE_NORMAL

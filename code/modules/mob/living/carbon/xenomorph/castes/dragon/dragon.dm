@@ -7,7 +7,7 @@
 	attacktext = "bites"
 	friendly = "nuzzles"
 	health = 850
-	maxHealth = 850
+	max_health = 850
 	plasma_stored = 0
 	pixel_x = -48
 	mob_size = MOB_SIZE_BIG

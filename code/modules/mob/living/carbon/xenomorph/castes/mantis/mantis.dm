@@ -5,7 +5,7 @@
 	icon = 'icons/Xeno/castes/mantis.dmi'
 	icon_state = "Mantis Walking"
 	health = 150
-	maxHealth = 150
+	max_health = 150
 	plasma_stored = 50
 	pixel_x = -16
 	tier = XENO_TIER_MINION

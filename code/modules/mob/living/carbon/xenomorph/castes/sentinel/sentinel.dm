@@ -6,7 +6,7 @@
 	icon_state = "Sentinel Walking"
 	bubble_icon = "alienleft"
 	health = 150
-	maxHealth = 150
+	max_health = 150
 	plasma_stored = 75
 	pixel_x = -12
 	tier = XENO_TIER_ONE

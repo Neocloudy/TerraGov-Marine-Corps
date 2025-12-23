@@ -18,7 +18,7 @@
 	))
 	. += list(list(
 		ADVICE_TEXT = "Combat Robot: Patient does not enter critical condition.",
-		ADVICE_TOOLTIP = "Combat Robots will continue operating until death at [patient.get_death_threshold() / patient.maxHealth * 100]% health.",
+		ADVICE_TOOLTIP = "Combat Robots will continue operating until death at [patient.get_death_threshold() / patient.max_health * 100]% health.",
 		ADVICE_ICON = FA_ICON_ROBOT,
 		ADVICE_ICON_COLOR = "label",
 	))
@@ -30,12 +30,12 @@
 	. = list()
 	. += list(list(
 		ADVICE_TEXT = "Synthetic: Patient does not heal on defibrillation.",
-		ADVICE_TOOLTIP = "Synthetics do not heal when being shocked with a defibrillator, meaning they are only revivable over [patient.get_death_threshold() / patient.maxHealth * 100]% health.",
+		ADVICE_TOOLTIP = "Synthetics do not heal when being shocked with a defibrillator, meaning they are only revivable over [patient.get_death_threshold() / patient.max_health * 100]% health.",
 		ADVICE_ICON = FA_ICON_ROBOT,
 		ADVICE_ICON_COLOR = "label",
 	))
 	. += list(list(
-		ADVICE_TEXT = "Synthetic: Patient overheats while lower than [SYNTHETIC_CRIT_THRESHOLD / patient.maxHealth * 100]% health.",
+		ADVICE_TEXT = "Synthetic: Patient overheats while lower than [SYNTHETIC_CRIT_THRESHOLD / patient.max_health * 100]% health.",
 		ADVICE_TOOLTIP = "When defibrillating, the patient should be repaired above this threshold to avoid unnecessary burning.",
 		ADVICE_ICON = FA_ICON_ROBOT,
 		ADVICE_ICON_COLOR = "label",

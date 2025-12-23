@@ -90,6 +90,6 @@
 		throw_alert(ALERT_PRESSURE, /atom/movable/screen/alert/lowpressure, 1)
 	else
 		take_overall_damage(LOW_PRESSURE_DAMAGE)
-		if(getOxyLoss() < 55) //11 OxyLoss per 4 ticks when wearing internals;    unconsciousness in 16 ticks, roughly half a minute
-			adjustOxyLoss(4)  //16 OxyLoss per 4 ticks when no internals present; unconsciousness in 13 ticks, roughly twenty seconds
+		if(get_oxy_loss() < 55) //11 OxyLoss per 4 ticks when wearing internals;    unconsciousness in 16 ticks, roughly half a minute
+			adjust_oxy_loss(4)  //16 OxyLoss per 4 ticks when no internals present; unconsciousness in 13 ticks, roughly twenty seconds
 		throw_alert(ALERT_PRESSURE, /atom/movable/screen/alert/lowpressure, 2)

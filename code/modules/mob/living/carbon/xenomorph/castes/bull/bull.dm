@@ -6,7 +6,7 @@
 	icon_state = "Bull Walking"
 	bubble_icon = "alienleft"
 	health = 160
-	maxHealth = 160
+	max_health = 160
 	plasma_stored = 200
 	tier = XENO_TIER_TWO
 	upgrade = XENO_UPGRADE_NORMAL

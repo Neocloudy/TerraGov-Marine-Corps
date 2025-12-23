@@ -6,7 +6,7 @@
 	icon_state = "Baneling Walking"
 	bubble_icon = "alienleft"
 	health = 100
-	maxHealth = 100
+	max_health = 100
 	plasma_stored = 50
 	tier = XENO_TIER_MINION
 	upgrade = XENO_UPGRADE_BASETYPE

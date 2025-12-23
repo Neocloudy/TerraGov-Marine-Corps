@@ -45,7 +45,7 @@
 	SSpoints.add_strategic_psy_points(hivenumber, psych_points_output)
 	SSpoints.add_tactical_psy_points(hivenumber, psych_points_output*0.25)
 	//Gives marine cloneloss for a total of 30.
-	victim.adjustCloneLoss(0.5)
+	victim.adjust_clone_loss(0.5)
 
 /obj/structure/cocoon/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, effects = TRUE, attack_dir, armour_penetration = 0, mob/living/blame_mob)
 	. = ..()
