@@ -142,7 +142,7 @@
 			if(!ishuman(M))
 				to_chat(M, span_danger("You land heavily!"))
 				M.apply_damage(damage, BRUTE)
-				UPDATE_HEALTH_NEXT_TICK(M)
+				QUEUE_HEALTH_UPDATE(M)
 				return
 
 			var/mob/living/carbon/human/H = M
@@ -167,7 +167,7 @@
 				to_chat(H, span_danger("You land heavily!"))
 				H.apply_damage(damage, BRUTE)
 
-			UPDATE_HEALTH_NEXT_TICK(H)
+			QUEUE_HEALTH_UPDATE(H)
 			H.UpdateDamageIcon()
 
 

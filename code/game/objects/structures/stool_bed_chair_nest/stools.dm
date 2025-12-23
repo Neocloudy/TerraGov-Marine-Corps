@@ -51,7 +51,7 @@
 		if(istype(T) && !isxeno(T))
 			T.Paralyze(20 SECONDS)
 		T.apply_damage(20, blocked = MELEE, attacker = user)
-		UPDATE_HEALTH_NEXT_TICK(T)
+		QUEUE_HEALTH_UPDATE(T)
 		qdel(src)
 		return
 	..()

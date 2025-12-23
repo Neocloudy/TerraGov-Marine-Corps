@@ -189,7 +189,7 @@
 			span_userdanger("[user] [response_harm] [src]!"))
 			playsound(loc, attacked_sound, 25, 1, -1)
 			attack_threshold_check(harm_intent_damage)
-			UPDATE_HEALTH_NEXT_TICK(src)
+			QUEUE_HEALTH_UPDATE(src)
 			log_combat(user, src, "attacked")
 			return TRUE
 
@@ -232,7 +232,7 @@
 		if(EXPLODE_WEAK)
 			adjust_brute_loss(15)
 
-	UPDATE_HEALTH_NEXT_TICK(src)
+	QUEUE_HEALTH_UPDATE(src)
 
 
 /mob/living/simple_animal/get_idcard(hand_first)
@@ -257,7 +257,7 @@
 		return FALSE
 	else
 		apply_damage(damage, damagetype, blocked = armorcheck)
-		UPDATE_HEALTH_NEXT_TICK(src)
+		QUEUE_HEALTH_UPDATE(src)
 		return TRUE
 
 

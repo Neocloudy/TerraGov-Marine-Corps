@@ -175,7 +175,7 @@
 		if(EXPLODE_WEAK)
 			adjust_brute_loss(15)
 
-	UPDATE_HEALTH_NEXT_TICK(src)
+	QUEUE_HEALTH_UPDATE(src)
 
 
 /mob/living/silicon/update_transform()

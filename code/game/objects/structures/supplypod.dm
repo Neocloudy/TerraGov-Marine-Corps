@@ -140,7 +140,7 @@ GLOBAL_LIST_INIT(pod_styles, list(\
 			continue
 
 		L.adjust_brute_loss(damage)
-		UPDATE_HEALTH_NEXT_TICK(L)
+		QUEUE_HEALTH_UPDATE(L)
 
 	var/explosion_sum = B[1] + B[2] + B[3] + B[4]
 	if(explosion_sum != 0)

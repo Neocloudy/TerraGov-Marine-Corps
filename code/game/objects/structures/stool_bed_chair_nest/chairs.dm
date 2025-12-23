@@ -268,7 +268,7 @@
 	occupant.apply_effect(6 SECONDS * armor_modifier, EFFECT_PARALYZE)
 	occupant.apply_effect(6 SECONDS * armor_modifier, EFFECT_STUTTER)
 	occupant.apply_damage(10 * armor_modifier, BRUTE, def_zone)
-	UPDATE_HEALTH_NEXT_TICK(occupant)
+	QUEUE_HEALTH_UPDATE(occupant)
 	playsound(src.loc, 'sound/weapons/punch1.ogg', 25, 1)
 	if(isliving(A))
 		var/mob/living/victim = A
@@ -278,7 +278,7 @@
 		victim.apply_effect(6 SECONDS * armor_modifier, EFFECT_PARALYZE)
 		victim.apply_effect(6 SECONDS * armor_modifier, EFFECT_STUTTER)
 		victim.apply_damage(10 * armor_modifier, BRUTE, def_zone)
-		UPDATE_HEALTH_NEXT_TICK(victim)
+		QUEUE_HEALTH_UPDATE(victim)
 	occupant.visible_message(span_danger("[occupant] crashed into \the [A]!"))
 
 /obj/structure/bed/chair/office/light

@@ -132,14 +132,14 @@
 	to_chat(owner, .)
 
 	take_damage_limb(embedded.embedding.embed_limb_damage)
-	UPDATE_HEALTH_NEXT_TICK(owner)
+	QUEUE_HEALTH_UPDATE(owner)
 
 	if(!(limb_status & LIMB_ROBOT) && !(owner.species.species_flags & NO_BLOOD)) //There is no blood in protheses.
 		add_limb_flags(LIMB_BLEEDING)
 
 	if(prob(embedded.embedding.embedded_fall_chance))
 		take_damage_limb(embedded.embedding.embed_limb_damage * embedded.embedding.embedded_fall_dmg_multiplier)
-		UPDATE_HEALTH_NEXT_TICK(owner)
+		QUEUE_HEALTH_UPDATE(owner)
 		owner.visible_message(span_danger("[embedded] falls out of [owner]'s [display_name]!"),
 			span_userdanger("[embedded] falls out of your [display_name]!"))
 		embedded.unembed_ourself()
@@ -207,12 +207,12 @@
 
 /mob/living/proc/handle_yank_out_damage(obj/item/yanked, mob/living/carbon/human/user)
 	apply_damage(yanked.embedding.embedded_unsafe_removal_dmg_multiplier * yanked.embedding.embed_body_damage)
-	UPDATE_HEALTH_NEXT_TICK(src)
+	QUEUE_HEALTH_UPDATE(src)
 
 
 /mob/living/carbon/human/handle_yank_out_damage(obj/item/yanked, mob/living/carbon/human/user)
 	adjustShock_Stage(yanked.embedding.embedded_unsafe_removal_dmg_multiplier * yanked.embedding.embed_limb_damage)
 	var/datum/limb/affected_limb = embedded_objects[yanked]
 	affected_limb.take_damage_limb(yanked.embedding.embedded_unsafe_removal_dmg_multiplier * yanked.embedding.embed_limb_damage, 0, FALSE, TRUE)
-	UPDATE_HEALTH_NEXT_TICK(src)
+	QUEUE_HEALTH_UPDATE(src)
 	user.bloody_hands(src)
