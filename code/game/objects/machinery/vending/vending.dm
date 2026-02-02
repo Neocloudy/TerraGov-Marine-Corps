@@ -111,14 +111,21 @@
 	)
 	*/
 	/// Normal products that are always available on the vendor.
+	/// Nulled after products have been loaded.
 	var/list/products = list()
-	/** List of seasons whose products are added to the vendor's.
-	 *	Format for each entry is SEASON_NAME = "tab name"
+	/**
+	 * List of seasons whose products are added to this vendor.
+	 *
+	 * Formatted as (season identifier -> tab name).
+	 *
+	 * This is nulled after seasonal items have been loaded.
 	 */
 	var/list/seasonal_items = list()
 	/// Contraband products that are only available on vendor when hacked.
+	/// Nulled after contraband products have been loaded.
 	var/list/contraband = list()
 	/// Premium products that are only available when using a coin to pay for it.
+	/// Nulled after premium products have been loaded.
 	var/list/premium = list()
 	/// Prices for each item, list(/type/path = price), items not in the list don't have a price.
 	var/list/prices = list()
@@ -193,7 +200,12 @@
 	// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
 	last_slogan = world.time + rand(0, slogan_delay)
 
-	build_seasonal_tabs()
+	if(length(seasonal_items) && !SSpersistence.initialized)
+		RegisterSignal(SSpersistence, COMSIG_SUBSYSTEM_POST_INITIALIZE, PROC_REF(on_persistence_init))
+	else if(length(seasonal_items))
+		for(var/season in seasonal_items)
+			products[seasonal_items[season]] += SSpersistence.season_items[season]
+		seasonal_items = null
 
 	if(isshared)
 		build_shared_inventory()
@@ -277,10 +289,30 @@
 		var/datum/vending_product/record = new(typepath = entry, product_amount = amount, product_price = prices[entry], category = category, product_max_capacity = max_capacities[entry])
 		recordlist += record
 
-///Makes additional tabs/adds to the tabs based on the seasonal_items vendor specification
-/obj/machinery/vending/proc/build_seasonal_tabs()
-	for(var/season in seasonal_items)
-		products[seasonal_items[season]] += SSpersistence.season_items[season]
+/// After `SSpersistence` is initialized and seasonal items are set up on it,
+/// adds additional items according to the seasonal items under `SSpersistence`
+/obj/machinery/vending/proc/on_persistence_init(datum/controller/subsystem/persistence/source)
+	SIGNAL_HANDLER
+	UnregisterSignal(SSpersistence, COMSIG_SUBSYSTEM_POST_INITIALIZE)
+
+	// getting relevant seasonal items from SSpersistence
+	var/list/compiled_seasonal_items = list()
+	for(var/season_key in seasonal_items)
+		var/season_name = seasonal_items[season_key]
+		compiled_seasonal_items[season_name] += SSpersistence.season_items[season_key]
+
+	seasonal_items = null
+
+	if(!isshared)
+		build_inventory(compiled_seasonal_items, CAT_NORMAL)
+		return
+
+	// to know what shared vendor types we have handled so far
+	var/static/list/seasonal_shared_vendors
+	if(LAZYACCESS(seasonal_shared_vendors, type))
+		return
+	LAZYSET(seasonal_shared_vendors, type, TRUE)
+	build_inventory(compiled_seasonal_items, CAT_NORMAL)
 
 /obj/machinery/vending/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
