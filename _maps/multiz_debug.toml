@@ -1,0 +1,15 @@
+map_name = "Multi-Z Debugging"
+map_path = "map_files/multiz_debug"
+map_file = "multiz_debug.dmm"
+
+[[traits]] # first level
+"Marine Main Ship" = true
+Baseturf = "/turf/open/floor/plating"
+
+[[traits]] # second level
+"Marine Main Ship" = true
+Baseturf = "/turf/open/openspace"
+
+[[traits]] # third level
+"Marine Main Ship" = true
+Baseturf = "/turf/open/openspace"

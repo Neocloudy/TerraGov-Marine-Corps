@@ -349,7 +349,7 @@ SUBSYSTEM_DEF(mapping)
 	if(maptype == GROUND_MAP)
 		if(!VM.MakeNextMap(maptype))
 			next_map_configs[GROUND_MAP] = load_map_configs(list(maptype), default = TRUE)
-			message_admins("Failed to set new map with next_map.json for [VM.map_name]! Using default as backup!")
+			message_admins("Failed to set new map with next_map.toml for [VM.map_name]! Using default as backup!")
 			return
 
 		next_map_configs[GROUND_MAP] = VM
@@ -358,7 +358,7 @@ SUBSYSTEM_DEF(mapping)
 	else if(maptype == SHIP_MAP)
 		if(!VM.MakeNextMap(maptype))
 			next_map_configs[SHIP_MAP] = load_map_configs(list(maptype), default = TRUE)
-			message_admins("Failed to set new map with next_map.json for [VM.map_name]! Using default as backup!")
+			message_admins("Failed to set new map with next_map.toml for [VM.map_name]! Using default as backup!")
 			return
 
 		next_map_configs[SHIP_MAP] = VM

@@ -42,7 +42,7 @@
 								//	2 for preloading absolutely everything;
 
 #ifdef LOWMEMORYMODE
-#define FORCE_MAP "_maps/runtimestation.json"
+#define FORCE_MAP "_maps/debugdalus.toml"
 #endif
 
 // If defined, we will NOT defer asset generation till later in the game, and will instead do it all at once, during initiialize

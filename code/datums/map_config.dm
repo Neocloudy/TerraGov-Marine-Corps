@@ -1,11 +1,11 @@
 //used for holding information about unique properties of maps
-//feed it json files that match the datum layout
+//feed it toml files that match the datum layout
 //defaults to box
 //  -Cyberboss
 
 /datum/map_config
 	// Metadata
-	var/config_filename = "_maps/vapor_processing.json"
+	var/config_filename = "_maps/vapor_processing.toml"
 	var/defaulted = TRUE  // set to FALSE by LoadConfig() succeeding
 	// Config from maps.txt
 	var/config_max_users = 0
@@ -66,7 +66,7 @@
 		configs[i] = config
 	return configs
 
-#define CHECK_EXISTS(X) if(!istext(json[X])) { log_world("[##X] missing from json!"); return; }
+#define CHECK_EXISTS(X) if(!istext(toml[X])) { log_world("[##X] missing from toml!"); return; }
 /datum/map_config/proc/LoadConfig(filename, error_if_missing, maptype, load_default)
 	if(!fexists(filename))
 		if(error_if_missing)
@@ -75,35 +75,35 @@
 			return
 		switch(maptype)
 			if(GROUND_MAP)
-				return LoadConfig("_maps/vapor_processing.json", error_if_missing, maptype)
+				return LoadConfig("_maps/vapor_processing.toml", error_if_missing, maptype)
 			if(SHIP_MAP)
-				return LoadConfig("_maps/debugdalus.json", error_if_missing, maptype)
+				return LoadConfig("_maps/debugdalus.toml", error_if_missing, maptype)
 
-	var/json = file(filename)
-	if(!json)
+	var/toml = filename
+	if(!toml)
 		log_world("Could not open map_config: [filename]")
 		return
 
-	json = file2text(json)
-	if(!json)
-		log_world("map_config is not text: [filename]")
-		return
+	//toml = file2text(toml)
+	//if(!toml)
+	//	log_world("map_config is not text: [filename]")
+	//	return
 
-	json = json_decode(json)
-	if(!json)
-		log_world("map_config is not json: [filename]")
+	toml = rustg_read_toml_file(toml)
+	if(!toml)
+		log_world("map_config is not toml: [filename]")
 		return
 
 	config_filename = filename
 
 	CHECK_EXISTS("map_name")
-	map_name = json["map_name"]
+	map_name = toml["map_name"]
 	CHECK_EXISTS("map_path")
-	map_path = json["map_path"]
-	parallax_icon = json["parallax_icon"]
-	announce_text = json["announce_text"]
+	map_path = toml["map_path"]
+	parallax_icon = toml["parallax_icon"]
+	announce_text = toml["announce_text"]
 
-	map_file = json["map_file"]
+	map_file = toml["map_file"]
 	// "map_file": "BoxStation.dmm"
 	if (istext(map_file))
 		if (!fexists("_maps/[map_path]/[map_file]"))
@@ -116,19 +116,19 @@
 				log_world("Map file ([file]) does not exist!")
 				return
 	else
-		log_world("map_file missing from json!")
+		log_world("map_file missing from toml!")
 		return
 
-	if (islist(json["shuttles"]))
-		var/list/L = json["shuttles"]
+	if (islist(toml["shuttles"]))
+		var/list/L = toml["shuttles"]
 		for(var/key in L)
 			var/value = L[key]
 			shuttles[key] = value
-	else if ("shuttles" in json)
+	else if ("shuttles" in toml)
 		log_world("map_config shuttles is not a list!")
 		return
 
-	traits = json["traits"]
+	traits = toml["traits"]
 	if (islist(traits))
 		// "Ground" is set by default, but it's assumed if you're setting
 		// traits you want to customize which level is cross-linked
@@ -141,37 +141,37 @@
 		log_world("map_config traits is not a list!")
 		return
 
-	var/temp = json["space_empty_levels"]
+	var/temp = toml["space_empty_levels"]
 	if (isnum(temp))
 		space_empty_levels = temp
 	else if (!isnull(temp))
 		log_world("map_config space_empty_levels is not a number!")
 		return
 
-	temp = json["squads"]
+	temp = toml["squads"]
 	if(isnum(temp))
 		squads_max_num = temp
 	else if(!isnull(temp))
 		log_world("map_config squads_max_num is not a number!")
 		return
 
-	allow_custom_shuttles = json["allow_custom_shuttles"] != FALSE
+	allow_custom_shuttles = toml["allow_custom_shuttles"] != FALSE
 
-	if(json["armor"])
-		armor_style = json["armor"]
+	if(toml["armor"])
+		armor_style = toml["armor"]
 
-	if(json["quickbuilds"])
-		quickbuilds = json["quickbuilds"]
+	if(toml["quickbuilds"])
+		quickbuilds = toml["quickbuilds"]
 
-	if(islist(json["disk_sets"]))
-		disk_sets = json["disk_sets"]
-	else if(!isnull(json["disk_sets"]))
+	if(islist(toml["disk_sets"]))
+		disk_sets = toml["disk_sets"]
+	else if(!isnull(toml["disk_sets"]))
 		log_world("map_config disk sets are not a list!")
 		return
 
-	if(islist(json["environment_traits"]))
-		environment_traits = json["environment_traits"]
-	else if(!isnull(json["environment_traits"]))
+	if(islist(toml["environment_traits"]))
+		environment_traits = toml["environment_traits"]
+	else if(!isnull(toml["environment_traits"]))
 		log_world("map_config environment_traits is not a list!")
 		return
 
@@ -181,13 +181,13 @@
 		if(initial(G.config_tag))
 			gamemode_names += initial(G.config_tag)
 
-	if(islist(json["gamemodes"]))
-		for(var/g in json["gamemodes"])
+	if(islist(toml["gamemodes"]))
+		for(var/g in toml["gamemodes"])
 			if(!(g in gamemode_names))
 				log_world("map_config has an invalid gamemode name!")
 				return
 			gamemodes += g
-	else if(!isnull(json["gamemodes"]))
+	else if(!isnull(toml["gamemodes"]))
 		log_world("map_config gamemodes is not a list!")
 		return
 	else
@@ -196,8 +196,8 @@
 			if(initial(G.config_tag))
 				gamemodes += initial(G.config_tag)
 
-	if ("height_autosetup" in json)
-		height_autosetup = json["height_autosetup"]
+	if ("height_autosetup" in toml)
+		height_autosetup = toml["height_autosetup"]
 
 	defaulted = FALSE
 	return TRUE
@@ -213,6 +213,6 @@
 
 /datum/map_config/proc/MakeNextMap(maptype = GROUND_MAP)
 	if(maptype == GROUND_MAP)
-		return config_filename == "data/next_map.json" || fcopy(config_filename, "data/next_map.json")
+		return config_filename == "data/next_map.toml" || fcopy(config_filename, "data/next_map.toml")
 	else if(maptype == SHIP_MAP)
-		return config_filename == "data/next_ship.json" || fcopy(config_filename, "data/next_ship.json")
+		return config_filename == "data/next_ship.toml" || fcopy(config_filename, "data/next_ship.toml")
