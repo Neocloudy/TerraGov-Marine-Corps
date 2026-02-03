@@ -12,7 +12,7 @@
 	var/config_min_users = 0
 	var/voteweight = 1
 
-	// Config actually from the JSON - default values
+	// Config actually from the TOML - default values
 	var/map_name = "Vapor Processing"
 	var/map_path = "map_files/Vapor_Processing"
 	var/map_file = "Vapor_Processing.dmm"
@@ -26,7 +26,7 @@
 	var/armor_style = "default"
 	var/quickbuilds = 1000
 	var/list/gamemodes = list()
-	/// Boolean - if TRUE, the "Up" and "Down" traits are automatically distributed to the map's z-levels. If FALSE; they're set via JSON.
+	/// Boolean - if TRUE, the "Up" and "Down" traits are automatically distributed to the map's z-levels. If FALSE; they're set via TOML.
 	var/height_autosetup = TRUE
 
 	var/allow_custom_shuttles = TRUE
