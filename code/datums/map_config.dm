@@ -56,10 +56,11 @@
 	for(var/i in maptypes)
 		var/filename = MAP_TO_FILENAME[i]
 		var/filename_legacy = MAP_TO_FILENAME_LEGACY[i]
-		if(!fexists(filename) && fexists(filename_legacy))
-			var/file_ref = file(filename_legacy)
-			var/legacy_file = json_decode(file2text(file_ref))
-			var/conversion = rustg_toml_encode(legacy_file)
+		if(fexists(filename_legacy))
+			fdel(filename) // just in case
+			var/legacy_cached_config_raw = rustg_file_read(filename_legacy)
+			var/list/decoded_json = json_decode(legacy_cached_config_raw)
+			var/conversion = rustg_toml_encode(decoded_json)
 			rustg_file_write(conversion, replacetext(filename_legacy, ".json", ".toml"))
 			fdel(filename_legacy)
 		var/datum/map_config/config = new
@@ -83,8 +84,16 @@
 		// to version control
 		var/legacy_json_path = replacetext(filename, ".toml", ".json")
 		if(fexists(legacy_json_path))
-			var/legacy_json_ref = file2text(file(legacy_json_path))
-			var/list/decoded_json = json_decode(legacy_json_ref)
+			var/legacy_json_raw = rustg_file_read(legacy_json_path)
+			var/list/decoded_json = json_decode(legacy_json_raw)
+			var/list/traits = decoded_json["traits"]
+			for(var/list/level in traits)
+				// rustg toml parser is dumb and can't just skip null datatypes, other parsers do though
+				// this targets ztraits in particular because that's where map configs use the null type
+				for(var/trait in level)
+					if(level[trait] != null)
+						continue
+					level -= trait
 			var/conversion = rustg_toml_encode(decoded_json)
 			rustg_file_write(conversion, filename)
 			stack_trace("Map config file [legacy_json_path] required a conversion to TOML to be loaded. Please run the game locally for long enough to complete subsystem init and commit the converted files in '_maps/'.")
