@@ -200,12 +200,13 @@
 	// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
 	last_slogan = world.time + rand(0, slogan_delay)
 
-	if(length(seasonal_items) && !SSpersistence.initialized)
-		RegisterSignal(SSpersistence, COMSIG_SUBSYSTEM_POST_INITIALIZE, PROC_REF(on_persistence_init))
-	else if(length(seasonal_items))
-		for(var/season in seasonal_items)
-			products[seasonal_items[season]] += SSpersistence.season_items[season]
-		seasonal_items = null
+	if(length(seasonal_items))
+		if(!SSpersistence.initialized)
+			RegisterSignal(SSpersistence, COMSIG_SUBSYSTEM_POST_INITIALIZE, PROC_REF(on_persistence_init))
+		else
+			for(var/season in seasonal_items)
+				products[seasonal_items[season]] += SSpersistence.season_items[season]
+			seasonal_items = null
 
 	if(isshared)
 		build_shared_inventory()
