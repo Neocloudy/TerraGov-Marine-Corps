@@ -10,3 +10,5 @@
 GLOBAL_LIST_EMPTY(vending_records)
 GLOBAL_LIST_EMPTY(vending_hidden_records)
 GLOBAL_LIST_EMPTY(vending_coin_records)
+/// Assoc lazy list of vendor types that have had seasonals handled
+GLOBAL_LIST(seasonal_shared_vendors)

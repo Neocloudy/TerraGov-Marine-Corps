@@ -308,11 +308,9 @@
 		build_inventory(compiled_seasonal_items, CAT_NORMAL)
 		return
 
-	// to know what shared vendor types we have handled so far
-	var/static/list/seasonal_shared_vendors
-	if(LAZYACCESS(seasonal_shared_vendors, type))
+	if(LAZYACCESS(GLOB.seasonal_shared_vendors, type))
 		return
-	LAZYSET(seasonal_shared_vendors, type, TRUE)
+	LAZYSET(GLOB.seasonal_shared_vendors, type, TRUE)
 	build_inventory(compiled_seasonal_items, CAT_NORMAL)
 
 /obj/machinery/vending/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
