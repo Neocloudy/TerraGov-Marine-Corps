@@ -312,11 +312,6 @@
 #define COMSIG_XENOABILITY_GRAPPLE_TOSS "xenoability_grapple_toss"
 #define COMSIG_XENOABILITY_JAB "xenoability_jab"
 
-#define COMSIG_XENOABILITY_PORTAL "xenoablity_portal"
-#define COMSIG_XENOABILITY_PORTAL_ALTERNATE "xenoability_portal_alternate"
-#define COMSIG_XENOABILITY_TIMESTOP "xenoability_timestop"
-#define COMSIG_XENOABILITY_REWIND "xenoability_rewind"
-
 #define COMSIG_XENOABILITY_NIGHTFALL "xenoability_nightfall"
 #define COMSIG_XENOABILITY_PETRIFY "xenoability_petrify"
 #define COMSIG_XENOABILITY_OFFGUARD "xenoability_offguard"

@@ -854,7 +854,7 @@ GLOBAL_LIST_INIT(boiler_glob_image_list, list(
 /datum/action/ability/activable/xeno/high_pressure_spit/use_ability(atom/target)
 	var/mob/living/carbon/xenomorph/X = owner
 
-	new /obj/effect/temp_visual/wraith_warp(get_turf(owner))
+	new /obj/effect/temp_visual/warp(get_turf(owner))
 
 	if(!do_after(X, 1 SECONDS, NONE, target, BUSY_ICON_DANGER))
 		return fail_activate()

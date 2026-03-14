@@ -376,17 +376,6 @@
 
 //----SHRIKE END----//
 //============//
-//----WRAITH START----//
-
-/mob/living/carbon/xenomorph/wraith
-	upgrade = XENO_UPGRADE_NORMAL
-
-/mob/living/carbon/xenomorph/wraith/primordial
-	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
-
-//----WRAITH END----//
-//============//
 //----WIDOW START----//
 
 /mob/living/carbon/xenomorph/widow

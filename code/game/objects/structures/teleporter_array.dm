@@ -108,7 +108,7 @@
 	var/turf/central_turf = get_turf(src)
 	for(var/turf/affected_turf in RANGE_TURFS(range, central_turf))
 		turfs_affected += affected_turf
-		affected_turf.add_filter("wraith_magic", 2, drop_shadow_filter(color = "#031025aa", size = -10))
+		affected_turf.add_filter("teleporter_array_shadow", 2, drop_shadow_filter(color = "#031025aa", size = -10))
 
 	teleporter_status = TELEPORTER_ARRAY_IN_USE
 	addtimer(CALLBACK(src, PROC_REF(do_startup)), windup - 1.5 SECONDS)
@@ -160,7 +160,7 @@
 ///cleans up teleport effects
 /obj/structure/teleporter_array/proc/cleanup(list/turfs_affected)
 	for(var/turf/affected_turf AS in turfs_affected)
-		affected_turf.remove_filter("wraith_magic")
+		affected_turf.remove_filter("teleporter_array_shadow")
 
 /datum/action/innate/activate_teleporter
 	name = "Activate teleporter array"

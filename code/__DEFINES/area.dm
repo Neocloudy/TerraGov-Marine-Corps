@@ -6,21 +6,21 @@
 #define ALARM_WARNING_DOWN (1<<4)
 
 //area_flags
-///When present prevents xenos from weeding this area
+/// When present prevents xenos from weeding this area
 #define DISALLOW_WEEDING (1<<0)
-///When present, monitor will consider marines inside it to be at FOB
+/// When present, monitor will consider marines inside it to be at FOB
 #define NEAR_FOB (1<<1)
-///When present, this will prevent the drop pod to land there (usually kill zones)
+/// When present, this will prevent the drop pod to land there (usually kill zones)
 #define NO_DROPPOD (1<<2)
-///Make this area immune to cas/ob laser. Explosions can still go through if the ob is called in a nearby area
+/// Make this area immune to cas/ob laser. Explosions can still go through if the ob is called in a nearby area
 #define OB_CAS_IMMUNE (1<<3)
-///Prevent wraith from portaling there, and hivemind to weed there when shutters are closed
+/// Denotes a marine base, prevents hivemind actions in early game (among other things)
 #define MARINE_BASE (1<<4)
-///radio works even underground
+/// radio works even underground
 #define ALWAYS_RADIO (1<<5)
-///prevents construction in area
+/// prevents construction in area
 #define NO_CONSTRUCTION (1<<6)
-///Disallows nuke timer to be activated in area
+/// Disallows nuke timer to be activated in area
 #define CANNOT_NUKE (1<<7)
 
 #define AREA_FLAVOR_NONE "area_regular"
