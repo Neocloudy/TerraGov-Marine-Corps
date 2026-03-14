@@ -14,7 +14,7 @@
 #define NO_DROPPOD (1<<2)
 /// Make this area immune to cas/ob laser. Explosions can still go through if the ob is called in a nearby area
 #define OB_CAS_IMMUNE (1<<3)
-/// Denotes a marine base, prevents hivemind actions in early game (among other things)
+/// Denotes a marine landing zone
 #define MARINE_BASE (1<<4)
 /// radio works even underground
 #define ALWAYS_RADIO (1<<5)
