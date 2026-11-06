@@ -46,7 +46,7 @@
 	/// Lowest percentage of max health dealt as damage when in crit
 	var/crit_damage_percentage_low = 0.035
 	/// Highest percentage of max health dealt as damage when in crit
-	var/crit_damage_percentage_high = 0.085
+	var/crit_damage_percentage_high = 0.09
 	/// Armor reduction while in negative health
 	var/crit_armor_reduction = 1.2
 	/// Holder for armor reduction
@@ -85,6 +85,7 @@
 	crit_armor_modifier = human.soft_armor.scaleAllRatings(crit_armor_reduction)
 	human.soft_armor = human.soft_armor.detachArmor(crit_armor_modifier)
 
+/// Cleanses critical condition armor reduction
 /datum/species/synthetic/proc/crit_armor_unshred(mob/living/carbon/human/human)
 	human.soft_armor = human.soft_armor.attachArmor(crit_armor_modifier)
 	QDEL_NULL(crit_armor_modifier)

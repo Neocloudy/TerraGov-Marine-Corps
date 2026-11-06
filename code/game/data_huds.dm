@@ -258,11 +258,11 @@
 		simple_status_hud.icon_state = ""
 		if(stat != DEAD)
 			status_hud.icon_state = "synth"
-			switch(round(health * 100 / maxHealth)) // special health HUD icons for damaged synthetics
-				if(-29 to 4) // close to overheating: should appear when health is less than 5
-					status_hud.icon_state = "synthsoftcrit"
-				if(-INFINITY to -30) // dying
-					status_hud.icon_state = "synthhardcrit"
+			var/datum/species/synthetic/synthetic = species
+			if(health <= synthetic.crit_thresh && !synthetic.crit_damage_active)
+				status_hud.icon_state = "synthsoftcrit"
+			else if(synthetic.crit_damage_active)
+				status_hud.icon_state = "synthhardcrit"
 		else if(HAS_TRAIT(src, TRAIT_UNDEFIBBABLE))
 			status_hud.icon_state = "synthdnr"
 			return TRUE
