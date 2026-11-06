@@ -22,10 +22,10 @@
 	race = "Yiren"
 
 /mob/living/carbon/human/species/synthetic
-	race = "Synthetic"
+	race = /datum/species/synthetic::name
 
 /mob/living/carbon/human/species/early_synthetic
-	race = "Early Synthetic"
+	race = /datum/species/synthetic/early::name
 
 /mob/living/carbon/human/species/moth
 	race = "Moth"

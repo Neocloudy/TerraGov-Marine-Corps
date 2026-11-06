@@ -73,7 +73,15 @@
 */
 
 /datum/sprite_accessory/hair
-	species_allowed = list("Human","Synthetic","Early Synthetic", "Vat-Grown", "Vatborn", "Prototype Supersoldier")
+	species_allowed = list(
+			/datum/species/human::name,
+			/datum/species/human/vatgrown::name,
+			/datum/species/human/vatgrown::name,
+			/datum/species/human/prototype_supersoldier::name,
+			/datum/species/synthetic::name,
+			/datum/species/synthetic/early::name,
+		)
+		//"Human","Synthetic","Early Synthetic", "Vat-Grown", "Vatborn", "Prototype Supersoldier")
 	icon = 'icons/mob/Human_face.dmi'
 
 /datum/sprite_accessory/hair/bald
@@ -1175,7 +1183,14 @@
 /datum/sprite_accessory/hair_gradient
 	icon = 'icons/mob/hair_gradients.dmi'
 	gender = NEUTER
-	species_allowed = list("Human","Synthetic", "Early Synthetic", "Vat-Grown", "Vatborn")
+	species_allowed = list(
+			/datum/species/human::name,
+			/datum/species/human/vatgrown::name,
+			/datum/species/human/vatgrown::name,
+			/datum/species/human/prototype_supersoldier::name,
+			/datum/species/synthetic::name,
+			/datum/species/synthetic/early::name,
+		)
 
 /datum/sprite_accessory/hair_gradient/none
 	name = "None"
@@ -1226,7 +1241,14 @@
 	name = "Shaved"
 	icon_state = "bald"
 	gender = NEUTER
-	species_allowed = list("Human","Synthetic", "Early Synthetic", "Vat-Grown", "Vatborn")
+	species_allowed = list(
+			/datum/species/human::name,
+			/datum/species/human/vatgrown::name,
+			/datum/species/human/vatgrown::name,
+			/datum/species/human/prototype_supersoldier::name,
+			/datum/species/synthetic::name,
+			/datum/species/synthetic/early::name,
+		)
 
 /datum/sprite_accessory/facial_hair/watson
 	name = "Watson Mustache"
