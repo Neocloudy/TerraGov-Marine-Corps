@@ -97,13 +97,13 @@
 	deltimer(crit_damage_timerid)
 	crit_damage_timerid = null
 
-/// Starts the critical condition timer and warns the synth about their situation
+/// Starts the critical condition timer
 /datum/species/synthetic/proc/start_crit_timer(mob/living/carbon/human/human)
 	crit_damage_timerid = addtimer(CALLBACK(src, PROC_REF(crit_damage_start), human), crit_damage_time, TIMER_STOPPABLE | TIMER_DELETE_ME)
 	to_chat(human, span_userdanger("Critical damage sustained. Internal temperature regulation systems failing. Integrity compromised. <i>Survival estimate: [DisplayTimeText(crit_damage_time + rand(-3 SECONDS, 7 SECONDS))].</i>"))
 	human.balloon_alert(human, "integrity warning!")
 
-/// Starts the actual damage over time from critical condition, and warns the synth about their situation
+/// Starts the actual damage over time from critical condition
 /datum/species/synthetic/proc/crit_damage_start(mob/living/carbon/human/human)
 	if(crit_damage_active)
 		return
@@ -126,7 +126,7 @@
 		)
 		do_sparks(4, TRUE, human)
 
-/// Stops the actual damage over time from critical condition, and notifies the synth about their situation
+/// Stops the actual damage over time from critical condition
 /datum/species/synthetic/proc/crit_damage_end(mob/living/carbon/human/human)
 	crit_damage_active = FALSE
 	to_chat(human, span_boldnotice("Critical damage repaired. Internal temperature regulation systems active."))
