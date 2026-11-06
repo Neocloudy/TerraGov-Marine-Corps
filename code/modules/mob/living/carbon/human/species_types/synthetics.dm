@@ -167,16 +167,10 @@
 	species_flags = parent_type::species_flags ^ (HAS_LIPS | HAS_SKIN_COLOR)
 	hair_color = "#000000"
 
-	// Early Synthetics are tougher overall compared to standard Synthetics...
-	//
-	// tougher overall compared to standard Synthetics but crit damage kicks
-	// in faster and applies more armor reduction
 	slowdown = 1.15
 	total_health = 200
 	brute_mod = 0.65
 	burn_mod = 0.65
 
-	// ... but they have more armor shredding in crit and
-	// have a smaller grace period before burning up.
 	crit_damage_time = parent_type::crit_damage_time / 2
 	crit_armor_reduction = 1.35
